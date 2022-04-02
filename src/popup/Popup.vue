@@ -76,7 +76,7 @@ const openOptionsPage = () => {
       </div>
       <div class="resin-stats">
         <h2>
-          <img src="../assets/genshin/resin.png" /> 原粹树脂
+          <img src="/assets/genshin/resin.png" /> 原粹树脂
         </h2>
         <p class="resin-num">
           {{ userData.current_resin }}/{{ userData.max_resin }}
@@ -115,25 +115,25 @@ const openOptionsPage = () => {
       <div class="more-stats">
         <div class="stat-item">
           <span class="left">
-            <img src="../assets/genshin/task.png" /> 每日委托
+            <img src="/assets/genshin/task.png" /> 每日委托
           </span>
           <span class="right">{{ userData.finished_task_num }}/{{ userData.total_task_num }}</span>
         </div>
         <div class="stat-item">
           <span class="left">
-            <img src="../assets/genshin/home.png" /> 洞天宝钱
+            <img src="/assets/genshin/home.png" /> 洞天宝钱
           </span>
           <span class="right">{{ userData.current_home_coin }}/{{ userData.max_home_coin }}</span>
         </div>
         <div class="stat-item">
           <span class="left">
-            <img src="../assets/genshin/discount.png" /> 周本树脂五折
+            <img src="/assets/genshin/discount.png" /> 周本树脂五折
           </span>
           <span class="right">{{ userData.remain_resin_discount_num }}/{{ userData.resin_discount_num_limit }}</span>
         </div>
         <div v-if="userData.transformer.obtained" class="stat-item">
           <span class="left">
-            <img src="../assets/genshin/transformer.png" /> 参量质变仪
+            <img src="/assets/genshin/transformer.png" /> 参量质变仪
           </span>
           <span class="right">{{
             userData.transformer.recovery_time.reached ? '可用' :
