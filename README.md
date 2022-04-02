@@ -27,3 +27,9 @@ pnpm start:firefox
 ```
 pnpm build
 ```
+
+### 截图
+
+![popup](./screenshots/popup.png)
+
+![options](./screenshots/options.png)
