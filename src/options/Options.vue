@@ -71,13 +71,13 @@ const onCookieReadBtnClick = async() => {
 <style lang="scss" scoped>
 main {
     background: linear-gradient(to bottom, #141d2e 0%, #1e2f48 100%);
-    @apply h-screen;
+    @apply h-auto;
 }
 
 .btn {
     @apply text-lg rounded-md text-center select-none;
     @apply cursor-pointer transition-all transform-gpu;
-    @apply px-2 py-1 m-2 mt-6;
+    @apply px-2 py-1 m-2 mt-3;
     background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
     color: #141d2e;
 
@@ -96,7 +96,7 @@ h1 {
 }
 
 .tips {
-    @apply text-xs mb-1 select-none;
+    @apply text-sm select-none;
     color: #e6decc;
 }
 

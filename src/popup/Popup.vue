@@ -39,6 +39,7 @@ interface userDataType {
 
 }
 const isError = ref(false)
+const isLoaded = ref(false)
 const userData = ref({} as userDataType)
 
 const updateUserInfo = () => {
@@ -46,6 +47,7 @@ const updateUserInfo = () => {
     isError.value = true
   else
     userData.value = JSON.parse(storageUserData.value)
+  isLoaded.value = true
 }
 
 setTimeout(() => { updateUserInfo() }, 10)
@@ -60,7 +62,7 @@ const openOptionsPage = () => {
 </script>
 
 <template>
-  <main class="w-[300px] px-4 py-5">
+  <main v-if="isLoaded" class="w-[350px] px-4 py-5">
     <div
       v-if="!isError && storageUserData && storageCookies != '' && storageGameUid != '' && ['0', '1'].includes(storageGameServer)"
       class="main-wrapper"
@@ -198,7 +200,7 @@ h1 {
 }
 
 .tips {
-  @apply text-xs mb-1;
+  @apply text-sm mb-1;
   color: #e6decc;
 
   ol {
@@ -257,14 +259,18 @@ a {
 .main-wrapper {
   @apply flex flex-col gap-y-3;
   .stat-item-1 {
-    @apply rounded-md px-2 py-2 select-none;
+    @apply rounded-md px-2 py-1 select-none;
     @apply flex justify-between items-center;
     background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
     color: #141d2e;
 
+    .left {
+      @apply text-sm;
+    }
+
     .right {
       @apply text-xl;
-      @apply flex item-center;
+      @apply flex items-center;
 
       svg {
         @apply cursor-pointer transition transform-gpu;
