@@ -43,10 +43,13 @@ const isLoaded = ref(false)
 const userData = ref({} as userDataType)
 
 const updateUserInfo = () => {
-  if (storageErrorMessage.value !== '')
-    isError.value = true
-  else
-    userData.value = JSON.parse(storageUserData.value)
+  if (storageErrorMessage.value !== '') { isError.value = true }
+  else {
+    if (storageCookies.value !== '' && storageGameUid.value !== '' && ['0', '1'].includes(storageGameServer.value))
+      userData.value = JSON.parse(storageUserData.value)
+    else
+      userData.value = JSON.parse('{}')
+  }
   isLoaded.value = true
 }
 
@@ -274,7 +277,7 @@ a {
 
       svg {
         @apply cursor-pointer transition transform-gpu;
-        &:hover{
+        &:hover {
           @apply opacity-70;
         }
         &:active {
