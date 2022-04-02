@@ -1,13 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { cookies } from 'webextension-polyfill'
-import {
-  storageCookies,
-  storageGameServer,
-  storageGameUid,
-  storageErrorMessage,
-  storageUserData,
-  storageLastUpdateTime,
-} from '~/logic/storage'
+import { cookies, storage } from 'webextension-polyfill'
 import { md5, randomIntFromInterval } from '~/utils.js'
 
 const SERVER_LIST = ['cn_gf01', 'cn_qd01']
@@ -32,8 +24,7 @@ const getCookie = async function() {
     cookieString = ''
     for (const cookie of _cookies)
       cookieString += `${cookie.name}=${encodeURIComponent(cookie.value)};`
-
-    storageCookies.value = cookieString
+    await storage.local.set({ hoyo_cookies: cookieString })
     return true
   }
   else {
@@ -47,11 +38,11 @@ const refreshCookieAction = () => {
   return getCookie()
 }
 
-const getData = (force = false) => {
+const getData = async(force = false) => {
   if (
-    !storageCookies.value
-    || !storageGameServer.value
-    || !storageGameUid.value
+    !(await storage.local.get('hoyo_cookies')).hoyo_cookies
+    || !(await storage.local.get('genshin_uid')).genshin_uid
+    || !(await storage.local.get('genshin_server')).genshin_server
   ) {
     console.warn('未初始化')
     return false
@@ -60,17 +51,16 @@ const getData = (force = false) => {
   const randomStr = randomIntFromInterval(100000, 200000)
   const timestamp = Math.floor(Date.now() / 1000)
 
-  const role_id = storageGameUid.value
-  const server = SERVER_LIST[storageGameServer.value]
+  const role_id = (await storage.local.get('genshin_uid')).genshin_uid
+  const server = SERVER_LIST[Number((await storage.local.get('genshin_server')).genshin_server)]
   if (!SERVER_LIST.includes(server)) return false
   if (
-    new Date().getTime() - (Number(storageLastUpdateTime.value) || 0)
+    new Date().getTime() - (Number((await storage.local.get('last_update_time')).last_update_time) || 0)
       < INTERVAL_TIME - 100
     && !force
   )
     return false
-
-  storageLastUpdateTime.value = new Date().getTime()
+  await storage.local.set({ last_update_time: new Date().getTime() })
   const sign = md5(
     `salt=xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs&t=${timestamp}&r=${randomStr}&b=&q=role_id=${role_id}&server=${server}`,
   )
@@ -81,8 +71,9 @@ const getData = (force = false) => {
       'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1',
     'x-rpc-client_type': '5',
     'Referer': 'https://webstatic.mihoyo.com/',
-    'Cookie': storageCookies.value,
+    'Cookie': (await storage.local.get('hoyo_cookies')).hoyo_cookies,
   })
+
   const req = new Request(
     `https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote?server=${server}&role_id=${role_id}`,
     {
@@ -95,15 +86,16 @@ const getData = (force = false) => {
     .then(response => response.json())
     .then((data) => {
       if (data.retcode !== 0) {
-        storageErrorMessage.value = '-2'
+        storage.local.set({ error_msg: '-2' })
       }
       else {
-        storageUserData.value = JSON.stringify(data.data)
-        storageErrorMessage.value = ''
+        storage.local.set({ genshin_data: JSON.stringify(data.data) })
+        storage.local.set({ error_msg: '' })
       }
     })
-    .catch(() => {
-      storageErrorMessage.value = '-1'
+    .catch((e) => {
+      console.error(e)
+      storage.local.set({ error_msg: '-1' })
     })
 }
 
