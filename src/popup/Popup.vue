@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  storageGameUid, storageGameServer, storageCookies, storageErrorMessage,
-  storageUserData,
-} from '~/logic/storage'
+import { sendMessage } from 'webext-bridge'
 import { getTime, getClock } from '~/utils.js'
 
 const SERVER_LIST = ['官服', 'B服']
@@ -42,22 +39,44 @@ const isError = ref(false)
 const isLoaded = ref(false)
 const userData = ref({} as userDataType)
 
-const updateUserInfo = () => {
-  if (storageErrorMessage.value !== '') { isError.value = true }
+const uid = ref('')
+const server = ref('')
+const cookie = ref('')
+
+const updateUserInfo = async() => {
+  if (await sendMessage('get_data', { dataType: 'error_msg' })) { isError.value = true }
   else {
-    if (storageCookies.value !== '' && storageGameUid.value !== '' && ['0', '1'].includes(storageGameServer.value))
-      userData.value = JSON.parse(storageUserData.value)
-    else
+    if (await sendMessage('get_data', { dataType: 'hoyo_cookies' }) && await sendMessage('get_data', { dataType: 'genshin_uid' }) && ['0', '1'].includes(await sendMessage('get_data', { dataType: 'genshin_server' }))) {
+      try {
+        userData.value = JSON.parse(await sendMessage('get_data', { dataType: 'genshin_data' }))
+        uid.value = await sendMessage('get_data', { dataType: 'genshin_uid' })
+        server.value = SERVER_LIST[Number(await sendMessage('get_data', { dataType: 'genshin_server' }))]
+        cookie.value = await sendMessage('get_data', { dataType: 'hoyo_cookies' })
+        isError.value = false
+      }
+      catch (error) {
+        userData.value = JSON.parse('{}')
+        uid.value = ''
+        server.value = ''
+        cookie.value = ''
+        isError.value = true
+      }
+    }
+    else {
       userData.value = JSON.parse('{}')
+      uid.value = ''
+      server.value = ''
+      cookie.value = ''
+    }
   }
   isLoaded.value = true
 }
 
-setTimeout(() => { updateUserInfo() }, 10)
+onMounted(() => {
+  updateUserInfo()
+})
 
 setInterval(() => { updateUserInfo() }, 10 * 1000)
-const uid = computed(() => storageGameUid.value)
-const server = computed(() => SERVER_LIST[Number(storageGameServer.value)])
 
 const openOptionsPage = () => {
   browser.runtime.openOptionsPage()
@@ -67,7 +86,7 @@ const openOptionsPage = () => {
 <template>
   <main v-if="isLoaded" class="w-[350px] px-4 py-5">
     <div
-      v-if="!isError && storageUserData && storageCookies != '' && storageGameUid != '' && ['0', '1'].includes(storageGameServer)"
+      v-if="!isError && cookie && uid && server"
       class="main-wrapper"
     >
       <div class="stat-item-1">
@@ -86,7 +105,7 @@ const openOptionsPage = () => {
         <p class="resin-num">
           {{ userData.current_resin }}/{{ userData.max_resin }}
         </p>
-        <template v-if="userData.current_resin != userData.max_resin">
+        <template v-if="userData.current_resin < userData.max_resin">
           <p class="sub-stat-item">
             <span class="left">
               <uil:hourglass />全部恢复需要：
@@ -211,7 +230,6 @@ h1 {
 
     li {
       @apply my-1;
-      @apply li;
     }
   }
 }

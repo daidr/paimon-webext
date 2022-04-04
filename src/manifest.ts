@@ -33,7 +33,7 @@ export async function getManifest() {
       96: './assets/icon-96.png',
       128: './assets/icon-128.png',
     },
-    permissions: ['storage', 'cookies', '*://*.mihoyo.com/'],
+    permissions: ['storage', 'cookies', 'alarms', '*://*.mihoyo.com/'],
   }
 
   if (isDev) {

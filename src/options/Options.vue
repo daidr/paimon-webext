@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { runtime } from 'webextension-polyfill'
+import { sendMessage } from 'webext-bridge'
 import {
   storageGameUid, storageGameServer,
 } from '~/logic/storage'
@@ -10,17 +10,16 @@ const ServerSelectEl = ref()
 const refreshText = ref('')
 
 const onCookieReadBtnClick = async() => {
-  const bg = await runtime.getBackgroundPage()
-  bg.refreshCookieAction().then((ret: boolean) => {
-    if (ret) {
-      refreshText.value = '刷新成功'
-      bg.forceRefreshAction()
-    }
-    else { refreshText.value = '未找到用户凭据' }
-    setTimeout(() => {
-      refreshText.value = ''
-    }, 2000)
-  })
+  const ret = await sendMessage('refresh_cookie', {})
+  // eslint-disable-next-line no-console
+  if (ret) {
+    refreshText.value = '刷新成功'
+    sendMessage('force_refresh', {})
+  }
+  else { refreshText.value = '未找到用户凭据' }
+  setTimeout(() => {
+    refreshText.value = ''
+  }, 2000)
 }
 
 </script>
@@ -70,76 +69,76 @@ const onCookieReadBtnClick = async() => {
 
 <style lang="scss" scoped>
 main {
-    background: linear-gradient(to bottom, #141d2e 0%, #1e2f48 100%);
-    @apply h-auto;
+  background: linear-gradient(to bottom, #141d2e 0%, #1e2f48 100%);
+  @apply h-auto;
 }
 
 .btn {
-    @apply text-lg rounded-md text-center select-none;
-    @apply cursor-pointer transition-all transform-gpu;
-    @apply px-2 py-1 m-2 mt-3;
-    background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-    color: #141d2e;
+  @apply text-lg rounded-md text-center select-none;
+  @apply cursor-pointer transition-all transform-gpu;
+  @apply px-2 py-1 m-2 mt-3;
+  background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+  color: #141d2e;
 
-    &:hover {
-        @apply opacity-90;
-    }
+  &:hover {
+    @apply opacity-90;
+  }
 
-    &:active {
-        @apply scale-96 opacity-100;
-    }
+  &:active {
+    @apply scale-96 opacity-100;
+  }
 }
 
 h1 {
-    @apply text-xl select-none;
-    color: #e6decc;
+  @apply text-xl select-none;
+  color: #e6decc;
 }
 
 .tips {
-    @apply text-sm select-none;
-    color: #e6decc;
+  @apply text-sm select-none;
+  color: #e6decc;
 }
 
 .divider {
-    background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-    @apply h-0.5 opacity-30 rounded-full;
+  background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+  @apply h-0.5 opacity-30 rounded-full;
 }
 
 a {
-    @apply transition;
-    color: #e6decc;
-    text-decoration: underline dashed 1px #e6decc80;
+  @apply transition;
+  color: #e6decc;
+  text-decoration: underline dashed 1px #e6decc80;
 
-    &:hover {
-        @apply opacity-80;
-    }
+  &:hover {
+    @apply opacity-80;
+  }
 }
 
 .setting-panel {
-    .config-item {
-        @apply m-2;
-        p {
-            @apply text-base mb-1 select-none;
-            color: #e6decc;
-        }
-
-        input,
-        select {
-            @apply w-full;
-            @apply text-lg rounded-md transition;
-            @apply px-2 py-1;
-            background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-            color: #141d2e;
-
-            &:focus {
-                @apply shadow-lg shadow-[#e6decc];
-            }
-        }
-
-        ::selection {
-            background: #192741;
-            color: #e6decc;
-        }
+  .config-item {
+    @apply m-2;
+    p {
+      @apply text-base mb-1 select-none;
+      color: #e6decc;
     }
+
+    input,
+    select {
+      @apply w-full;
+      @apply text-lg rounded-md transition;
+      @apply px-2 py-1;
+      background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+      color: #141d2e;
+
+      &:focus {
+        @apply shadow-lg shadow-[#e6decc];
+      }
+    }
+
+    ::selection {
+      background: #192741;
+      color: #e6decc;
+    }
+  }
 }
 </style>
