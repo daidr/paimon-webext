@@ -153,7 +153,7 @@ const openOptionsPage = () => {
           <span class="left">
             <img src="/assets/genshin/discount.png" /> 周本树脂五折
           </span>
-          <span class="right">{{ userData.remain_resin_discount_num }}/{{ userData.resin_discount_num_limit }}</span>
+          <span class="right">{{ userData.resin_discount_num_limit - userData.remain_resin_discount_num }}/{{ userData.resin_discount_num_limit }}</span>
         </div>
         <div v-if="userData.transformer.obtained" class="stat-item">
           <span class="left">
