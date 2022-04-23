@@ -84,7 +84,7 @@ const openOptionsPage = () => {
 </script>
 
 <template>
-  <main v-if="isLoaded" class="w-[350px] px-4 py-5">
+  <main v-if="isLoaded" class="w-[350px] px-4 pt-5 pb-3">
     <div
       v-if="!isError && cookie && uid && server"
       class="main-wrapper"
@@ -317,7 +317,7 @@ a {
     }
 
     .resin-num {
-      @apply text-4xl tracking-wider font-mono font-bold mt-2;
+      @apply text-4xl tracking-wider font-mono font-bold mt-1;
     }
 
     .sub-stat-item {
@@ -343,7 +343,7 @@ a {
       @apply text-sm tracking-widest flex items-center gap-x-2 opacity-90;
 
       &.has-result {
-        @apply mb-2;
+        @apply mb-1;
       }
     }
 
