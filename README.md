@@ -10,6 +10,8 @@
 
 [Chrome Webstore 链接](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 
+[Edge 拓展商店链接](https://microsoftedge.microsoft.com/addons/detail/amlfaonbmcninlpijbjkblmfgcanjdih)
+
 ### 开发
 
 chrome/edge:
