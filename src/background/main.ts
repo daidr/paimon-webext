@@ -3,7 +3,7 @@ import { onMessage } from 'webext-bridge'
 import { cookies, storage, alarms } from 'webextension-polyfill'
 import { md5, randomIntFromInterval } from '~/utils.js'
 
-const SERVER_LIST = ['cn_gf01', 'cn_qd01']
+const SERVER_LIST = ['cn_gf01', 'cn_qd01', 'os_usa', 'os_euro', 'os_asia', 'os_cht']
 // 一分钟
 const INTERVAL_TIME = 1
 

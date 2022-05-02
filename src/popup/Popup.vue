@@ -2,7 +2,7 @@
 import { sendMessage } from 'webext-bridge'
 import { getTime, getClock } from '~/utils.js'
 
-const SERVER_LIST = ['官服', 'B服']
+const SERVER_LIST = ['天空岛', '世界树', 'NA', 'EU', 'Asia', 'SAR']
 
 interface userDataType {
   current_resin: number
