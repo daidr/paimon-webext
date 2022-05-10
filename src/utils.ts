@@ -263,7 +263,11 @@ function getTime(time: number) {
   const hh = ~~(time / 3600)
   const mm = ~~((time % 3600) / 60)
 
-  return `${hh}小时${mm}分钟`
+  // return `${hh}小时${mm}分钟`
+  return {
+    hour: hh,
+    minute: mm,
+  }
 }
 
 function getClock(time: number) {
@@ -274,14 +278,19 @@ function getClock(time: number) {
   const secondsNow = now.getSeconds() * 1000
   const timeRecovery = new Date(timeNow + time * 1000)
 
-  const tillTommorow = (24 - hoursNow) * 3600 * 1000
-  const tommorow = new Date(timeNow + tillTommorow - minutesNow - secondsNow)
+  const tillTomorrow = (24 - hoursNow) * 3600 * 1000
+  const tomorrow = new Date(timeNow + tillTomorrow - minutesNow - secondsNow)
 
   let str = ''
-  if (timeRecovery < tommorow) str = '今日'
-  else str = '次日'
+  if (timeRecovery < tomorrow) str = 'today'
+  else str = 'tomorrow'
 
-  return ` ${str}, ${timeRecovery.getHours()}点${timeRecovery.getMinutes()}分`
+  // return ` ${str}, ${timeRecovery.getHours()}点${timeRecovery.getMinutes()}分`
+  return {
+    day: str,
+    hour: timeRecovery.getHours(),
+    minute: timeRecovery.getMinutes(),
+  }
 }
 
 function stringifyParams(params: object) {
