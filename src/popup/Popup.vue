@@ -4,7 +4,7 @@ import { getTime, getClock } from '~/utils.js'
 
 const SERVER_LIST = ['天空岛', '世界树', 'NA', 'EU', 'Asia', 'SAR']
 
-interface userDataType {
+interface IUserDataType {
   current_resin: number
   max_resin: number
   resin_recovery_time: string
@@ -37,7 +37,7 @@ interface userDataType {
 }
 const isError = ref(false)
 const isLoaded = ref(false)
-const userData = ref({} as userDataType)
+const userData = ref({} as IUserDataType)
 
 const uid = ref('')
 const server = ref('')
