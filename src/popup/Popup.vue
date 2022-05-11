@@ -1,75 +1,69 @@
 <script setup lang="ts">
 import { sendMessage } from 'webext-bridge'
-import { getTime, getClock } from '~/utils.js'
+import { i18n } from 'webextension-polyfill'
+import { IUserDataItem } from '~/types'
+import { getTime, getClock } from '~/utils'
 
-const SERVER_LIST = ['天空岛', '世界树', 'NA', 'EU', 'Asia', 'SAR']
-
-interface IUserDataType {
-  current_resin: number
-  max_resin: number
-  resin_recovery_time: string
-  finished_task_num: number
-  total_task_num: number
-  is_extra_task_reward_received: boolean
-  remain_resin_discount_num: number
-  resin_discount_num_limit: number
-  current_expedition_num: number
-  max_expedition_num: number
-  expeditions: {
-    avatar_side_icon: string
-    status: string
-    remained_time: string
-  }[]
-  current_home_coin: number
-  max_home_coin: number
-  home_coin_recovery_time: string
-  transformer: {
-    obtained: boolean
-    recovery_time: {
-      Day: number
-      Hour: number
-      Minute: number
-      Second: number
-      reached: boolean
-    }
-  }
-
-}
-const isError = ref(false)
 const isLoaded = ref(false)
-const userData = ref({} as IUserDataType)
 
-const uid = ref('')
-const server = ref('')
-const cookie = ref('')
+const userDataList = ref([] as IUserDataItem[])
 
-const updateUserInfo = async() => {
-  if (await sendMessage('get_data', { dataType: 'error_msg' })) { isError.value = true }
-  else {
-    if (await sendMessage('get_data', { dataType: 'hoyo_cookies' }) && await sendMessage('get_data', { dataType: 'genshin_uid' }) && ['0', '1'].includes(await sendMessage('get_data', { dataType: 'genshin_server' }))) {
-      try {
-        userData.value = JSON.parse(await sendMessage('get_data', { dataType: 'genshin_data' }))
-        uid.value = await sendMessage('get_data', { dataType: 'genshin_uid' })
-        server.value = SERVER_LIST[Number(await sendMessage('get_data', { dataType: 'genshin_server' }))]
-        cookie.value = await sendMessage('get_data', { dataType: 'hoyo_cookies' })
-        isError.value = false
-      }
-      catch (error) {
-        userData.value = JSON.parse('{}')
-        uid.value = ''
-        server.value = ''
-        cookie.value = ''
-        isError.value = true
-      }
-    }
-    else {
-      userData.value = JSON.parse('{}')
-      uid.value = ''
-      server.value = ''
-      cookie.value = ''
+const selectedUid = ref('')
+
+const onSelectUidChange = (e: any) => {
+  selectedUid.value = e.target.value || selectedUid.value
+  sendMessage('set_selected_role', { uid: selectedUid.value })
+}
+
+const userData = computed(() => {
+  const data = userDataList.value.find(item => item.uid === selectedUid.value)
+  console.log('userData', data)
+  return data || {}
+})
+
+// const updateUserInfo = async() => {
+//   if (await sendMessage('get_data', { dataType: 'error_msg' })) { isError.value = true }
+//   else {
+//     if (await sendMessage('get_data', { dataType: 'hoyo_cookies' }) && await sendMessage('get_data', { dataType: 'genshin_uid' }) && ['0', '1'].includes(await sendMessage('get_data', { dataType: 'genshin_server' }))) {
+//       try {
+//         userData.value = JSON.parse(await sendMessage('get_data', { dataType: 'genshin_data' }))
+//         uid.value = await sendMessage('get_data', { dataType: 'genshin_uid' })
+//         server.value = SERVER_LIST[Number(await sendMessage('get_data', { dataType: 'genshin_server' }))]
+//         cookie.value = await sendMessage('get_data', { dataType: 'hoyo_cookies' })
+//         isError.value = false
+//       }
+//       catch (error) {
+//         userData.value = JSON.parse('{}')
+//         uid.value = ''
+//         server.value = ''
+//         cookie.value = ''
+//         isError.value = true
+//       }
+//     }
+//     else {
+//       userData.value = JSON.parse('{}')
+//       uid.value = ''
+//       server.value = ''
+//       cookie.value = ''
+//     }
+//   }
+//   isLoaded.value = true
+// }
+const updateUserInfo = async () => {
+  userDataList.value = await sendMessage('get_role_list', {})
+  selectedUid.value = await sendMessage('get_selected_role', {})
+  isLoaded.value = true
+
+  // 筛选出启用的角色列表
+  userDataList.value = userDataList.value.filter(item => item.isEnabled)
+
+  if (userDataList.value.length > 0) {
+    // 查看选中uid是否存在
+    if (!userDataList.value.find(item => item.uid === selectedUid.value)) {
+      // 不存在
+      selectedUid.value = userDataList.value[0].uid
     }
   }
-  isLoaded.value = true
 }
 
 onMounted(() => {
@@ -81,119 +75,209 @@ setInterval(() => { updateUserInfo() }, 10 * 1000)
 const openOptionsPage = () => {
   browser.runtime.openOptionsPage()
 }
+
+const refreshRequest = async () => {
+  await sendMessage('refresh_request', {})
+  updateUserInfo()
+}
+
+const TimeComponent = (props: { time: { hour: number; minute: number } }) => {
+  return [
+    h('span', { class: 'value' }, props.time.hour),
+    h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_hour')),
+    ' ',
+    h('span', { class: 'value' }, props.time.minute),
+    h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_minute')),
+  ]
+}
+
+const DayComponent = (props: { time: { day: 'today' | 'tomorrow'; hour: number; minute: number } }) => {
+  return [
+    h('span', { class: 'unit' }, i18n.getMessage(`popup_${props.time.day}`)),
+    ' ',
+    h('span', { class: 'value' }, props.time.hour),
+    h('span', { class: 'unit' }, i18n.getMessage('popup_hour')),
+    h('span', { class: 'value' }, props.time.minute),
+    h('span', { class: 'unit' }, i18n.getMessage('popup_minute')),
+  ]
+}
+
+const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Second: number }) => {
+  if (time.Day > 0)
+    return time.Day + i18n.getMessage('popup_recovery_day')
+  else if (time.Hour > 0)
+    return time.Hour + i18n.getMessage('popup_recovery_hour')
+  else if (time.Minute > 0)
+    return time.Minute + i18n.getMessage('popup_recovery_minute')
+  else
+    return time.Second + i18n.getMessage('popup_recovery_second')
+}
 </script>
 
 <template>
-  <main v-if="isLoaded" class="w-[350px] px-4 pt-5 pb-3">
-    <div
-      v-if="!isError && cookie && uid && server"
-      class="main-wrapper"
-    >
+  <main v-if="isLoaded" class="w-[350px] px-4 pt-4 pb-3">
+    <div v-if="Object.keys(userData).length > 0" class="main-wrapper">
       <div class="stat-item-1">
         <div class="left">
-          <p>uid: {{ uid }}</p>
-          <p>服务器: {{ server }}</p>
+          <p>
+            {{ i18n.getMessage('popup_CurrentTitle') }}
+            <select @change="onSelectUidChange">
+              <option v-for="item in userDataList" :key="item.uid" :value="item.uid"
+                :selected="item.uid === selectedUid">
+                {{ item.nickname }}({{ item.uid }})
+              </option>
+            </select>
+          </p>
+          <p>{{ i18n.getMessage('popup_ServerTitle') }}{{ i18n.getMessage(userData.serverRegion) }}</p>
         </div>
         <div class="right">
           <uil:setting @click="openOptionsPage" />
         </div>
       </div>
-      <div class="resin-stats">
-        <h2>
-          <img src="/assets/genshin/resin.png" /> 原粹树脂
-        </h2>
-        <p class="resin-num">
-          {{ userData.current_resin }}/{{ userData.max_resin }}
-        </p>
-        <template v-if="userData.current_resin < userData.max_resin">
-          <p class="sub-stat-item">
-            <span class="left">
-              <uil:hourglass />全部恢复需要：
-            </span>
-            <span class="right">{{ getTime(userData.resin_recovery_time) }}</span>
+      <template v-if="!userData.isError">
+        <div class="resin-stats">
+          <h2>
+            <img src="/assets/genshin/resin.png" /> {{ i18n.getMessage('popup_ResinTitle') }}
+            <span class="update-time">{{ i18n.getMessage('popup_UpdateTimeTitle') }}{{ new
+                Date(userData.updateTimestamp).toLocaleString()
+            }}</span>
+          </h2>
+          <p class="resin-num">
+            {{ userData.data.current_resin }}/{{ userData.data.max_resin }}
           </p>
-          <p class="sub-stat-item">
+          <template v-if="userData.data.current_resin < userData.data.max_resin">
+            <p class="sub-stat-item">
+              <span class="left">
+                <uil:hourglass /> {{ i18n.getMessage('popup_FullyReplenishedTitle') }}
+              </span>
+              <span class="right">
+                <TimeComponent :time="getTime(userData.data.resin_recovery_time)"></TimeComponent>
+              </span>
+            </p>
+            <p class="sub-stat-item">
+              <span class="left">
+                <uil:clock-two /> {{ i18n.getMessage('popup_ETATitle') }}
+              </span>
+              <span class="right">
+                <DayComponent :time="getClock(userData.data.resin_recovery_time)"></DayComponent>
+              </span>
+            </p>
+          </template>
+        </div>
+        <div class="divider"></div>
+        <div class="expeditions-stats">
+          <h2 :class="{ 'has-result': userData.data.expeditions.length > 0 }">
+            {{ i18n.getMessage('popup_ExpeditionsTitle') }} {{ userData.data.current_expedition_num }}/{{
+                userData.data.max_expedition_num
+            }}
+          </h2>
+          <template v-if="userData.data.expeditions.length > 0">
+            <div v-for="expedition, index of userData.data.expeditions" :key="index" class="expedition-item">
+              <span class="left">
+                <img :src="expedition.avatar_side_icon" />
+                {{ expedition.status == 'Ongoing' ? i18n.getMessage('popup_ExploringStatus') :
+                    i18n.getMessage('popup_FinishedStatus')
+                }}
+              </span>
+              <span v-if="expedition.remained_time == '0'" class="right">-</span>
+              <span v-else class="right">
+                <TimeComponent :time="getTime(expedition.remained_time)"></TimeComponent>
+              </span>
+            </div>
+          </template>
+        </div>
+        <div class="divider"></div>
+        <div class="more-stats">
+          <div class="stat-item">
             <span class="left">
-              <uil:clock-two />预计恢复时间：
+              <img src="/assets/genshin/task.png" /> {{ i18n.getMessage('popup_DailyCommissionsTitle') }}
             </span>
-            <span class="right">{{ getClock(userData.resin_recovery_time) }}</span>
-          </p>
-        </template>
-      </div>
-      <div class="divider"></div>
-      <div class="expeditions-stats">
-        <h2 :class="{ 'has-result': userData.expeditions.length > 0 }">
-          探索派遣 {{ userData.current_expedition_num }}/{{ userData.max_expedition_num }}
-        </h2>
-        <template v-if="userData.expeditions.length > 0">
-          <div v-for="expedition, index of userData.expeditions" :key="index" class="expedition-item">
-            <span class="left">
-              <img :src="expedition.avatar_side_icon" />
-              {{ expedition.status == 'Ongoing' ? '探索中' : '已完成' }}
+            <span class="right">{{ userData.data.finished_task_num }}/{{ userData.data.total_task_num }}
+              <span v-if="userData.data.finished_task_num == userData.data.total_task_num">
+                {{ userData.data.is_extra_task_reward_received ? i18n.getMessage('popup_ExtraTaskReceived') :
+                    i18n.getMessage('popup_ExtraTaskNotReceived')
+                }}
+              </span>
             </span>
-            <span class="right">{{ expedition.remained_time == '0' ? '-' : getTime(expedition.remained_time) }}</span>
           </div>
-        </template>
-      </div>
-      <div class="divider"></div>
-      <div class="more-stats">
-        <div class="stat-item">
-          <span class="left">
-            <img src="/assets/genshin/task.png" /> 每日委托
-          </span>
-          <span class="right">{{ userData.finished_task_num }}/{{ userData.total_task_num }}</span>
+          <div class="stat-item">
+            <span class="left">
+              <img src="/assets/genshin/home.png" /> {{ i18n.getMessage('popup_RealmCurrencyTitle') }}
+            </span>
+            <span class="right">{{ userData.data.current_home_coin }}/{{ userData.data.max_home_coin }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="left">
+              <img src="/assets/genshin/discount.png" /> {{ i18n.getMessage('popup_WeeklyBossesTitle') }}
+            </span>
+            <span class="right">{{ userData.data.resin_discount_num_limit - userData.data.remain_resin_discount_num
+            }}/{{ userData.data.resin_discount_num_limit }}</span>
+          </div>
+          <div v-if="userData.data.transformer && userData.data.transformer.obtained" class="stat-item">
+            <span class="left">
+              <img src="/assets/genshin/transformer.png" /> {{ i18n.getMessage('popup_ParametricTransformerTitle') }}
+            </span>
+            <span class="right">{{
+                userData.data.transformer.recovery_time.reached ? i18n.getMessage('popup_Available') :
+                  calcRecoveryTime(userData.data.transformer.recovery_time)
+            }}</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <span class="left">
-            <img src="/assets/genshin/home.png" /> 洞天宝钱
-          </span>
-          <span class="right">{{ userData.current_home_coin }}/{{ userData.max_home_coin }}</span>
-        </div>
-        <div class="stat-item">
-          <span class="left">
-            <img src="/assets/genshin/discount.png" /> 周本树脂五折
-          </span>
-          <span class="right">{{ userData.resin_discount_num_limit - userData.remain_resin_discount_num }}/{{ userData.resin_discount_num_limit }}</span>
-        </div>
-        <div v-if="userData.transformer.obtained" class="stat-item">
-          <span class="left">
-            <img src="/assets/genshin/transformer.png" /> 参量质变仪
-          </span>
-          <span class="right">{{
-            userData.transformer.recovery_time.reached ? '可用' :
-            `${userData.transformer.recovery_time.Day}天`
-          }}</span>
-        </div>
-      </div>
+      </template>
     </div>
-    <div v-else-if="!isError">
+    <div v-if="Object.keys(userData).length === 0">
       <h1 class="mb-4">
-        配置
+        {{ i18n.getMessage('popup_ConfigurationTitle') }}
       </h1>
       <p class="tips">
-        您需要进行一些简单的配置，完成后便可以正常使用啦！
+        {{ i18n.getMessage('popup_ConfigurationTips') }}
       </p>
       <div class="btn" @click="openOptionsPage">
-        打开配置页面
+        {{ i18n.getMessage('popup_ConfigurationButtonText') }}
       </div>
     </div>
-    <div v-else-if="isError">
-      <h1 class="mb-4">
-        发生错误
+    <div v-if="Object.keys(userData).length > 0 && userData.isError">
+      <h1 class="my-4">
+        {{ i18n.getMessage('popup_ErrorTitle') }}
       </h1>
       <p class="tips">
-        拓展无法获取您的游戏数据，试试前往设置页面检查下面的配置是否正确。
-        <ol>
-          <li>uid/服务器配置 是否配置正确</li>
-          <li>用户凭据 是否配置正确(浏览器米游社是否登录)</li>
-        </ol>
+        {{ i18n.getMessage('popup_ErrorTips_1') }}
+      <ol>
+        <li>{{ i18n.getMessage('popup_ErrorTips_2') }}</li>
+        <li>{{ i18n.getMessage('popup_ErrorTips_3') }}</li>
+        <li>{{ i18n.getMessage('popup_ErrorTips_4') }}</li>
+      </ol>
       </p>
       <div class="btn" @click="openOptionsPage">
-        打开配置页面
+        {{ i18n.getMessage('popup_ErrorOpenConfigButtonText') }}
+      </div>
+      <div class="btn" @click="refreshRequest">
+        {{ i18n.getMessage('popup_ErrorRefreshButtonText') }}
       </div>
     </div>
   </main>
 </template>
+
+<style lang="scss">
+@font-face {
+  font-family: number-mono;
+  src: local(ui-monospace), local(SFMono-Regular), local(Menlo), local(Monaco), local(Consolas), local("Liberation Mono"), local("Courier New"), local(monospace);
+  unicode-range: U+30-39, U+2F, U+3A;
+}
+
+.unit {
+  @apply text-xs;
+  @apply mx-0.3;
+}
+
+.value {
+  @apply text-base;
+}
+
+img {
+  @apply pointer-events-none;
+}
+</style>
 
 <style lang="scss" scoped>
 main {
@@ -229,7 +313,7 @@ h1 {
     @apply my-2;
 
     li {
-      @apply my-1;
+      @apply my-1 ml-5 list-square;
     }
   }
 }
@@ -252,6 +336,7 @@ a {
 .setting-panel {
   .config-item {
     @apply m-2;
+
     p {
       @apply text-base mb-1;
       color: #e6decc;
@@ -277,13 +362,27 @@ a {
   }
 }
 
+
 .main-wrapper {
-  @apply flex flex-col gap-y-3;
+  @apply flex flex-col gap-y-2;
+
   .stat-item-1 {
     @apply rounded-md px-2 py-1 select-none;
     @apply flex justify-between items-center;
     background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
     color: #141d2e;
+
+    select {
+      @apply bg-transparent cursor-pointer;
+      @apply rounded-md;
+      @apply transition;
+      @apply px-1 py-0.5 ml-1;
+      @apply text-primary-dark;
+
+      &:hover {
+        @apply bg-[#fcf6e480];
+      }
+    }
 
     .left {
       @apply text-sm;
@@ -295,9 +394,11 @@ a {
 
       svg {
         @apply cursor-pointer transition transform-gpu;
+
         &:hover {
           @apply opacity-70;
         }
+
         &:active {
           @apply scale-95;
         }
@@ -311,25 +412,41 @@ a {
 
     h2 {
       @apply text-sm tracking-widest flex items-center gap-x-2 opacity-90;
+
       img {
         @apply h-4 w-4;
+      }
+
+      .update-time {
+        @apply text-primary-light/40 select-none;
+        @apply text-center text-xs self-end;
+        @apply transition-all overflow-hidden;
+        @apply max-w-0 whitespace-nowrap opacity-0 duration-500;
+      }
+
+      &:hover {
+        .update-time {
+          @apply max-w-full opacity-100;
+        }
       }
     }
 
     .resin-num {
-      @apply text-4xl tracking-wider font-mono font-bold mt-1;
+      @apply text-4xl tracking-wider font-bold mt-1 mb-1.5;
+      font-family: number-mono;
     }
 
     .sub-stat-item {
       @apply text-sm;
-      @apply flex justify-between items-center mt-2;
+      @apply flex justify-between items-center mt-1;
 
       .left {
         @apply flex items-center gap-x-1 tracking-widest;
       }
 
       .right {
-        @apply opacity-60 font-bold font-mono;
+        @apply opacity-60 font-bold;
+        font-family: number-mono;
       }
     }
   }
@@ -349,6 +466,7 @@ a {
 
     .expedition-item {
       @apply flex items-center justify-between;
+
       img {
         @apply h-7 w-7;
         @apply rounded-full overflow-hidden border border-2 border-[#e6decccc];
@@ -360,7 +478,8 @@ a {
       }
 
       .right {
-        @apply font-bold text-sm opacity-60 font-mono;
+        @apply font-bold text-sm opacity-60;
+        font-family: number-mono;
       }
     }
   }
@@ -376,13 +495,15 @@ a {
 
       .left {
         @apply flex items-center gap-x-2 tracking-widest;
+
         img {
           @apply h-7 w-7;
         }
       }
 
       .right {
-        @apply font-bold text-sm opacity-60 font-mono;
+        @apply font-bold text-sm opacity-60;
+        font-family: number-mono;
       }
     }
   }

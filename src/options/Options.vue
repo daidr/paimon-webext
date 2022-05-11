@@ -63,6 +63,14 @@ const onDeleteRoleBtnClick = (roleUid: string) => {
     })
   })
 }
+
+const onRoleCheckboxChange = (roleUid: string, e: any) => {
+  console.log(e.target.value)
+  sendMessage('set_role_status', {
+    uid: roleUid,
+    status: e.target.checked,
+  })
+}
 </script>
 
 <template>
@@ -143,7 +151,7 @@ const onDeleteRoleBtnClick = (roleUid: string) => {
                       :id="`role-checkbox-${index}`"
                       type="checkbox"
                       :checked="role.isEnabled"
-                      @change="onRoleCheckboxChange(index)"
+                      @change="onRoleCheckboxChange(role.uid, $event)"
                     />
                     <label :for="`role-checkbox-${index}`"></label>
                   </td>

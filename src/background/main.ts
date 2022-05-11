@@ -1,8 +1,8 @@
 import { onMessage } from 'webext-bridge'
-import { cookies, storage, alarms } from 'webextension-polyfill'
+import { cookies, storage, alarms, webRequest } from 'webextension-polyfill'
 
 import { IRoleDataItem, IUserDataItem } from '~/types'
-import { getRoleInfoByCookie } from '~/utils'
+import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
 // import { cookies, storage, alarms } from 'webextension-polyfill'
 
 // only on dev mode
@@ -11,10 +11,37 @@ if (import.meta.hot) {
   import('/@vite/client')
 }
 
+// 一分钟
+const INTERVAL_TIME = 1
+
 // 向storage写入数据
 const writeDataToStorage = async function <T>(key: string, data: T) {
   await storage.local.set({ [key]: data })
 }
+
+const targetPages = [
+  'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global',
+  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn',
+  'https://bbs-api-os.mihoyo.com/game_record/app/genshin/api/dailyNote*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote*',
+]
+
+let currentCookie = ''
+
+function rewriteCookieHeader(e: any) {
+  for (const header of e.requestHeaders) {
+    if (header.name === 'Cookie' || header.name === 'cookie')
+      header.value = currentCookie
+  }
+  console.log(e.requestHeaders)
+  return { requestHeaders: e.requestHeaders }
+}
+
+webRequest.onBeforeSendHeaders.addListener(
+  rewriteCookieHeader,
+  { urls: targetPages },
+  ['blocking', 'requestHeaders', 'extraHeaders'],
+)
 
 // 从storage读取数据
 const readDataFromStorage = async function <T>(key: string, defaultVal: T): Promise<T> {
@@ -90,8 +117,83 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
   await writeDataToStorage('roleList', originRoleList)
 }
 
+const refreshData = async function () {
+  // 取出原始 roleList
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  // 取出启用的 role
+  const enabledRoleList = originRoleList.filter((item) => {
+    return item.isEnabled
+  })
+
+  const setCookie = (cookie: string) => {
+    currentCookie = cookie
+  }
+
+  // 遍历启用的 role
+  for (const role of enabledRoleList) {
+    const data = await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
+    console.log(data)
+    if (data) {
+      // 更新 roleList
+      const index = originRoleList.findIndex((item) => {
+        return item.uid === role.uid
+      })
+
+      originRoleList.splice(index, 1, {
+        ...role,
+        data,
+        isError: false,
+        errorMessage: '',
+        updateTimestamp: Date.now(),
+      })
+    } else {
+      // 获取失败，写入错误信息
+      role.isError = true
+      role.errorMessage = '获取数据失败'
+      role.updateTimestamp = Date.now()
+    }
+  }
+
+  // 更新 roleList
+  await writeDataToStorage('roleList', originRoleList)
+}
+
+// 定时器，定时获取玩家数据
+alarms.create('refresh_data', { periodInMinutes: INTERVAL_TIME })
+alarms.onAlarm.addListener((alarmInfo) => {
+  if (alarmInfo.name === 'refresh_data') refreshData()
+});
+
+(() => {
+  setTimeout(() => {
+    refreshData()
+  }, 1000)
+})()
+
 onMessage('get_role_list', async () => {
   return await readDataFromStorage<IUserDataItem[]>('roleList', [])
+})
+
+onMessage('get_selected_role', async () => {
+  return await readDataFromStorage<string>('selectedRole', '')
+})
+
+onMessage('refresh_request', async () => {
+  await refreshData()
+  return true
+})
+
+onMessage<{ uid: string }, 'set_selected_role'>('set_selected_role', async ({ data: { uid } }) => {
+  await writeDataToStorage('selectedRole', uid)
+})
+
+onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status', async ({ data: { uid, status } }) => {
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+  originRoleList[index].isEnabled = status
+  await writeDataToStorage('roleList', originRoleList)
 })
 
 onMessage<{ uid: string }, 'delete_role_request'>('delete_role_request', async ({ data: { uid } }) => {
@@ -119,12 +221,16 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
   // cookie 获取失败，返回 false
   if (cookie === '') return -1
 
-  const result = await getRoleInfoByCookie(oversea, cookie)
+  const setCookie = (cookie: string) => {
+    currentCookie = cookie
+  }
+
+  const result = await getRoleInfoByCookie(oversea, cookie, setCookie)
 
   if (result) {
-    console.log(result)
     for (const item of result)
       await addNewRoleToList(oversea, item, cookie)
+    refreshData()
     return result.length
   } else {
     return -1

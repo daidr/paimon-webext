@@ -1,4 +1,4 @@
-import { IRoleDataItem } from './types'
+import { IRoleDataItem, IUserData, serverRegions } from './types'
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -295,25 +295,33 @@ function getClock(time: number) {
   }
 }
 
-function stringifyParams(params: object) {
+function stringifyParams(params: { [key: string]: string }) {
+  // 字典序处理
   const keys = Object.keys(params)
-  const values = Object.values(params)
-  const paramsStr = keys.map((key, index) => `${key}=${values[index]}`).join('&')
+  keys.sort()
+  const values: string[] = []
+  keys.forEach(key => {
+    values.push(`${key}=${params[key]}`)
+  })
+
+  // 转字符串
+  const paramsStr = values.join('&')
   return paramsStr
 }
 
-function getDS(oversea: boolean, params: object, body: object) {
+function getDS(oversea: boolean, params: { [key: string]: string }, body: object) {
   const timestamp = Math.floor(Date.now() / 1000)
   const randomStr = randomIntFromInterval(100000, 200000)
-  const bodyStr = (!body && Object.keys(body).length > 0) ? JSON.stringify(body) : ''
-  const paramStr = (!params && Object.keys(params).length > 0) ? stringifyParams(params) : ''
+  const bodyStr = (body && Object.keys(body).length > 0) ? JSON.stringify(body) : ''
+  const paramStr = (params && Object.keys(params).length > 0) ? stringifyParams(params) : ''
   const salt = oversea ? 'okr4obncj8bw5a65hbnn5oo6ixjc3l9w' : 'xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs'
   const text = `salt=${salt}&t=${timestamp}&r=${randomStr}&b=${bodyStr}&q=${paramStr}`
+  console.log(text)
   const sign = md5(text)
   return `${timestamp},${randomStr},${sign}`
 }
 
-const HEADER_TEMPLATE_CN = {
+const HEADER_TEMPLATE_CN: { [key: string]: string } = {
   'x-rpc-app_version': '2.23.1',
   'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBS/2.23.1',
   'x-rpc-client_type': '5',
@@ -322,7 +330,7 @@ const HEADER_TEMPLATE_CN = {
   'Referer': 'https://webstatic.mihoyo.com/',
 }
 
-const HEADER_TEMPLATE_OS = {
+const HEADER_TEMPLATE_OS: { [key: string]: string } = {
   'x-rpc-app_version': '2.9.0',
   'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBSOversea/2.9.0',
   'x-rpc-client_type': '2',
@@ -331,26 +339,21 @@ const HEADER_TEMPLATE_OS = {
   'Referer': 'https://webstatic-sea.hoyolab.com',
 }
 
-function getHeader(oversea: boolean, params: object, body: object, ds: boolean) {
+function getHeader(oversea: boolean, params: { [key: string]: string }, body: object, ds: boolean) {
   const client = oversea ? HEADER_TEMPLATE_OS : HEADER_TEMPLATE_CN
-  const header = new Headers({
-    'Accept': 'application/json, text/plain, */*',
-    'User-Agent': client['User-Agent'],
-    'X-Requested-With': client['X-Requested-With'],
-    'Origin': client.Origin,
-    'Referer': client.Referer,
+  const header = new Headers()
+  Object.keys(client).forEach(key => {
+    header.append(key, client[key])
   })
 
   if (ds) {
     const dsStr = getDS(oversea, params, body)
     header.append('DS', dsStr)
-    header.append('x-rpc-client_type', client['x-rpc-client_type'])
-    header.append('x-rpc-app_version', client['x-rpc-app_version'])
   }
   return header
 }
 
-async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IRoleDataItem[] | false> {
+async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?: Function): Promise<IRoleDataItem[] | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
     ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
@@ -360,7 +363,8 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IR
   const headers = getHeader(oversea, {}, {}, false)
 
   // 为 header 追加 cookie
-  headers.append('Cookie', cookie)
+  // headers.append('Cookie', cookie)
+  setCookie && setCookie(cookie, headers)
 
   // 构造请求
   const req = new Request(
@@ -385,4 +389,47 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IR
     })
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie }
+async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function): Promise<IUserData | false> {
+  // 根据 oversea 参数选择对应 api 地址
+  const url = new URL(oversea ? 'https://bbs-api-os.mihoyo.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
+
+  // 补全 url query
+  const params = {
+    server: serverRegion,
+    role_id,
+  }
+
+  for (const [key, value] of Object.entries(params))
+    url.searchParams.append(key, value)
+
+  // 生成 header
+  const headers = getHeader(oversea, params, {}, true)
+
+  // 为 header 追加 cookie
+  // headers.append('Cookie', cookie)
+  setCookie && setCookie(cookie, headers)
+
+  // 构造请求
+  const req = new Request(
+    url.toString(),
+    {
+      method: 'get',
+      headers,
+    },
+  )
+
+  // 发送请求
+  return await fetch(req)
+    .then(response => response.json())
+    .then((data) => {
+      if (data.retcode === 0)
+        return data.data
+      else
+        return false
+    })
+    .catch(() => {
+      return false
+    })
+}
+
+export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie }

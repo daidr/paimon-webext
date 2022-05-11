@@ -20,6 +20,108 @@
     "os_cht": {
         "message": "港澳台服(SAR)"
     },
+    "popup_hour": {
+        "message": ":"
+    },
+    "popup_minute": {
+        "message": ""
+    },
+    "popup_today": {
+        "message": "今日"
+    },
+    "popup_tomorrow": {
+        "message": "明日"
+    },
+    "popup_recovery_day": {
+        "message": "天"
+    },
+    "popup_recovery_hour": {
+        "message": "小时"
+    },
+    "popup_recovery_minute": {
+        "message": "分钟"
+    },
+    "popup_recovery_second": {
+        "message": "秒"
+    },
+    "popup_CurrentTitle": {
+        "message": "当前: "
+    },
+    "popup_ServerTitle": {
+        "message": "服务器: "
+    },
+    "popup_ResinTitle": {
+        "message": "原粹树脂"
+    },
+    "popup_FullyReplenishedTitle": {
+        "message": "全部恢复需要"
+    },
+    "popup_ETATitle": {
+        "message": "预计恢复时间"
+    },
+    "popup_ExpeditionsTitle": {
+        "message": "探索派遣"
+    },
+    "popup_ExploringStatus": {
+        "message": "探索中"
+    },
+    "popup_FinishedStatus": {
+        "message": "已完成"
+    },
+    "popup_DailyCommissionsTitle": {
+        "message": "每日委托"
+    },
+    "popup_ExtraTaskReceived": {
+        "message": "(已领取)"
+    },
+    "popup_ExtraTaskNotReceived": {
+        "message": "(未领取)"
+    },
+    "popup_RealmCurrencyTitle": {
+        "message": "洞天宝钱"
+    },
+    "popup_WeeklyBossesTitle": {
+        "message": "周本 Boss"
+    },
+    "popup_ParametricTransformerTitle": {
+        "message": "参量质变仪"
+    },
+    "popup_Available": {
+        "message": "可用"
+    },
+    "popup_ConfigurationTitle": {
+        "message": "配置"
+    },
+    "popup_ConfigurationTips": {
+        "message": "您需要进行一些简单的配置，完成后便可以正常使用啦！"
+    },
+    "popup_ConfigurationButtonText": {
+        "message": "打开配置页面"
+    },
+    "popup_UpdateTimeTitle": {
+        "message": "上次更新: "
+    },
+    "popup_ErrorTitle": {
+        "message": "发生错误"
+    },
+    "popup_ErrorTips_1": {
+        "message": "拓展无法获取您的游戏数据，试试前往设置页面检查下面的配置是否正确。"
+    },
+    "popup_ErrorTips_2": {
+        "message": "当前网络是否可用"
+    },
+    "popup_ErrorTips_3": {
+        "message": "当前是否存在启用的角色"
+    },
+    "popup_ErrorTips_4": {
+        "message": "倘若你处于中国大陆，查看海外服数据需要自备魔法上网"
+    },
+    "popup_ErrorOpenConfigButtonText": {
+        "message": "打开配置页面"
+    },
+    "popup_ErrorRefreshButtonText": {
+        "message": "刷新"
+    },
     "options_Nav_AddNewRole": {
         "message": "增加新角色"
     },
@@ -51,7 +153,7 @@
         "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://bbs.mihoyo.com/ys' target='_blank'>米游社</a>"
     },
     "options_Tips_4": {
-        "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a>"
+        "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> <br>(HoYoLAB 屏蔽了中国大陆的访问，中国大陆的用户添加海外服需要自备魔法上网)"
     },
     "options_FetchBtnTitle": {
         "message": "获取用户凭据"
