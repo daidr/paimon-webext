@@ -29,9 +29,19 @@ const targetPages = [
 let currentCookie = ''
 
 function rewriteCookieHeader(e: any) {
+  let flag = false;
   for (const header of e.requestHeaders) {
-    if (header.name === 'Cookie' || header.name === 'cookie')
+    if (header.name === 'Cookie' || header.name === 'cookie') {
       header.value = currentCookie
+      flag = true
+    }
+
+  }
+  if (!flag) {
+    e.requestHeaders.push({
+      name: 'Cookie',
+      value: currentCookie
+    })
   }
   console.log(e.requestHeaders)
   return { requestHeaders: e.requestHeaders }

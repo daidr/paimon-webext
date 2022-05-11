@@ -363,7 +363,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
   const headers = getHeader(oversea, {}, {}, false)
 
   // 为 header 追加 cookie
-  // headers.append('Cookie', cookie)
+  headers.append('Cookie', cookie)
   setCookie && setCookie(cookie, headers)
 
   // 构造请求
@@ -406,7 +406,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   const headers = getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
-  // headers.append('Cookie', cookie)
+  headers.append('Cookie', cookie)
   setCookie && setCookie(cookie, headers)
 
   // 构造请求
