@@ -1,3 +1,5 @@
+import { IRoleDataItem } from './types'
+
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -348,4 +350,39 @@ function getHeader(oversea: boolean, params: object, body: object, ds: boolean) 
   return header
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader }
+async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IRoleDataItem[] | false> {
+  // 根据 oversea 参数选择对应 api 地址
+  const url = oversea
+    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
+    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
+
+  // 生成 header
+  const headers = getHeader(oversea, {}, {}, false)
+
+  // 为 header 追加 cookie
+  headers.append('Cookie', cookie)
+
+  // 构造请求
+  const req = new Request(
+    url,
+    {
+      method: 'get',
+      headers,
+    },
+  )
+
+  // 发送请求
+  return await fetch(req)
+    .then(response => response.json())
+    .then((data) => {
+      if (data.retcode === 0)
+        return data.data.list
+      else
+        return false
+    })
+    .catch(() => {
+      return false
+    })
+}
+
+export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie }
