@@ -20,8 +20,8 @@ const writeDataToStorage = async function <T>(key: string, data: T) {
 }
 
 const targetPages = [
-  'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global',
-  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn',
+  'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
+  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
   'https://bbs-api-os.mihoyo.com/game_record/app/genshin/api/dailyNote*',
   'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote*',
 ]
@@ -40,7 +40,7 @@ function rewriteCookieHeader(e: any) {
 webRequest.onBeforeSendHeaders.addListener(
   rewriteCookieHeader,
   { urls: targetPages },
-  ['blocking', 'requestHeaders', 'extraHeaders'],
+  ['blocking', 'requestHeaders', chrome.webRequest.OnBeforeSendHeadersOptions.EXTRA_HEADERS].filter(Boolean),
 )
 
 // 从storage读取数据
