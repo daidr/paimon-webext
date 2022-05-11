@@ -49,7 +49,7 @@ export interface IUserDataItem {
   /**
    * 玩家id
    */
-  uid: number
+  uid: string
   /**
    * 玩家昵称
    */
@@ -92,7 +92,7 @@ export interface IRoleDataItem {
   /**
    * 玩家uid
    */
-  game_uid: number
+  game_uid: string
   /**
    * 玩家昵称
    */
