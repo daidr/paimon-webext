@@ -316,7 +316,6 @@ function getDS(oversea: boolean, params: { [key: string]: string }, body: object
   const paramStr = (params && Object.keys(params).length > 0) ? stringifyParams(params) : ''
   const salt = oversea ? 'okr4obncj8bw5a65hbnn5oo6ixjc3l9w' : 'xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs'
   const text = `salt=${salt}&t=${timestamp}&r=${randomStr}&b=${bodyStr}&q=${paramStr}`
-  console.log(text)
   const sign = md5(text)
   return `${timestamp},${randomStr},${sign}`
 }

@@ -43,7 +43,6 @@ function rewriteCookieHeader(e: any) {
       value: currentCookie
     })
   }
-  console.log(e.requestHeaders)
   return { requestHeaders: e.requestHeaders }
 }
 
@@ -142,7 +141,6 @@ const refreshData = async function () {
   // 遍历启用的 role
   for (const role of enabledRoleList) {
     const data = await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
-    console.log(data)
     if (data) {
       // 更新 roleList
       const index = originRoleList.findIndex((item) => {
@@ -209,7 +207,6 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
 onMessage<{ uid: string }, 'delete_role_request'>('delete_role_request', async ({ data: { uid } }) => {
   // 取出原始 roleList
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
-  console.log(uid)
   // 删除 roleUid
   const newRoleList = originRoleList.filter((item) => {
     return item.uid !== uid

@@ -17,7 +17,6 @@ const onSelectUidChange = (e: any) => {
 
 const userData = computed(() => {
   const data = userDataList.value.find(item => item.uid === selectedUid.value)
-  console.log('userData', data)
   return data || {}
 })
 

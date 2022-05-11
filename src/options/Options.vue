@@ -24,7 +24,6 @@ watch(activeNavItem, (newValue) => {
   if (newValue === 1) {
     sendMessage('get_role_list', {}).then((data) => {
       roleList.value = (data as unknown) as IUserDataItem[]
-      console.log(roleList.value)
     })
   }
 })
@@ -65,7 +64,6 @@ const onDeleteRoleBtnClick = (roleUid: string) => {
 }
 
 const onRoleCheckboxChange = (roleUid: string, e: any) => {
-  console.log(e.target.value)
   sendMessage('set_role_status', {
     uid: roleUid,
     status: e.target.checked,
