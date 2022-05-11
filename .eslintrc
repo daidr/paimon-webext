@@ -2,6 +2,9 @@
   "extends": "@antfu",
   "rules": {
     "vue/max-attributes-per-line": 0,
-    "arrow-parens": 0
+    "arrow-parens": 0,
+    "space-before-function-paren": 0,
+    "brace-style": 0,
+    "no-console": 0
   }
 }
