@@ -1,11 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { onMessage } from 'webext-bridge'
 import { cookies, storage, alarms } from 'webextension-polyfill'
-import { md5, randomIntFromInterval } from '~/utils.js'
 
-const SERVER_LIST = ['cn_gf01', 'cn_qd01', 'os_usa', 'os_euro', 'os_asia', 'os_cht']
-// 一分钟
-const INTERVAL_TIME = 1
+import { IRoleDataItem, IUserDataItem } from '~/types'
+import { getRoleInfoByCookie } from '~/utils'
+// import { cookies, storage, alarms } from 'webextension-polyfill'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -13,130 +11,122 @@ if (import.meta.hot) {
   import('/@vite/client')
 }
 
-const getCookie = async function() {
+// 向storage写入数据
+const writeDataToStorage = async function <T>(key: string, data: T) {
+  await storage.local.set({ [key]: data })
+}
+
+// 从storage读取数据
+const readDataFromStorage = async function <T>(key: string, defaultVal: T): Promise<T> {
+  const data = await storage.local.get(key)
+  if (data[key])
+    return data[key]
+  else
+    return defaultVal
+}
+
+// 获取国服cookie
+const getMiHoYoCookie = async function () {
   let cookieString = ''
   const _cookies = await cookies.getAll({ domain: 'mihoyo.com' })
   if (_cookies.length !== 0) {
     cookieString = ''
     for (const cookie of _cookies)
       cookieString += `${cookie.name}=${encodeURIComponent(cookie.value)};`
-    await storage.local.set({ hoyo_cookies: cookieString })
-    return true
+    return cookieString
   }
   else {
-    return false
+    return ''
   }
 }
 
-const refreshCookieAction = async() => {
-  // eslint-disable-next-line no-console
-  console.log('刷新cookie')
-  return await getCookie()
+// 获取海外cookie
+const getHoYoLABCookie = async function () {
+  let cookieString = ''
+  const _cookies = await cookies.getAll({ domain: 'hoyolab.com' })
+  if (_cookies.length !== 0) {
+    cookieString = ''
+    for (const cookie of _cookies)
+      cookieString += `${cookie.name}=${encodeURIComponent(cookie.value)};`
+    return cookieString
+  }
+  else {
+    return ''
+  }
 }
 
-const getData = async(force = false) => {
-  if (
-    !(await storage.local.get('hoyo_cookies'))?.hoyo_cookies
-    || !(await storage.local.get('genshin_uid'))?.genshin_uid
-    || !(await storage.local.get('genshin_server'))?.genshin_server
-  ) {
-    console.warn('未初始化')
-    return false
-  }
+const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataItem, cookie: string) {
+  // 取出原始 roleList
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
 
-  const randomStr = randomIntFromInterval(100000, 200000)
-  const timestamp = Math.floor(Date.now() / 1000)
-
-  const role_id = (await storage.local.get('genshin_uid'))?.genshin_uid
-  const server
-    = SERVER_LIST[
-      Number((await storage.local.get('genshin_server'))?.genshin_server)
-    ]
-  if (!SERVER_LIST.includes(server)) return false
-  if (
-    new Date().getTime()
-      - (Number((await storage.local.get('last_update_time'))?.last_update_time)
-        || 0)
-      < INTERVAL_TIME * 60 * 1000 - 100
-    && !force
-  )
-    return false
-  await storage.local.set({ last_update_time: new Date().getTime() })
-  const sign = md5(
-    `salt=xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs&t=${timestamp}&r=${randomStr}&b=&q=role_id=${role_id}&server=${server}`,
-  )
-  const headers = new Headers({
-    'DS': `${timestamp},${randomStr},${sign}`,
-    'x-rpc-app_version': '2.19.1',
-    'User-Agent':
-      'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1',
-    'x-rpc-client_type': '5',
-    'Referer': 'https://webstatic.mihoyo.com/',
-    'Cookie': (await storage.local.get('hoyo_cookies'))?.hoyo_cookies,
+  // 判断是否已经存在
+  const isExist = originRoleList.some((item) => {
+    return item.uid === roleInfo.game_uid
   })
 
-  const req = new Request(
-    `https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote?server=${server}&role_id=${role_id}`,
-    {
-      method: 'get',
-      headers,
-    },
-  )
-
-  fetch(req)
-    .then(response => response.json())
-    .then((data) => {
-      if (data.retcode !== 0) {
-        storage.local.set({ error_msg: '-2' })
-      }
-      else {
-        storage.local.set({ genshin_data: JSON.stringify(data.data) })
-        storage.local.set({ error_msg: '' })
-      }
-    })
-    .catch((e) => {
-      console.error(e)
-      storage.local.set({ error_msg: '-1' })
-    })
-}
-
-const forceRefreshAction = () => {
-  // eslint-disable-next-line no-console
-  console.log('强制刷新信息')
-  return getData(true)
-}
-
-onMessage('refresh_cookie', refreshCookieAction)
-onMessage('force_refresh', forceRefreshAction)
-
-onMessage('get_data', async({ data }) => {
-  const { dataType } = data
-  switch (dataType) {
-    case 'genshin_data':
-      return (await storage.local.get('genshin_data'))?.genshin_data
-    case 'genshin_uid':
-      return (await storage.local.get('genshin_uid'))?.genshin_uid
-    case 'genshin_server':
-      return (await storage.local.get('genshin_server'))?.genshin_server
-    case 'hoyo_cookies':
-      return (await storage.local.get('hoyo_cookies'))?.hoyo_cookies
-    case 'error_msg':
-      return (await storage.local.get('error_msg'))?.error_msg
-    default:
-      return undefined
+  // 构造一个 roleItem
+  const roleItem: IUserDataItem = {
+    isEnabled: true,
+    uid: roleInfo.game_uid,
+    nickname: roleInfo.nickname,
+    level: roleInfo.level,
+    serverRegion: roleInfo.region,
+    serverType: oversea ? 'os' : 'cn',
+    cookie,
   }
+
+  // 如果不存在，则添加
+  if (!isExist) {
+    originRoleList.push(roleItem)
+  } else {
+    // 如果存在，则更新
+    const index = originRoleList.findIndex((item) => {
+      return item.uid === roleInfo.game_uid
+    })
+    originRoleList.splice(index, 1, roleItem)
+  }
+
+  // 更新 roleList
+  await writeDataToStorage('roleList', originRoleList)
+}
+
+onMessage('get_role_list', async () => {
+  return await readDataFromStorage<IUserDataItem[]>('roleList', [])
 })
 
-// 定时器，定时获取玩家数据
-alarms.create('refresh_data', { periodInMinutes: INTERVAL_TIME })
-alarms.onAlarm.addListener((alarmInfo) => {
-  if (alarmInfo.name === 'refresh_data') getData()
-});
+onMessage<{ uid: string }, 'delete_role_request'>('delete_role_request', async ({ data: { uid } }) => {
+  // 取出原始 roleList
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  console.log(uid)
+  // 删除 roleUid
+  const newRoleList = originRoleList.filter((item) => {
+    return item.uid !== uid
+  })
 
-(() => {
-  setTimeout(() => {
-    getData()
-  }, 1000)
-})()
+  // 更新 roleList
+  await writeDataToStorage('roleList', newRoleList)
 
-Object.assign(window, { refreshCookieAction, forceRefreshAction })
+  return true
+})
+
+onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', async ({ data: { oversea } }) => {
+  let cookie = ''
+  // 根据服务器类型获取对应 cookie
+  if (oversea)
+    cookie = await getHoYoLABCookie()
+  else
+    cookie = await getMiHoYoCookie()
+  // cookie 获取失败，返回 false
+  if (cookie === '') return -1
+
+  const result = await getRoleInfoByCookie(oversea, cookie)
+
+  if (result) {
+    console.log(result)
+    for (const item of result)
+      await addNewRoleToList(oversea, item, cookie)
+    return result.length
+  } else {
+    return -1
+  }
+})
