@@ -55,25 +55,29 @@ export interface IUserDataItem {
    */
   nickname: string
   /**
+   * 玩家昵称
+   */
+  level: number
+  /**
    * 用户cookie
    */
   cookie: string
   /**
    * 获取的数据
    */
-  data: IUserData
+  data?: IUserData
   /**
    * 最后一次获取数据的时间
    */
-  updateTimestamp: number
+  updateTimestamp?: number
   /**
    * 是否出错
    */
-  isError: boolean
+  isError?: boolean
   /**
    * 错误信息
    */
-  errorMessage: string
+  errorMessage?: string
 }
 
 export interface IRoleDataItem {
@@ -81,6 +85,10 @@ export interface IRoleDataItem {
    * 玩家对应的服务器
    */
   region: serverRegions
+  /**
+   * 玩家对应的服务器名称
+   */
+  region_name: string
   /**
    * 玩家uid
    */
