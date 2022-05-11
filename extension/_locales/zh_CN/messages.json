@@ -2,11 +2,32 @@
     "pluginDesc": {
         "message": "在浏览器中查看原神账号情况"
     },
+    "cn_gf01": {
+        "message": "天空岛"
+    },
+    "cn_qd01": {
+        "message": "世界树"
+    },
+    "os_usa": {
+        "message": "美服(NA)"
+    },
+    "os_euro": {
+        "message": "欧服(EU)"
+    },
+    "os_asia": {
+        "message": "亚服(Asia)"
+    },
+    "os_cht": {
+        "message": "港澳台服(SAR)"
+    },
     "options_Nav_AddNewRole": {
         "message": "增加新角色"
     },
     "options_Nav_RoleListSetting": {
         "message": "角色列表&设置"
+    },
+    "options_Nav_About": {
+        "message": "关于"
     },
     "options_SelectServer": {
         "message": "第一步：选择账号类型"
@@ -35,8 +56,29 @@
     "options_FetchBtnTitle": {
         "message": "获取用户凭据"
     },
-    "options_Nav_About": {
-        "message": "关于"
+    "options_FetchBtnAlert_1": {
+        "message": "角色获取失败"
+    },
+    "options_FetchBtnAlert_2": {
+        "message": "成功添加 $1 个角色"
+    },
+    "options_FetchBtnAlert_3": {
+        "message": "未绑定原神角色"
+    },
+    "options_Role_NoRoleFound": {
+        "message": "没有找到任何角色"
+    },
+    "options_Role_IsEnabledTitle": {
+        "message": "启用"
+    },
+    "options_Role_RoleNameTitle": {
+        "message": "昵称(uid)"
+    },
+    "options_Role_RoleServerTitle": {
+        "message": "服务器"
+    },
+    "options_Role_RoleActionTitle": {
+        "message": "操作"
     },
     "options_About_VersionTitle": {
         "message": "版本"
