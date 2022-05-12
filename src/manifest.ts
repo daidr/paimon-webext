@@ -12,7 +12,8 @@ export async function getManifest() {
     manifest_version: 3,
     name: pkg.displayName || pkg.name,
     version: pkg.version,
-    description: pkg.description,
+    description: '__MSG_pluginDesc__',
+    default_locale: 'zh_CN',
     action: {
       default_icon: './assets/icon-48.png',
       default_popup: './dist/popup/index.html',
@@ -31,8 +32,8 @@ export async function getManifest() {
       96: './assets/icon-96.png',
       128: './assets/icon-128.png',
     },
-    permissions: ['storage', 'cookies', 'alarms'],
-    host_permissions: ['*://*.mihoyo.com/'],
+    permissions: ['storage', 'cookies', 'alarms', 'declarativeNetRequest'],
+    host_permissions: ['*://*.mihoyo.com/', '*://*.hoyolab.com/'],
     content_security_policy: {
       extension_pages: isDev
         ? `script-src 'self' http://localhost:${port}; object-src 'self' http://localhost:${port}`
