@@ -225,7 +225,7 @@ a {
   }
 
   &.reverse {
-    @apply border-dashed border-b-1 border-primary-dark;
+    @apply border-dashed border-b-1 border-primary-dark text-primary-dark;
   }
 }
 
