@@ -10,4 +10,16 @@ export default defineConfig({
       resolve(__dirname, 'src/**/*.{vue,html}'),
     ],
   },
+  theme: {
+    extend: {
+      colors: {
+        'primary-light': {
+          DEFAULT: '#d5c9b6',
+        },
+        'primary-dark': {
+          DEFAULT: '#141d2e',
+        },
+      },
+    },
+  },
 })
