@@ -2,7 +2,7 @@
   "name": "paimon-webext",
   "displayName": "派蒙 Paimon",
   "version": "0.0.4",
-  "description": "在浏览器中查看原神账号情况(目前仅支持官服、B服) Check your Genshin Impact account status in your browser.(China Server Support Only)",
+  "description": "在浏览器中查看原神账号情况 Check your Genshin Impact account status in your browser.",
   "author": {
     "name": "daidr",
     "url": "https://daidr.me"
