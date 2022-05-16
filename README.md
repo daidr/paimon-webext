@@ -5,8 +5,9 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits)
-[![Mozilla Add-on](https://img.shields.io/amo/users/%E6%B4%BE%E8%92%99-paimon?label=firefox)](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
+[![Mozilla Add-on](https://img.shields.io/amo/users/%E6%B4%BE%E8%92%99-paimon?label=firefox&color=green)](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome&color=green)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
+[![Microsoft Edge Addons](https://img.shields.io/badge/dynamic/json?label=edge&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Famlfaonbmcninlpijbjkblmfgcanjdih&color=green)](https://microsoftedge.microsoft.com/addons/detail/%E6%B4%BE%E8%92%99-paimon/amlfaonbmcninlpijbjkblmfgcanjdih)
 
 > 在浏览器中查看原神账号情况(目前仅支持官服、B服)
 > Check your Genshin Impact account status in your browser. (China Server Support Only)
