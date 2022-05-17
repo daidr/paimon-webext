@@ -1,5 +1,5 @@
 import { onMessage } from 'webext-bridge'
-import { cookies, storage, alarms } from 'webextension-polyfill'
+import { cookies, storage, alarms, Cookies } from 'webextension-polyfill'
 
 import { IRoleDataItem, IUserDataItem } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
@@ -41,6 +41,29 @@ const updateRules = async () => {
 
   await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3], addRules: rules })
 }
+
+const responseRuleID = 19198
+
+const initResponseRules = async () => {
+  const rules = []
+  for (const i of [0, 1, 2, 3]) {
+    rules.push({
+      id: responseRuleID + i,
+      priority: 1,
+      action: {
+        type: 'modifyHeaders',
+        responseHeaders: [
+          { header: 'set-cookie', operation: 'set', value: '' },
+        ],
+      },
+      condition: { urlFilter: targetPages[i] },
+    })
+  }
+
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [responseRuleID, responseRuleID + 1, responseRuleID + 2, responseRuleID + 3], addRules: rules })
+}
+
+initResponseRules()
 
 // webRequest.onBeforeSendHeaders.addListener(
 //   rewriteCookieHeader,
@@ -85,6 +108,27 @@ const getHoYoLABCookie = async function () {
   else {
     return ''
   }
+}
+
+const clearMiHoYoCookie = async function () {
+  const originCookieList: Cookies.Cookie[] = await cookies.getAll({ domain: 'mihoyo.com' })
+  const cookieList: Cookies.RemoveDetailsType[] = originCookieList.map((cookie) => ({
+    name: cookie.name,
+    url: 'https://mihoyo.com',
+  }))
+  for (const cookie of cookieList)
+    await cookies.remove(cookie)
+}
+
+const clearHoYoLABCookie = async function () {
+  const originCookieList: Cookies.Cookie[] = await cookies.getAll({ domain: 'hoyolab.com' })
+  const cookieList: Cookies.RemoveDetailsType[] = originCookieList.map((cookie) => ({
+    name: cookie.name,
+    url: 'https://hoyolab.com',
+  }))
+
+  for (const cookie of cookieList)
+    await cookies.remove(cookie)
 }
 
 const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataItem, cookie: string) {
@@ -235,7 +279,17 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
   if (result) {
     for (const item of result)
       await addNewRoleToList(oversea, item, cookie)
-    refreshData()
+    await refreshData()
+
+    // 清空 cookie
+    if (oversea) {
+      // 清空 hoyolab cookie
+      await clearHoYoLABCookie()
+    }
+    else {
+      // 清空 mihoyo cookie
+      await clearMiHoYoCookie()
+    }
     return result.length
   } else {
     return -1
