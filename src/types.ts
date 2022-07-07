@@ -65,11 +65,11 @@ export interface IUserDataItem {
   /**
    * 获取的数据
    */
-  data?: IUserData
+  data: IUserData
   /**
    * 最后一次获取数据的时间
    */
-  updateTimestamp?: number
+  updateTimestamp: number
   /**
    * 是否出错
    */

@@ -17,7 +17,7 @@ const onSelectUidChange = (e: any) => {
 
 const userData = computed(() => {
   const data = userDataList.value.find(item => item.uid === selectedUid.value)
-  return data || {}
+  return data || {} as IUserDataItem
 })
 
 // const updateUserInfo = async() => {
@@ -122,7 +122,8 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
             {{ i18n.getMessage('popup_CurrentTitle') }}
             <select @change="onSelectUidChange">
               <option v-for="item in userDataList" :key="item.uid" :value="item.uid"
-                :selected="item.uid === selectedUid">
+                      :selected="item.uid === selectedUid"
+              >
                 {{ item.nickname }}({{ item.uid }})
               </option>
             </select>
@@ -138,7 +139,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
           <h2>
             <img src="/assets/genshin/resin.png" /> {{ i18n.getMessage('popup_ResinTitle') }}
             <span class="update-time">{{ i18n.getMessage('popup_UpdateTimeTitle') }}{{ new
-                Date(userData.updateTimestamp).toLocaleString()
+              Date(userData.updateTimestamp).toLocaleString()
             }}</span>
           </h2>
           <p class="resin-num">
@@ -150,7 +151,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:hourglass /> {{ i18n.getMessage('popup_FullyReplenishedTitle') }}
               </span>
               <span class="right">
-                <TimeComponent :time="getTime(userData.data.resin_recovery_time)"></TimeComponent>
+                <TimeComponent :time="getTime(Number(userData.data.resin_recovery_time))"></TimeComponent>
               </span>
             </p>
             <p class="sub-stat-item">
@@ -158,7 +159,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:clock-two /> {{ i18n.getMessage('popup_ETATitle') }}
               </span>
               <span class="right">
-                <DayComponent :time="getClock(userData.data.resin_recovery_time)"></DayComponent>
+                <DayComponent :time="getClock(Number(userData.data.resin_recovery_time))"></DayComponent>
               </span>
             </p>
           </template>
@@ -167,7 +168,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
         <div class="expeditions-stats">
           <h2 :class="{ 'has-result': userData.data.expeditions.length > 0 }">
             {{ i18n.getMessage('popup_ExpeditionsTitle') }} {{ userData.data.current_expedition_num }}/{{
-                userData.data.max_expedition_num
+              userData.data.max_expedition_num
             }}
           </h2>
           <template v-if="userData.data.expeditions.length > 0">
@@ -175,12 +176,12 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
               <span class="left">
                 <img :src="expedition.avatar_side_icon" />
                 {{ expedition.status == 'Ongoing' ? i18n.getMessage('popup_ExploringStatus') :
-                    i18n.getMessage('popup_FinishedStatus')
+                  i18n.getMessage('popup_FinishedStatus')
                 }}
               </span>
               <span v-if="expedition.remained_time == '0'" class="right">-</span>
               <span v-else class="right">
-                <TimeComponent :time="getTime(expedition.remained_time)"></TimeComponent>
+                <TimeComponent :time="getTime(Number(expedition.remained_time))"></TimeComponent>
               </span>
             </div>
           </template>
@@ -194,7 +195,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
             <span class="right">{{ userData.data.finished_task_num }}/{{ userData.data.total_task_num }}
               <span v-if="userData.data.finished_task_num == userData.data.total_task_num">
                 {{ userData.data.is_extra_task_reward_received ? i18n.getMessage('popup_ExtraTaskReceived') :
-                    i18n.getMessage('popup_ExtraTaskNotReceived')
+                  i18n.getMessage('popup_ExtraTaskNotReceived')
                 }}
               </span>
             </span>
@@ -217,8 +218,8 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
               <img src="/assets/genshin/transformer.png" /> {{ i18n.getMessage('popup_ParametricTransformerTitle') }}
             </span>
             <span class="right">{{
-                userData.data.transformer.recovery_time.reached ? i18n.getMessage('popup_Available') :
-                  calcRecoveryTime(userData.data.transformer.recovery_time)
+              userData.data.transformer.recovery_time.reached ? i18n.getMessage('popup_Available') :
+              calcRecoveryTime(userData.data.transformer.recovery_time)
             }}</span>
           </div>
         </div>
@@ -241,11 +242,11 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
       </h1>
       <p class="tips">
         {{ i18n.getMessage('popup_ErrorTips_1') }}
-      <ol>
-        <li>{{ i18n.getMessage('popup_ErrorTips_2') }}</li>
-        <li>{{ i18n.getMessage('popup_ErrorTips_3') }}</li>
-        <li>{{ i18n.getMessage('popup_ErrorTips_4') }}</li>
-      </ol>
+        <ol>
+          <li>{{ i18n.getMessage('popup_ErrorTips_2') }}</li>
+          <li>{{ i18n.getMessage('popup_ErrorTips_3') }}</li>
+          <li>{{ i18n.getMessage('popup_ErrorTips_4') }}</li>
+        </ol>
       </p>
       <div class="btn" @click="openOptionsPage">
         {{ i18n.getMessage('popup_ErrorOpenConfigButtonText') }}
@@ -360,7 +361,6 @@ a {
     }
   }
 }
-
 
 .main-wrapper {
   @apply flex flex-col gap-y-2;
