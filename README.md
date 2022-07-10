@@ -52,6 +52,11 @@ pnpm build
 - UI 参考: [spencerwooo/PaimonMenuBar](https://github.com/spencerwooo/PaimonMenuBar)
 - [[心得交流] [工具分享] 在浏览器里直接查看自己树脂情况的小工具](https://bbs.nga.cn/read.php?tid=31590015)
 
+# 翻译 Translation
+- 简体中文 @daidr
+- English @daidr
+- Русский @133718
+
 ## 协议 License
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
