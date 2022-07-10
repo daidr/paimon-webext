@@ -8,8 +8,8 @@
 [![Mozilla Add-on](https://img.shields.io/amo/users/%E6%B4%BE%E8%92%99-paimon?label=firefox)](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 
-> 在浏览器中查看原神账号情况(目前仅支持官服、B服)
-> Check your Genshin Impact account status in your browser. (China Server Support Only)
+> 在浏览器中查看原神账号情况
+> Check your Genshin Impact account status in your browser.
 
 [Firefox Addons 链接](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
 
