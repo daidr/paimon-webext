@@ -235,6 +235,10 @@ a {
 </style>
 
 <style lang="scss" scoped>
+html {
+  @apply text-base;
+}
+
 nav {
   @apply flex mb-4 gap-x-2;
   @apply select-none;
