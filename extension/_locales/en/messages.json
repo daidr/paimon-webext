@@ -195,7 +195,7 @@
         "message": "Open Source"
     },
     "options_About_OpenSource": {
-        "message": "The extension is open source and hosted on <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>, obey the MIT license to use the source code please.\nYou can try to create <a class='reverse' href='https://github.com/daidr/issues' target='_blank'>Issues</a> if you have any problems and I'll help you solve them as much as possible. It would be better if you could create PR👍"
+        "message": "The extension is open source and hosted on <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>, obey the MIT license to use the source code please.\nYou can try to create <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a> if you have any problems and I'll help you solve them as much as possible. It would be better if you could create PR👍"
     },
     "options_About_ThankTitle": {
         "message": "Credits"
