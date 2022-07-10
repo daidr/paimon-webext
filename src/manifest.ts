@@ -13,7 +13,7 @@ export async function getManifest() {
     name: pkg.displayName || pkg.name,
     version: pkg.version,
     description: '__MSG_pluginDesc__',
-    default_locale: 'zh_CN',
+    default_locale: 'en',
     action: {
       default_icon: './assets/icon-48.png',
       default_popup: './dist/popup/index.html',
