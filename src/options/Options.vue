@@ -245,6 +245,7 @@ nav {
     @apply cursor-pointer;
     @apply transition-all;
     @apply text-primary-light bg-transparent;
+    @apply whitespace-nowrap;
 
     &:hover {
       @apply bg-primary-light/70;
