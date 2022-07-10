@@ -215,6 +215,10 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
 </template>
 
 <style lang="scss">
+html {
+  @apply text-base;
+}
+
 a {
   @apply transition;
   @apply text-primary-light;
