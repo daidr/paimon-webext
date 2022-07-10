@@ -112,7 +112,9 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
       <template v-if="!userData.isError">
         <div class="resin-stats">
           <h2>
-            <img src="/assets/genshin/resin.png" /> {{ i18n.getMessage('popup_ResinTitle') }}
+            <span class="resin-title">
+              <img src="/assets/genshin/resin.png" />
+              {{ i18n.getMessage('popup_ResinTitle') }}</span>
             <span class="update-time">{{ i18n.getMessage('popup_UpdateTimeTitle') }}{{ new
               Date(userData.updateTimestamp).toLocaleString()
             }}</span>
@@ -385,17 +387,23 @@ a {
     color: #e6decc;
 
     h2 {
-      @apply text-sm tracking-widest flex items-center gap-x-2 opacity-90;
+      @apply text-sm tracking-widest flex items-center justify-between gap-x-2 opacity-90;
 
       img {
         @apply h-4 w-4;
       }
 
+      .resin-title {
+        @apply text-ellipsis flex-shrink overflow-hidden whitespace-nowrap h-full;
+        @apply flex items-center gap-x-2;
+      }
+
       .update-time {
         @apply text-primary-light/40 select-none;
-        @apply text-center text-xs self-end;
+        @apply text-right text-xs;
         @apply transition-all overflow-hidden;
-        @apply max-w-0 whitespace-nowrap opacity-0 duration-500;
+        @apply max-w-0 whitespace-nowrap opacity-0 duration-600;
+        @apply flex-shrink-0;
       }
 
       &:hover {
@@ -477,6 +485,7 @@ a {
 
       .right {
         @apply font-bold text-sm opacity-60;
+        @apply text-right;
         font-family: number-mono;
       }
     }
