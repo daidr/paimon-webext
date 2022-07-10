@@ -351,12 +351,14 @@ a {
     select {
       @apply bg-transparent cursor-pointer;
       @apply rounded-md;
-      @apply transition;
-      @apply px-1 py-0.5 ml-1;
+      @apply transition-all;
+      @apply px-0 ml-0;
+      @apply py-0.5;
       @apply text-primary-dark;
 
       &:hover {
         @apply bg-[#fcf6e480];
+        @apply px-1 ml-1;
       }
     }
 
