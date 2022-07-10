@@ -195,7 +195,7 @@
         "message": "开源说明"
     },
     "options_About_OpenSource": {
-        "message": "本拓展开源在 <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a> <del>(求个star)</del>，使用源码请遵循 MIT 开源协议。\n遇到问题可以尝试给我提 <a class='reverse' href='https://github.com/daidr/issues' target='_blank'>Issues</a>，我会尽可能帮助你解决问题。也欢迎大家发 PR👍"
+        "message": "本拓展开源在 <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a> <del>(求个star)</del>，使用源码请遵循 MIT 开源协议。\n遇到问题可以尝试给我提 <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a>，我会尽可能帮助你解决问题。也欢迎大家发 PR👍"
     },
     "options_About_ThankTitle": {
         "message": "鸣谢"
