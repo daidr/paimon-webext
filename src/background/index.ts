@@ -1,7 +1,7 @@
 import { onMessage } from 'webext-bridge'
 import { cookies, storage, alarms, Cookies } from 'webextension-polyfill'
 
-import { IRoleDataItem, IUserDataItem } from '~/types'
+import { IRoleDataItem, IUserData, IUserDataItem } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
 // import { cookies, storage, alarms } from 'webextension-polyfill'
 
@@ -149,6 +149,8 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
     serverRegion: roleInfo.region,
     serverType: oversea ? 'os' : 'cn',
     cookie,
+    data: {} as IUserData,
+    updateTimestamp: Date.now(),
   }
 
   // 如果不存在，则添加

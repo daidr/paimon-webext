@@ -17,7 +17,7 @@ const onSelectUidChange = (e: any) => {
 
 const userData = computed(() => {
   const data = userDataList.value.find(item => item.uid === selectedUid.value)
-  return data || {}
+  return data || {} as IUserDataItem
 })
 
 const updateUserInfo = async() => {
@@ -126,7 +126,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:hourglass /> {{ i18n.getMessage('popup_FullyReplenishedTitle') }}
               </span>
               <span class="right">
-                <TimeComponent :time="getTime(userData.data.resin_recovery_time)"></TimeComponent>
+                <TimeComponent :time="getTime(Number(userData.data.resin_recovery_time))"></TimeComponent>
               </span>
             </p>
             <p class="sub-stat-item">
@@ -134,7 +134,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:clock-two /> {{ i18n.getMessage('popup_ETATitle') }}
               </span>
               <span class="right">
-                <DayComponent :time="getClock(userData.data.resin_recovery_time)"></DayComponent>
+                <DayComponent :time="getClock(Number(userData.data.resin_recovery_time))"></DayComponent>
               </span>
             </p>
           </template>
@@ -156,7 +156,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
               </span>
               <span v-if="expedition.remained_time == '0'" class="right">-</span>
               <span v-else class="right">
-                <TimeComponent :time="getTime(expedition.remained_time)"></TimeComponent>
+                <TimeComponent :time="getTime(Number(expedition.remained_time))"></TimeComponent>
               </span>
             </div>
           </template>

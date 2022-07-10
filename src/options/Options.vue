@@ -10,7 +10,7 @@ const refreshText = ref('')
 
 const activeNavItem = ref(0)
 
-const manifestData = ref({})
+const manifestData = ref({}) as any
 
 fetch('/manifest.json')
   .then((response) => response.json())
