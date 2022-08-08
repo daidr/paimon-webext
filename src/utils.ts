@@ -390,7 +390,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
 
 async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function): Promise<IUserData | false> {
   // 根据 oversea 参数选择对应 api 地址
-  const url = new URL(oversea ? 'https://bbs-api-os.mihoyo.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
+  const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
 
   // 补全 url query
   const params = {
