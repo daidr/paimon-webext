@@ -75,13 +75,20 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
   <main class="px-4 py-5">
     <nav>
       <div :class="{ active: activeNavItem == 0 }" @click="activeNavItem = 0">
-        {{ i18n.getMessage('options_Nav_AddNewRole') }}
+        <uil:user-plus />
+        <span>{{ i18n.getMessage('options_Nav_AddNewRole') }}</span>
       </div>
       <div :class="{ active: activeNavItem == 1 }" @click="activeNavItem = 1">
-        {{ i18n.getMessage('options_Nav_RoleListSetting') }}
+        <uil:list-ul />
+        <span>{{ i18n.getMessage('options_Nav_RoleListSetting') }}</span>
+      </div>
+      <div :class="{ active: activeNavItem == 3 }" @click="activeNavItem = 3">
+        <uil:bell />
+        <span>{{ i18n.getMessage('options_Nav_AlertSetting') }}</span>
       </div>
       <div :class="{ active: activeNavItem == 2 }" @click="activeNavItem = 2">
-        {{ i18n.getMessage('options_Nav_About') }}
+        <uil:info-circle />
+        <span>{{ i18n.getMessage('options_Nav_About') }}</span>
       </div>
     </nav>
     <template v-if="activeNavItem == 0">
@@ -252,22 +259,37 @@ nav {
   @apply select-none;
 
   div {
-    @apply px-3 py-2;
-    @apply rounded-md text-base;
+    @apply px-2 py-1.5;
+    @apply rounded-md text-sm;
     @apply cursor-pointer;
     @apply transition-all;
     @apply text-primary-light bg-transparent;
     @apply whitespace-nowrap;
+    @apply flex items-center;
+
+    span {
+      @apply overflow-hidden;
+      @apply max-w-0 m-l-0;
+
+      transition: max-width 0.15s ease-out, margin 0.15s ease-out;
+    }
 
     &:hover {
       @apply bg-primary-light/70;
       @apply text-primary-dark;
+
+      span {
+        @apply max-w-25 m-l-0.5;
+      }
     }
 
     &.active {
       @apply cursor-default;
       @apply bg-primary-light bg-opacity-100;
       @apply text-primary-dark;
+      span {
+        @apply max-w-25 m-l-0.5;
+      }
     }
   }
 }
