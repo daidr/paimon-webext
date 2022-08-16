@@ -137,6 +137,7 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
   // 构造一个 roleItem
   const roleItem: IUserDataItem = {
     isEnabled: true,
+    enabledAlert: false,
     uid: roleInfo.game_uid,
     nickname: roleInfo.nickname,
     level: roleInfo.level,
