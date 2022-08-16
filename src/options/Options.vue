@@ -259,7 +259,7 @@ nav {
   @apply select-none;
 
   div {
-    @apply px-2 py-1.5;
+    @apply px-2 py-1.5 h-9;
     @apply rounded-md text-sm;
     @apply cursor-pointer;
     @apply transition-all;
