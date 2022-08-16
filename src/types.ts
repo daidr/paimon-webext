@@ -39,6 +39,10 @@ export interface IUserDataItem {
    */
   isEnabled: boolean
   /**
+   * 是否开启提示功能（默认关闭）
+   */
+  enabledAlert: boolean
+  /**
    * 服务器类型（国服/海外）
    */
   serverType: ServerTypes
