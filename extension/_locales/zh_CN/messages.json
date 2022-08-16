@@ -128,6 +128,9 @@
     "options_Nav_RoleListSetting": {
         "message": "角色列表&设置"
     },
+    "options_Nav_AlertSetting": {
+        "message": "提醒"
+    },
     "options_Nav_About": {
         "message": "关于"
     },

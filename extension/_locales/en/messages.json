@@ -128,6 +128,9 @@
     "options_Nav_RoleListSetting": {
         "message": "Role List & Setting"
     },
+    "options_Nav_AlertSetting": {
+        "message": "Alert"
+    },
     "options_Nav_About": {
         "message": "About"
     },
