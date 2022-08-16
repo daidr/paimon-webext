@@ -255,7 +255,7 @@ html {
 }
 
 nav {
-  @apply flex mb-4 gap-x-2;
+  @apply flex mb-4 gap-x-2 w-full;
   @apply select-none;
 
   div {
@@ -266,6 +266,7 @@ nav {
     @apply text-primary-light bg-transparent;
     @apply whitespace-nowrap;
     @apply flex items-center;
+    @apply flex-shrink;
 
     span {
       @apply overflow-hidden;
@@ -277,10 +278,6 @@ nav {
     &:hover {
       @apply bg-primary-light/70;
       @apply text-primary-dark;
-
-      span {
-        @apply max-w-25 m-l-0.5;
-      }
     }
 
     &.active {
@@ -288,7 +285,7 @@ nav {
       @apply bg-primary-light bg-opacity-100;
       @apply text-primary-dark;
       span {
-        @apply max-w-25 m-l-0.5;
+        @apply max-w-40 m-l-0.5;
       }
     }
   }
@@ -434,7 +431,8 @@ h1 {
       @apply font-bold;
       @apply select-none align-top;
       div {
-        @apply whitespace-nowrap;
+        @apply whitespace-normal;
+        word-break: keep-all;
         @apply p-1.5 rounded-md;
         background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
       }
