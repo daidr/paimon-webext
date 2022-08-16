@@ -128,6 +128,9 @@
     "options_Nav_RoleListSetting": {
         "message": "Аккаунты и настройки"
     },
+    "options_Nav_AlertSetting": {
+        "message": "Тревога"
+    },
     "options_Nav_About": {
         "message": "Дополнение и автор"
     },
