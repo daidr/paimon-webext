@@ -22,7 +22,7 @@ const writeDataToStorage = async function <T>(key: string, data: T) {
 const targetPages = [
   'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
   'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
-  'https://bbs-api-os.mihoyo.com/game_record/app/genshin/api/dailyNote*',
+  'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote*',
   'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote*',
 ]
 
