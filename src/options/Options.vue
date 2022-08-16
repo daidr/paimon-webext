@@ -176,13 +176,17 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
           <tbody>
             <tr>
               <td class="key">
-                {{ i18n.getMessage('options_About_VersionTitle') }}
+                <div>
+                  {{ i18n.getMessage('options_About_VersionTitle') }}
+                </div>
               </td>
               <td class="value" v-html="manifestData.version"></td>
             </tr>
             <tr>
               <td class="key">
-                {{ i18n.getMessage('options_About_AuthorTitle') }}
+                <div>
+                  {{ i18n.getMessage('options_About_AuthorTitle') }}
+                </div>
               </td>
               <td
                 class="value"
@@ -191,7 +195,9 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
             </tr>
             <tr>
               <td class="key">
-                {{ i18n.getMessage('options_About_OpenSourceTitle') }}
+                <div>
+                  {{ i18n.getMessage('options_About_OpenSourceTitle') }}
+                </div>
               </td>
               <td
                 class="value"
@@ -200,7 +206,9 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
             </tr>
             <tr>
               <td class="key">
-                {{ i18n.getMessage('options_About_ThankTitle') }}
+                <div>
+                  {{ i18n.getMessage('options_About_ThankTitle') }}
+                </div>
               </td>
               <td
                 class="value"
@@ -397,19 +405,21 @@ h1 {
 .about-panel {
   .about-table {
     @apply text-primary-dark text-base;
-    @apply w-full border-separate;
+    @apply w-full border-separate table-auto;
     border-spacing: 8px;
 
     .key {
-      @apply table-caption;
       @apply font-bold;
-      @apply w-100px;
-      @apply select-none;
+      @apply select-none align-top;
+      div {
+        @apply whitespace-nowrap;
+        @apply p-1.5 rounded-md;
+        background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+      }
     }
 
-    .key,
     .value {
-      @apply p-2 rounded-md whitespace-pre-wrap;
+      @apply p-1.5 rounded-md whitespace-pre-wrap;
       background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
     }
   }
