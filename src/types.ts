@@ -33,6 +33,39 @@ export interface IUserData {
   }
 }
 
+export interface IAlertSetting {
+  /**
+   * 树脂阈值（默认 155）
+   */
+  resin: number
+  /**
+   * 参量质变仪
+   */
+  transformer: boolean
+  /**
+   * 洞天宝钱
+   */
+  realmCurrency: boolean
+}
+
+/**
+* 是否在周期内提醒过
+*/
+export interface IAlertStatus {
+  /**
+   * 树脂
+   */
+  resin: boolean
+  /**
+   * 参量质变仪
+   */
+  transformer: boolean
+  /**
+   * 洞天宝钱
+   */
+  realmCurrency: boolean
+}
+
 export interface IUserDataItem {
   /**
    * 是否启用（不启用则不显示，且不获取数据）
@@ -42,6 +75,10 @@ export interface IUserDataItem {
    * 是否开启提示功能（默认关闭）
    */
   enabledAlert: boolean
+  /**
+   * 周期内是否提醒过
+   */
+  alertStatus: IAlertStatus
   /**
    * 服务器类型（国服/海外）
    */
