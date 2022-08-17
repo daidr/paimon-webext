@@ -54,6 +54,7 @@ pnpm build
 
 # 翻译 Translation
 - 简体中文 @daidr
+- 繁体中文 @stevened7246
 - English @daidr
 - Русский @133718
 
