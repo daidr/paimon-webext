@@ -1,5 +1,5 @@
 import { onMessage } from 'webext-bridge'
-import { cookies, storage, alarms, webRequest, Cookies } from 'webextension-polyfill'
+import { cookies, storage, alarms, webRequest, Cookies, notifications } from 'webextension-polyfill'
 
 import { IRoleDataItem, IUserData, IUserDataItem, IAlertSetting, IAlertStatus } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
@@ -231,6 +231,22 @@ alarms.onAlarm.addListener((alarmInfo) => {
   }, 1000)
 })()
 
+// 传入 AlertStatus，对存在的通知进行清理
+const clearNotifications = async function (alertStatus: IAlertStatus) {
+  if (alertStatus.resin !== '') {
+    await notifications.clear(alertStatus.resin)
+    alertStatus.resin = ''
+  }
+  if (alertStatus.realmCurrency !== '') {
+    await notifications.clear(alertStatus.realmCurrency)
+    alertStatus.realmCurrency = ''
+  }
+  if (alertStatus.transformer !== '') {
+    await notifications.clear(alertStatus.transformer)
+    alertStatus.transformer = ''
+  }
+}
+
 onMessage('get_alert_setting', async () => {
   return await readDataFromStorage<IAlertSetting>('alertSetting', defaultAlertSetting)
 })
@@ -263,6 +279,7 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
   })
   originRoleList[index].isEnabled = status
   // 重置角色提醒状态
+  clearNotifications(originRoleList[index].alertStatus)
   originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
@@ -274,6 +291,7 @@ onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_a
   })
   originRoleList[index].enabledAlert = status
   // 重置角色提醒状态
+  clearNotifications(originRoleList[index].alertStatus)
   originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
