@@ -205,5 +205,29 @@
     },
     "options_About_Thank": {
         "message": "感谢本扩展仓库的所有贡献者\n本扩展灵感来源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+    },
+    "options_Alert_Setting": {
+        "message": "设置"
+    },
+    "options_Alert_Resin": {
+        "message": "原粹树脂阈值"
+    },
+    "options_Alert_Transformer": {
+        "message": "参量质变仪可用"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "洞天宝钱溢出"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "没有找到任何角色"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "提醒"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "昵称(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "服务器"
     }
 }
