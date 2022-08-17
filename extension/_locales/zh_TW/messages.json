@@ -78,7 +78,7 @@
         "message": "(未領取)"
     },
     "popup_RealmCurrencyTitle": {
-        "message": "洞天報簽"
+        "message": "洞天寶錢"
     },
     "popup_WeeklyBossesTitle": {
         "message": "周本 Boss"
@@ -205,5 +205,29 @@
     },
     "options_About_Thank": {
         "message": "感謝本擴展倉庫的所有貢獻者\n本擴展靈感來源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+    },
+    "options_Alert_Setting": {
+        "message": "設置"
+    },
+    "options_Alert_Resin": {
+        "message": "原粹樹脂閾值"
+    },
+    "options_Alert_Transformer": {
+        "message": "參數質變儀可用"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "洞天寶錢溢出"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "沒有找到任何角色"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "提醒"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "昵稱(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "伺服器"
     }
 }

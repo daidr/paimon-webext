@@ -205,5 +205,29 @@
     },
     "options_About_Thank": {
         "message": "Особая благодарность всем участникам этого расширения\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+    },
+    "options_Alert_Setting": {
+        "message": "настройки"
+    },
+    "options_Alert_Resin": {
+        "message": "Порог смолы"
+    },
+    "options_Alert_Transformer": {
+        "message": "трансформатор в наличии"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "Сокровища обители переполнена"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "Аккаунты не добавлены"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "Тревога"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "Ник(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "Сервер"
     }
 }

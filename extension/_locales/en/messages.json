@@ -205,5 +205,29 @@
     },
     "options_About_Thank": {
         "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+    },
+    "options_Alert_Setting": {
+        "message": "Settings"
+    },
+    "options_Alert_Resin": {
+        "message": "resin threshold"
+    },
+    "options_Alert_Transformer": {
+        "message": "transformer is available"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "realm currency overflowed"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "No role found"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "Alert"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "Nickname(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "Server"
     }
 }
