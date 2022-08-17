@@ -59,15 +59,15 @@ export interface IAlertStatus {
   /**
    * 树脂
    */
-  resin: number
+  resin: string
   /**
    * 参量质变仪
    */
-  transformer: number
+  transformer: string
   /**
    * 洞天宝钱
    */
-  realmCurrency: number
+  realmCurrency: string
 }
 
 export interface IUserDataItem {
