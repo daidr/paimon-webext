@@ -53,21 +53,21 @@ export interface IAlertSetting {
 }
 
 /**
-* 是否在周期内提醒过
+* 当前提醒的通知 ID
 */
 export interface IAlertStatus {
   /**
    * 树脂
    */
-  resin: boolean
+  resin: number
   /**
    * 参量质变仪
    */
-  transformer: boolean
+  transformer: number
   /**
    * 洞天宝钱
    */
-  realmCurrency: boolean
+  realmCurrency: number
 }
 
 export interface IUserDataItem {
