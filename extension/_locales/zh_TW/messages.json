@@ -229,5 +229,26 @@
     },
     "options_Alert_RoleServerTitle": {
         "message": "伺服器"
+    },
+    "options_Alert_Notify_Title": {
+        "message": "派蒙提醒"
+    },
+    "options_Alert_Notify_Resin": {
+        "message": "你的原粹樹脂量為 $1，已超過閾值"
+    },
+    "options_Alert_Notify_Resin_Firefox": {
+        "message": "$1 的原粹樹脂已超過閾值"
+    },
+    "options_Alert_Notify_Transformer": {
+        "message": "參數質變儀可用了"
+    },
+    "options_Alert_Notify_Transformer_Firefox": {
+        "message": "$1 的參數質變儀可用了"
+    },
+    "options_Alert_Notify_RealmCurrency": {
+        "message": "你的洞天寶錢溢出了"
+    },
+    "options_Alert_Notify_RealmCurrency_Firefox": {
+        "message": "$1 的洞天寶錢溢出了"
     }
 }
