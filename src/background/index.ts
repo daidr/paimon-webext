@@ -1,7 +1,7 @@
 import { onMessage } from 'webext-bridge'
 import { cookies, storage, alarms, Cookies } from 'webextension-polyfill'
 
-import { IRoleDataItem, IUserData, IUserDataItem } from '~/types'
+import { IRoleDataItem, IUserData, IUserDataItem, IAlertSetting, IAlertStatus } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
 // import { cookies, storage, alarms } from 'webextension-polyfill'
 
@@ -11,6 +11,21 @@ const INTERVAL_TIME = 1
 // 向storage写入数据
 const writeDataToStorage = async function <T>(key: string, data: T) {
   await storage.local.set({ [key]: data })
+}
+
+// 角色的默认提醒设定
+const defaultAlertSetting: IAlertSetting = {
+  resin: false,
+  resinThreshold: 155,
+  realmCurrency: false,
+  transformer: false,
+}
+
+// 角色默认提醒状态
+const defaultAlertStatus: IAlertStatus = {
+  resin: false,
+  realmCurrency: false,
+  transformer: false,
 }
 
 const targetPages = [
@@ -144,6 +159,7 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
   const roleItem: IUserDataItem = {
     isEnabled: true,
     enabledAlert: false,
+    alertStatus: defaultAlertStatus,
     uid: roleInfo.game_uid,
     nickname: roleInfo.nickname,
     level: roleInfo.level,
@@ -222,6 +238,14 @@ alarms.onAlarm.addListener((alarmInfo) => {
   }, 1000)
 })()
 
+onMessage('get_alert_setting', async () => {
+  return await readDataFromStorage<IAlertSetting>('alertSetting', defaultAlertSetting)
+})
+
+onMessage<{ resin: boolean; resinThreshold: number; transformer: boolean; realmCurrency: boolean }, 'set_alert_setting'>('set_alert_setting', async ({ data: alertSetting }) => {
+  await writeDataToStorage('alertSetting', alertSetting)
+})
+
 onMessage('get_role_list', async () => {
   return await readDataFromStorage<IUserDataItem[]>('roleList', [])
 })
@@ -245,6 +269,19 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
     return item.uid === uid
   })
   originRoleList[index].isEnabled = status
+  // 重置角色提醒状态
+  originRoleList[index].alertStatus = defaultAlertStatus
+  await writeDataToStorage('roleList', originRoleList)
+})
+
+onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_alert_status', async ({ data: { uid, status } }) => {
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+  originRoleList[index].enabledAlert = status
+  // 重置角色提醒状态
+  originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
 
