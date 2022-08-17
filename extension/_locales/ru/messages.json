@@ -229,5 +229,8 @@
     },
     "options_Alert_RoleServerTitle": {
         "message": "Сервер"
+    },
+    "options_Alert_Notify_Title": {
+        "message": "Паймон Тревога"
     }
 }
