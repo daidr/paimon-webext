@@ -149,12 +149,6 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
     return item.uid === roleInfo.game_uid
   })
 
-  const defaultAlertStatus: IAlertStatus = {
-    resin: false,
-    realmCurrency: false,
-    transformer: false,
-  }
-
   // 构造一个 roleItem
   const roleItem: IUserDataItem = {
     isEnabled: true,
