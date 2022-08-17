@@ -32,7 +32,7 @@ export async function getManifest() {
       96: './assets/icon-96.png',
       128: './assets/icon-128.png',
     },
-    permissions: ['storage', 'cookies', 'alarms', 'declarativeNetRequest'],
+    permissions: ['storage', 'cookies', 'alarms', 'notifications', 'declarativeNetRequest'],
     host_permissions: ['*://*.mihoyo.com/', '*://*.hoyolab.com/'],
     content_security_policy: {
       extension_pages: isDev
