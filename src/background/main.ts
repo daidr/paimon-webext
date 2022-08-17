@@ -279,6 +279,8 @@ onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_a
     return item.uid === uid
   })
   originRoleList[index].enabledAlert = status
+  // 重置角色提醒状态
+  originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
 
