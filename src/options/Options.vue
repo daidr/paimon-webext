@@ -43,11 +43,12 @@ watch(activeNavItem, (newValue) => {
 })
 
 watch(alertSetting, (newValue) => {
-  console.log(newValue)
   if (newValue.resinThreshold < 60) alertSetting.resinThreshold = 60
   else if (newValue.resinThreshold > 160) alertSetting.resinThreshold = 160
 
-  sendMessage<number, 'set_alert_setting'>('set_alert_setting', newValue)
+  sendMessage<number, 'set_alert_setting'>('set_alert_setting', {
+    ...newValue,
+  })
 })
 
 const isFetching = ref(false)
