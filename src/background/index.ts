@@ -23,9 +23,9 @@ const defaultAlertSetting: IAlertSetting = {
 
 // 角色默认提醒状态
 const defaultAlertStatus: IAlertStatus = {
-  resin: 0,
-  realmCurrency: 0,
-  transformer: 0,
+  resin: '',
+  realmCurrency: '',
+  transformer: '',
 }
 
 const targetPages = [
