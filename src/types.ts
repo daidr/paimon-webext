@@ -35,9 +35,13 @@ export interface IUserData {
 
 export interface IAlertSetting {
   /**
+   * 树脂
+   */
+  resin: boolean
+  /**
    * 树脂阈值（默认 155）
    */
-  resin: number
+  resinThreshold: number
   /**
    * 参量质变仪
    */
