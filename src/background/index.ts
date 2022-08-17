@@ -1,17 +1,11 @@
 import { onMessage } from 'webext-bridge'
-import { cookies, storage, alarms, Cookies } from 'webextension-polyfill'
+import { cookies, storage, alarms, Cookies, notifications, runtime, i18n, Notifications } from 'webextension-polyfill'
 
 import { IRoleDataItem, IUserData, IUserDataItem, IAlertSetting, IAlertStatus } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
-// import { cookies, storage, alarms } from 'webextension-polyfill'
 
 // 一分钟
 const INTERVAL_TIME = 1
-
-// 向storage写入数据
-const writeDataToStorage = async function <T>(key: string, data: T) {
-  await storage.local.set({ [key]: data })
-}
 
 // 角色的默认提醒设定
 const defaultAlertSetting: IAlertSetting = {
@@ -26,6 +20,139 @@ const defaultAlertStatus: IAlertStatus = {
   resin: '',
   realmCurrency: '',
   transformer: '',
+}
+
+// 通知图标路径
+const notificationIconList = {
+  resin: runtime.getURL('/assets/notifications/icon_resin.png'),
+  realmCurrency: runtime.getURL('/assets/notifications/icon_realm_currency.png'),
+  transformer: runtime.getURL('/assets/notifications/icon_transformer.png'),
+}
+
+// 随机生成 10 位字符串作为通知 id
+const randomNotificationId = () => {
+  return Math.random().toString(36).slice(2, 10)
+}
+
+// type: 0 resin; 1 realmCurrency; 2 transformer
+const showNotification = (alertStatus: IAlertStatus, type: 0 | 1 | 2, scope: any) => {
+  // @ts-ignore: update 方法在 firefox 中不存在
+  const isFirefox = !notifications.update
+  if (!isFirefox) {
+    // chromium 系浏览器
+    if (type === 0) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.resin,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_Resin', [scope.resin]),
+        contextMessage: `${scope.name}(${scope.uid}) - ${i18n.getMessage(scope.server)}`,
+      }
+
+      if (alertStatus.resin === '') {
+        // 创建通知
+        alertStatus.resin = randomNotificationId()
+        notifications.create(alertStatus.resin, notificationData)
+      } else {
+        // 更新通知
+        notifications.update(alertStatus.resin, notificationData)
+      }
+    } else if (type === 1) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.realmCurrency,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_RealmCurrency'),
+        contextMessage: `${scope.name}(${scope.uid}) - ${i18n.getMessage(scope.server)}`,
+      }
+
+      if (alertStatus.realmCurrency === '') {
+        // 创建通知
+        alertStatus.realmCurrency = randomNotificationId()
+        notifications.create(alertStatus.realmCurrency, notificationData)
+      }
+    } else if (type === 2) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.transformer,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_Transformer'),
+        contextMessage: `${scope.name}(${scope.uid}) - ${i18n.getMessage(scope.server)}`,
+      }
+
+      if (alertStatus.transformer === '') {
+        // 创建通知
+        alertStatus.transformer = randomNotificationId()
+        notifications.create(alertStatus.transformer, notificationData)
+      }
+    }
+  } else {
+    // firefox 浏览器
+    if (type === 0) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.resin,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_Resin_Firefox', [`${scope.name}(${scope.uid})`, scope.resin]),
+      }
+
+      if (alertStatus.resin === '') {
+        // 创建通知
+        alertStatus.resin = randomNotificationId()
+        notifications.create(alertStatus.resin, notificationData)
+      }
+    } else if (type === 1) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.realmCurrency,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_RealmCurrency_Firefox', [`${scope.name}(${scope.uid})`]),
+      }
+
+      if (alertStatus.realmCurrency === '') {
+        // 创建通知
+        alertStatus.realmCurrency = randomNotificationId()
+        notifications.create(alertStatus.realmCurrency, notificationData)
+      }
+    } else if (type === 2) {
+      const notificationData: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: notificationIconList.transformer,
+        title: i18n.getMessage('options_Alert_Notify_Title'),
+        message: i18n.getMessage('options_Alert_Notify_Transformer_Firefox', [`${scope.name}(${scope.uid})`]),
+      }
+
+      if (alertStatus.transformer === '') {
+        // 创建通知
+        alertStatus.transformer = randomNotificationId()
+        notifications.create(alertStatus.transformer, notificationData)
+      }
+    }
+  }
+}
+
+const removeNotification = (alertStatus: IAlertStatus, type: 0 | 1 | 2) => {
+  if (type === 0) {
+    if (alertStatus.resin !== '') {
+      notifications.clear(alertStatus.resin)
+      alertStatus.resin = ''
+    }
+  } else if (type === 1) {
+    if (alertStatus.realmCurrency !== '') {
+      notifications.clear(alertStatus.realmCurrency)
+      alertStatus.realmCurrency = ''
+    }
+  } else if (type === 2) {
+    if (alertStatus.transformer !== '') {
+      notifications.clear(alertStatus.transformer)
+      alertStatus.transformer = ''
+    }
+  }
+}
+
+// 向storage写入数据
+const writeDataToStorage = async function <T>(key: string, data: T) {
+  await storage.local.set({ [key]: data })
 }
 
 const targetPages = [
@@ -185,6 +312,53 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
   await writeDataToStorage('roleList', originRoleList)
 }
 
+let alertSettings: IAlertSetting = defaultAlertSetting;
+
+(async function () {
+  alertSettings = await readDataFromStorage<IAlertSetting>('alertSetting', defaultAlertSetting)
+})()
+
+const doAlertCheck = async function (roleInfo: IUserDataItem) {
+  if (!roleInfo.enabledAlert) return
+  // 树脂检查
+  if (alertSettings.resin) {
+    if (roleInfo.data.current_resin >= alertSettings.resinThreshold) {
+      showNotification(roleInfo.alertStatus, 0, {
+        name: roleInfo.nickname,
+        uid: roleInfo.uid,
+        server: roleInfo.serverRegion,
+        resin: roleInfo.data.current_resin,
+      })
+    } else {
+      removeNotification(roleInfo.alertStatus, 0)
+    }
+  }
+  // 洞天宝钱检查
+  if (alertSettings.realmCurrency) {
+    if (roleInfo.data.current_home_coin === roleInfo.data.max_home_coin && roleInfo.data.current_home_coin > 0) {
+      showNotification(roleInfo.alertStatus, 1, {
+        name: roleInfo.nickname,
+        uid: roleInfo.uid,
+        server: roleInfo.serverRegion,
+      })
+    } else {
+      removeNotification(roleInfo.alertStatus, 1)
+    }
+  }
+  // 参量质变仪检查
+  if (alertSettings.transformer) {
+    if (roleInfo.data.transformer.obtained && roleInfo.data.transformer.recovery_time.reached) {
+      showNotification(roleInfo.alertStatus, 2, {
+        name: roleInfo.nickname,
+        uid: roleInfo.uid,
+        server: roleInfo.serverRegion,
+      })
+    } else {
+      removeNotification(roleInfo.alertStatus, 2)
+    }
+  }
+}
+
 const refreshData = async function () {
   // 取出原始 roleList
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
@@ -214,6 +388,7 @@ const refreshData = async function () {
         errorMessage: '',
         updateTimestamp: Date.now(),
       })
+      doAlertCheck(role)
     } else {
       // 获取失败，写入错误信息
       role.isError = true
@@ -237,6 +412,22 @@ alarms.onAlarm.addListener((alarmInfo) => {
     refreshData()
   }, 1000)
 })()
+
+// 传入 AlertStatus，对存在的通知进行清理
+const clearNotifications = async function (alertStatus: IAlertStatus) {
+  if (alertStatus.resin !== '') {
+    await notifications.clear(alertStatus.resin)
+    alertStatus.resin = ''
+  }
+  if (alertStatus.realmCurrency !== '') {
+    await notifications.clear(alertStatus.realmCurrency)
+    alertStatus.realmCurrency = ''
+  }
+  if (alertStatus.transformer !== '') {
+    await notifications.clear(alertStatus.transformer)
+    alertStatus.transformer = ''
+  }
+}
 
 onMessage('get_alert_setting', async () => {
   return await readDataFromStorage<IAlertSetting>('alertSetting', defaultAlertSetting)
@@ -270,6 +461,7 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
   })
   originRoleList[index].isEnabled = status
   // 重置角色提醒状态
+  clearNotifications(originRoleList[index].alertStatus)
   originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
@@ -281,6 +473,7 @@ onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_a
   })
   originRoleList[index].enabledAlert = status
   // 重置角色提醒状态
+  clearNotifications(originRoleList[index].alertStatus)
   originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
 })
