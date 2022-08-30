@@ -1,0 +1,29 @@
+#
+# Your Crowdin credentials
+#
+"project_id": "535202"
+"api_token_env": "CROWDIN_PAIMON_PERSONAL_TOKEN"
+"base_path": "."
+"base_url": "https://api.crowdin.com"
+
+#
+# Choose file structure in Crowdin
+# e.g. true or false
+#
+"preserve_hierarchy": true
+
+#
+# Files configuration
+#
+files:
+  [
+    {
+      "source": "/extension/_locales/en/messages.json",
+      "translation": "/extension/_locales/%locale_with_underscore%/messages.json",
+    },
+    {
+      "source": "/README.md",
+      "translation": "/README_%locale%.md",
+      "translation_replace": { "_en": "" },
+    },
+  ]
