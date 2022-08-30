@@ -1,4 +1,4 @@
-<p align='right'><b>English | <a href="./README_zh-Hans.md">简体中文</a></b></p>
+<p align='right'><b>English | <a href="./README_zh-CN.md">简体中文</a></b></p>
 
 <p align='center'><img width="96px" src="./extension/assets/icon-128.png" alt="Paimon">
 </p>

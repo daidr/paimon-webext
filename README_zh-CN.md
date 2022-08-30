@@ -5,7 +5,7 @@
 
 # 派蒙 Paimon
 
-<img align="right" src="./screenshots/popup_zh-Hans.png" width="320px" height="auto" alt="screenshot_popup" />
+<img align="right" src="./screenshots/popup_zh-CN.png" width="320px" height="auto" alt="screenshot_popup" />
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits)
