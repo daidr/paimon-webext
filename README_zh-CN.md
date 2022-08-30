@@ -3,9 +3,9 @@
 <p align='center'><img width="96px" src="./extension/assets/icon-128.png" alt="Paimon">
 </p>
 
-# Paimon
+# 派蒙
 
-<img align="right" src="./screenshots/popup.png" width="320px" height="auto" alt="screenshot_popup" />
+<img align="right" src="./screenshots/popup_zh-CN.png" width="320px" height="auto" alt="screenshot_popup" />
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits) [![Mozilla Add-on](https://img.shields.io/amo/users/%E6%B4%BE%E8%92%99-paimon?label=firefox&color=green)](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/) [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome&color=green)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd) [![Microsoft Edge Addons](https://img.shields.io/badge/dynamic/json?label=edge&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Famlfaonbmcninlpijbjkblmfgcanjdih&color=green)](https://microsoftedge.microsoft.com/addons/detail/%E6%B4%BE%E8%92%99-paimon/amlfaonbmcninlpijbjkblmfgcanjdih)
 
@@ -68,6 +68,6 @@ pnpm build
 - English @daidr
 - Русский @133718
 
-## License
+## 许可协议
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
