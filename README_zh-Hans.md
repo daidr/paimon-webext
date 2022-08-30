@@ -1,11 +1,11 @@
-<p align='right'><b>English | <a href="./README_zh-Hans.md">简体中文</a></b></p>
+<p align='right'><b><a href="./README.md">English</a> | 简体中文</b></p>
 
 <p align='center'><img width="96px" src="./extension/assets/icon-128.png" alt="Paimon">
 </p>
 
-# Paimon
+# 派蒙 Paimon
 
-<img align="right" src="./screenshots/popup.png" width="320px" height="auto" alt="screenshot_popup" />
+<img align="right" src="./screenshots/popup_zh-Hans.png" width="320px" height="auto" alt="screenshot_popup" />
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits)
@@ -13,25 +13,25 @@
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome&color=green)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 [![Microsoft Edge Addons](https://img.shields.io/badge/dynamic/json?label=edge&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Famlfaonbmcninlpijbjkblmfgcanjdih&color=green)](https://microsoftedge.microsoft.com/addons/detail/%E6%B4%BE%E8%92%99-paimon/amlfaonbmcninlpijbjkblmfgcanjdih)
 
-> Track Genshin Impact stats in your browser.
+> 在浏览器中实时查看原神游戏状态
 
-Features: 
+派蒙的特色功能： 
 
-* 🌙 Real-time resin tracking.
-* 💰 Track your daily expeditions, commissions, realm currency, parametric transformer and weekly boss status.
-* 🌏 Fully server(CN & oversea) support.
-* 🚨 Thresholds alerts for in-game stats.
-* 📚 Multi-account support.
+* 🌙 显示实时树脂及恢复情况
+* 💰 探索派遣/每日委托/洞天宝钱/参量质变仪/周本 Boss 情况提示
+* 🌏 完整的国服(含世界树)/海外服支持
+* 🚨 树脂/参量质变仪等阈值通知
+* 📚 多账号/多角色支持
 
-## Download
+## 下载
 
-[Firefox Addons](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
+[Firefox Addons 链接](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
 
-[Chrome Webstore](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
+[Chrome Webstore 链接](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 
-[Edge Addons](https://microsoftedge.microsoft.com/addons/detail/amlfaonbmcninlpijbjkblmfgcanjdih)
+[Edge Addons 链接](https://microsoftedge.microsoft.com/addons/detail/amlfaonbmcninlpijbjkblmfgcanjdih)
 
-## Development
+## 开发
 
 ```bash
 pnpm i
@@ -39,7 +39,7 @@ pnpm i
 pnpm dev
 ```
 
-## Debug
+## 调试
 
 ### firefox:
 
@@ -53,25 +53,23 @@ pnpm start:firefox
 pnpm start:chromium
 ```
 
-## Build
+## 构建
 
 ```bash
 pnpm build
 ```
 
-## Credits
+## 相关
+- Mac 可用的类似工具(灵感来源): [spencerwooo/PaimonMenuBar](https://github.com/spencerwooo/PaimonMenuBar)
+- Windows 可用的类似工具: [ArvinZJC/PaimonTray](https://github.com/ArvinZJC/PaimonTray)
+- NGA 介绍贴(已锁) [[心得交流] [工具分享] 在浏览器里直接查看自己树脂情况的小工具](https://bbs.nga.cn/read.php?tid=31590015)
 
-- Friendly Mac alternative (UI Reference): [spencerwooo/PaimonMenuBar](https://github.com/spencerwooo/PaimonMenuBar)
-- Friendly Windows alternative: [ArvinZJC/PaimonTray](https://github.com/ArvinZJC/PaimonTray)
-- Post on NGA.CN: [[心得交流][工具分享] 在浏览器里直接查看自己树脂情况的小工具](https://bbs.nga.cn/read.php?tid=31590015)
-
-## Translations
-
+## 翻译
 - 简体中文 @daidr
 - 繁体中文 @stevened7246
 - English @daidr
 - Русский @133718
 
-## License
+## 协议
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
