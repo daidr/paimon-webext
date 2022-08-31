@@ -21,9 +21,4 @@ files:
       "source": "/extension/_locales/en/messages.json",
       "translation": "/extension/_locales/%locale_with_underscore%/messages.json",
     },
-    {
-      "source": "/README.md",
-      "translation": "/README_%locale%.md",
-      "translation_replace": { "_en": "" },
-    },
   ]
