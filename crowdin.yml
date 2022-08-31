@@ -18,7 +18,7 @@
 files:
   [
     {
-      "source": "/extension/_locales/en/messages.json",
-      "translation": "/extension/_locales/%locale_with_underscore%/messages.json",
+      "source": "/_locales/en/messages.json",
+      "translation": "/_locales/%locale_with_underscore%/messages.json",
     },
   ]

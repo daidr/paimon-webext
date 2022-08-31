@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
-import { IUserDataItem } from '~/types'
-import { getTime, getClock } from '~/utils'
+import type { IUserDataItem } from '~/types'
+import { getClock, getTime } from '~/utils'
 
 const isLoaded = ref(false)
 
@@ -20,7 +20,7 @@ const userData = computed(() => {
   return data || {} as IUserDataItem
 })
 
-const updateUserInfo = async() => {
+const updateUserInfo = async () => {
   userDataList.value = await sendMessage('get_role_list', {})
   selectedUid.value = await sendMessage('get_selected_role', {})
   isLoaded.value = true
@@ -47,7 +47,7 @@ const openOptionsPage = () => {
   browser.runtime.openOptionsPage()
 }
 
-const refreshRequest = async() => {
+const refreshRequest = async () => {
   await sendMessage('refresh_request', {})
   updateUserInfo()
 }
@@ -113,7 +113,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
         <div class="resin-stats">
           <h2>
             <span class="resin-title">
-              <img src="/assets/genshin/resin.png" />
+              <img src="/assets/genshin/resin.png">
               {{ i18n.getMessage('popup_ResinTitle') }}</span>
             <span class="update-time">{{ i18n.getMessage('popup_UpdateTimeTitle') }}{{ new
               Date(userData.updateTimestamp).toLocaleString()
@@ -128,7 +128,7 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:hourglass /> {{ i18n.getMessage('popup_FullyReplenishedTitle') }}
               </span>
               <span class="right">
-                <TimeComponent :time="getTime(Number(userData.data.resin_recovery_time))"></TimeComponent>
+                <TimeComponent :time="getTime(Number(userData.data.resin_recovery_time))" />
               </span>
             </p>
             <p class="sub-stat-item">
@@ -136,12 +136,12 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
                 <uil:clock-two /> {{ i18n.getMessage('popup_ETATitle') }}
               </span>
               <span class="right">
-                <DayComponent :time="getClock(Number(userData.data.resin_recovery_time))"></DayComponent>
+                <DayComponent :time="getClock(Number(userData.data.resin_recovery_time))" />
               </span>
             </p>
           </template>
         </div>
-        <div class="divider"></div>
+        <div class="divider" />
         <div class="expeditions-stats">
           <h2 :class="{ 'has-result': userData.data.expeditions.length > 0 }">
             {{ i18n.getMessage('popup_ExpeditionsTitle') }} {{ userData.data.current_expedition_num }}/{{
@@ -151,52 +151,52 @@ const calcRecoveryTime = (time: { Day: number; Hour: number; Minute: number; Sec
           <template v-if="userData.data.expeditions.length > 0">
             <div v-for="expedition, index of userData.data.expeditions" :key="index" class="expedition-item">
               <span class="left">
-                <img :src="expedition.avatar_side_icon" />
-                {{ expedition.status == 'Ongoing' ? i18n.getMessage('popup_ExploringStatus') :
-                  i18n.getMessage('popup_FinishedStatus')
+                <img :src="expedition.avatar_side_icon">
+                {{ expedition.status === 'Ongoing' ? i18n.getMessage('popup_ExploringStatus')
+                  : i18n.getMessage('popup_FinishedStatus')
                 }}
               </span>
-              <span v-if="expedition.remained_time == '0'" class="right">-</span>
+              <span v-if="expedition.remained_time === '0'" class="right">-</span>
               <span v-else class="right">
-                <TimeComponent :time="getTime(Number(expedition.remained_time))"></TimeComponent>
+                <TimeComponent :time="getTime(Number(expedition.remained_time))" />
               </span>
             </div>
           </template>
         </div>
-        <div class="divider"></div>
+        <div class="divider" />
         <div class="more-stats">
           <div class="stat-item">
             <span class="left">
-              <img src="/assets/genshin/task.png" /> {{ i18n.getMessage('popup_DailyCommissionsTitle') }}
+              <img src="/assets/genshin/task.png"> {{ i18n.getMessage('popup_DailyCommissionsTitle') }}
             </span>
             <span class="right">{{ userData.data.finished_task_num }}/{{ userData.data.total_task_num }}
-              <span v-if="userData.data.finished_task_num == userData.data.total_task_num">
-                {{ userData.data.is_extra_task_reward_received ? i18n.getMessage('popup_ExtraTaskReceived') :
-                  i18n.getMessage('popup_ExtraTaskNotReceived')
+              <span v-if="userData.data.finished_task_num === userData.data.total_task_num">
+                {{ userData.data.is_extra_task_reward_received ? i18n.getMessage('popup_ExtraTaskReceived')
+                  : i18n.getMessage('popup_ExtraTaskNotReceived')
                 }}
               </span>
             </span>
           </div>
           <div class="stat-item">
             <span class="left">
-              <img src="/assets/genshin/home.png" /> {{ i18n.getMessage('popup_RealmCurrencyTitle') }}
+              <img src="/assets/genshin/home.png"> {{ i18n.getMessage('popup_RealmCurrencyTitle') }}
             </span>
             <span class="right">{{ userData.data.current_home_coin }}/{{ userData.data.max_home_coin }}</span>
           </div>
           <div class="stat-item">
             <span class="left">
-              <img src="/assets/genshin/discount.png" /> {{ i18n.getMessage('popup_WeeklyBossesTitle') }}
+              <img src="/assets/genshin/discount.png"> {{ i18n.getMessage('popup_WeeklyBossesTitle') }}
             </span>
             <span class="right">{{ userData.data.resin_discount_num_limit - userData.data.remain_resin_discount_num
             }}/{{ userData.data.resin_discount_num_limit }}</span>
           </div>
           <div v-if="userData.data.transformer && userData.data.transformer.obtained" class="stat-item">
             <span class="left">
-              <img src="/assets/genshin/transformer.png" /> {{ i18n.getMessage('popup_ParametricTransformerTitle') }}
+              <img src="/assets/genshin/transformer.png"> {{ i18n.getMessage('popup_ParametricTransformerTitle') }}
             </span>
             <span class="right">{{
-              userData.data.transformer.recovery_time.reached ? i18n.getMessage('popup_Available') :
-              calcRecoveryTime(userData.data.transformer.recovery_time)
+              userData.data.transformer.recovery_time.reached ? i18n.getMessage('popup_Available')
+              : calcRecoveryTime(userData.data.transformer.recovery_time)
             }}</span>
           </div>
         </div>

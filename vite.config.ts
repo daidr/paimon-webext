@@ -1,5 +1,6 @@
 import { dirname, relative } from 'path'
-import { defineConfig, UserConfig } from 'vite'
+import type { UserConfig } from 'vite'
+import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -7,7 +8,8 @@ import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import WindiCSS from 'vite-plugin-windicss'
 import windiConfig from './windi.config'
-import { r, port, isDev } from './scripts/utils'
+import { isDev, port, r } from './scripts/utils'
+import { MV3Hmr } from './vite-mv3-hmr'
 
 export const sharedConfig: UserConfig = {
   root: r('src'),
@@ -67,36 +69,40 @@ export const sharedConfig: UserConfig = {
   },
 }
 
-export default defineConfig(({ command }) => ({
-  ...sharedConfig,
-  base: command === 'serve' ? `http://localhost:${port}/` : '/dist/',
-  server: {
-    port,
-    hmr: {
-      host: 'localhost',
-    },
-  },
-  build: {
-    outDir: r('extension/dist'),
-    emptyOutDir: false,
-    sourcemap: isDev ? 'inline' : false,
-    // https://developer.chrome.com/docs/webstore/program_policies/#:~:text=Code%20Readability%20Requirements
-    terserOptions: {
-      mangle: false,
-    },
-    rollupOptions: {
-      input: {
-        options: r('src/options/index.html'),
-        popup: r('src/popup/index.html'),
+export default defineConfig(({ command }) => {
+  return ({
+    ...sharedConfig,
+    base: command === 'serve' ? `http://localhost:${port}/` : '/dist/',
+    server: {
+      port,
+      hmr: {
+        host: 'localhost',
       },
     },
-  },
-  plugins: [
-    ...sharedConfig.plugins!,
+    build: {
+      outDir: r('extension/dist'),
+      emptyOutDir: false,
+      sourcemap: isDev ? 'inline' : false,
+      // https://developer.chrome.com/docs/webstore/program_policies/#:~:text=Code%20Readability%20Requirements
+      terserOptions: {
+        mangle: false,
+      },
+      rollupOptions: {
+        input: {
+          options: r('src/options/index.html'),
+          popup: r('src/popup/index.html'),
+        },
+      },
+    },
+    plugins: [
+      ...sharedConfig.plugins!,
 
-    // https://github.com/antfu/vite-plugin-windicss
-    WindiCSS({
-      config: windiConfig,
-    }),
-  ],
-}))
+      // https://github.com/antfu/vite-plugin-windicss
+      WindiCSS({
+        config: windiConfig,
+      }),
+
+      MV3Hmr(),
+    ],
+  })
+})

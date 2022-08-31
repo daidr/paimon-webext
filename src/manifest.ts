@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import type { Manifest } from 'webextension-polyfill'
 import type PkgType from '../package.json'
-import { isDev, port, r } from '../scripts/utils'
+import { isDev, r } from '../scripts/utils'
 
 export async function getManifest() {
   const pkg = (await fs.readJSON(r('package.json'))) as typeof PkgType
@@ -19,7 +19,7 @@ export async function getManifest() {
       default_popup: './dist/popup/index.html',
     },
     background: {
-      service_worker: './dist/background/index.global.js',
+      service_worker: './dist/background/index.mjs',
     },
     options_ui: {
       page: './dist/options/index.html',
@@ -34,11 +34,6 @@ export async function getManifest() {
     },
     permissions: ['storage', 'cookies', 'alarms', 'notifications', 'declarativeNetRequest'],
     host_permissions: ['*://*.mihoyo.com/', '*://*.hoyolab.com/'],
-    content_security_policy: {
-      extension_pages: isDev
-        ? `script-src 'self' http://localhost:${port}; object-src 'self' http://localhost:${port}`
-        : 'script-src \'self\'; object-src \'self\'',
-    },
   }
 
   if (isDev) {
