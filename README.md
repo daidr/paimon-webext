@@ -1,11 +1,11 @@
 <p align='right'><b>English | <a href="./README_zh-CN.md">简体中文</a></b></p>
 
-<p align='center'><img width="96px" src="./assets/icon-128.png" alt="Paimon">
+<p align='center'><img width="96px" src="https://cdn.jsdelivr.net/gh/daidr/paimon-webext@main/assets/icon-128.png" alt="Paimon">
 </p>
 
 # Paimon
 
-<img align="right" src="./screenshots/popup.png" width="320px" height="auto" alt="screenshot_popup" />
+<img align="right" src="https://cdn.jsdelivr.net/gh/daidr/paimon-webext@main/screenshots/popup.png" width="320px" height="auto" alt="screenshot_popup" />
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits)
