@@ -2,7 +2,7 @@
   "name": "paimon-webext",
   "displayName": "派蒙 Paimon",
   "version": "0.0.8",
-  "description": "在浏览器中查看原神账号情况 Check your Genshin Impact account status in your browser.",
+  "description": "在浏览器中实时查看原神游戏状态 Track Genshin Impact stats in your browser.",
   "author": {
     "name": "daidr",
     "url": "https://daidr.me"
