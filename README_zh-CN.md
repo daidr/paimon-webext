@@ -1,6 +1,6 @@
 <p align='right'><b><a href="./README.md">English</a> | 简体中文</b></p>
 
-<p align='center'><img width="96px" src="./extension/assets/icon-128.png" alt="Paimon">
+<p align='center'><img width="96px" src="./assets/icon-128.png" alt="Paimon">
 </p>
 
 # 派蒙 Paimon
@@ -69,6 +69,10 @@ pnpm build
 - 繁体中文 @stevened7246
 - English @daidr
 - Русский @133718
+
+点击下方的徽章来参与翻译：
+
+[![Crowdin](https://badges.crowdin.net/paimon-webext/localized.svg)](https://crowdin.com/project/paimon-webext)
 
 ## 协议
 
