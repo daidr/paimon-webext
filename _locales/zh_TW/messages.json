@@ -1,24 +1,24 @@
 {
     "pluginDesc": {
-        "message": "在瀏覽器中即時查看原神遊戲狀態"
+        "message": "Track Genshin Impact stats in your browser."
     },
     "cn_gf01": {
-        "message": "天空島(CN)"
+        "message": "天空岛(CN)"
     },
     "cn_qd01": {
-        "message": "世界樹(CN)"
+        "message": "世界树(CN)"
     },
     "os_usa": {
-        "message": "美服(NA)"
+        "message": "NA"
     },
     "os_euro": {
-        "message": "歐服(EU)"
+        "message": "EU"
     },
     "os_asia": {
-        "message": "亞服(Asia)"
+        "message": "Asia"
     },
     "os_cht": {
-        "message": "港澳臺服(SAR)"
+        "message": "SAR"
     },
     "popup_hour": {
         "message": ":"
@@ -27,228 +27,228 @@
         "message": ""
     },
     "popup_today": {
-        "message": "今日"
+        "message": "Today"
     },
     "popup_tomorrow": {
-        "message": "明日"
+        "message": "Tomorrow"
     },
     "popup_recovery_day": {
-        "message": "天"
+        "message": "d"
     },
     "popup_recovery_hour": {
-        "message": "小時"
+        "message": "h"
     },
     "popup_recovery_minute": {
-        "message": "分鐘"
+        "message": "m"
     },
     "popup_recovery_second": {
-        "message": "秒"
+        "message": "s"
     },
     "popup_CurrentTitle": {
-        "message": "當前: "
+        "message": "Current: "
     },
     "popup_ServerTitle": {
-        "message": "伺服器: "
+        "message": "Server: "
     },
     "popup_ResinTitle": {
-        "message": "原粹樹脂"
+        "message": "Current Resin"
     },
     "popup_FullyReplenishedTitle": {
-        "message": "全部恢復需要"
+        "message": "Fully Replenished"
     },
     "popup_ETATitle": {
-        "message": "預計恢復時間"
+        "message": "ETA"
     },
     "popup_ExpeditionsTitle": {
-        "message": "探索派遣"
+        "message": "Expeditions"
     },
     "popup_ExploringStatus": {
-        "message": "探索中"
+        "message": "Exploring"
     },
     "popup_FinishedStatus": {
-        "message": "已完成"
+        "message": "Finished"
     },
     "popup_DailyCommissionsTitle": {
-        "message": "每日委託"
+        "message": "Daily commissions"
     },
     "popup_ExtraTaskReceived": {
-        "message": "(已領取)"
+        "message": "(Received)"
     },
     "popup_ExtraTaskNotReceived": {
-        "message": "(未領取)"
+        "message": "(Unreceived)"
     },
     "popup_RealmCurrencyTitle": {
-        "message": "洞天寶錢"
+        "message": "Realm currency"
     },
     "popup_WeeklyBossesTitle": {
-        "message": "周本 Boss"
+        "message": "Weekly boss"
     },
     "popup_ParametricTransformerTitle": {
-        "message": "參數質變儀"
+        "message": "Parametric Transformer"
     },
     "popup_Available": {
-        "message": "可用"
+        "message": "Available"
     },
     "popup_ConfigurationTitle": {
-        "message": "設定"
+        "message": "Configuration"
     },
     "popup_ConfigurationTips": {
-        "message": "您需要進行一些簡單的設定，完成後便可以正常使用啦！"
+        "message": "You just need to complete a few simple configurations, and then you are ready to enjoy it!"
     },
     "popup_ConfigurationButtonText": {
-        "message": "打開設定頁面"
+        "message": "Open Options"
     },
     "popup_UpdateTimeTitle": {
-        "message": "上次更新: "
+        "message": "Update: "
     },
     "popup_ErrorTitle": {
-        "message": "發生錯誤"
+        "message": "Error"
     },
     "popup_ErrorTips_1": {
-        "message": "擴展無法獲取您的遊戲資料，試試前往設置頁面檢查下面的設置是否正確。"
+        "message": "We are unable to access your game data, try going to the options page to check if the configuration below is correct."
     },
     "popup_ErrorTips_2": {
-        "message": "當前網路是否可用"
+        "message": "Is the network currently available?"
     },
     "popup_ErrorTips_3": {
-        "message": "當前是否存在啟用的角色"
+        "message": "Are there any roles that are currently enabled?"
     },
     "popup_ErrorTips_4": {
-        "message": "如果您處於中國大陸，查看國際服資料需要自備魔法上網"
+        "message": "If you are in China Mainland, you need a proxy to access the data of the overseas service"
     },
     "popup_ErrorOpenConfigButtonText": {
-        "message": "打開設置頁面"
+        "message": "Open Options"
     },
     "popup_ErrorRefreshButtonText": {
-        "message": "刷新"
+        "message": "Refresh"
     },
     "options_Nav_AddNewRole": {
-        "message": "增加新角色"
+        "message": "Add New Roles"
     },
     "options_Nav_RoleListSetting": {
-        "message": "角色列表&設置"
+        "message": "Role List & Setting"
     },
     "options_Nav_AlertSetting": {
-        "message": "提醒"
+        "message": "Alert"
     },
     "options_Nav_About": {
-        "message": "關於"
+        "message": "About"
     },
     "options_SelectServer": {
-        "message": "第一步：選擇帳號類型"
+        "message": "I. Choose Region"
     },
     "options_ServerCN": {
-        "message": "國服"
+        "message": "China Mainland"
     },
     "options_ServerOS": {
-        "message": "國際服"
+        "message": "Oversea"
     },
     "options_FetchUserCookie": {
-        "message": "第二步：獲取用戶憑證"
+        "message": "II. Fetch Cookies"
     },
     "options_Tips_1": {
-        "message": "擴展需要您的米遊社用戶憑證(cookies)才能夠獲取相關資料。"
+        "message": "We need your HoYoLAB user credentials (cookies) in order to access the relevant data."
     },
     "options_Tips_2": {
-        "message": "別擔心，這些資料均儲存在本地，且不會提交到任何伺服器。"
+        "message": "Don't worry, all these data are stored locally and will not be submitted to any third party service."
     },
     "options_Tips_3": {
-        "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://bbs.mihoyo.com/ys' target='_blank'>米遊社</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效"
+        "message": "Please make sure you are logged into <a href='https://bbs.mihoyo.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
     },
     "options_Tips_4": {
-        "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效 <br>(HoYoLAB 遮罩了中國大陸的訪問，中國大陸的使用者添加海外服需要自備魔法上網)"
+        "message": "Please make sure you are logged into <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout <br>(HoYoLAB blocked access from China Mainland, users from China Mainland need a proxy to get the data of overseas service)"
     },
     "options_FetchBtnTitle": {
-        "message": "獲取用戶憑證"
+        "message": "Fetch Cookies"
     },
     "options_FetchBtnAlert_1": {
-        "message": "角色獲取失敗"
+        "message": "Failed to fetch roles"
     },
     "options_FetchBtnAlert_2": {
-        "message": "成功添加 $1 個角色"
+        "message": "Successfully added $1 role"
     },
     "options_FetchBtnAlert_3": {
-        "message": "未綁定原神角色"
+        "message": "No role binding"
     },
     "options_Role_NoRoleFound": {
-        "message": "沒有找到任何角色"
+        "message": "No role found"
     },
     "options_Role_IsEnabledTitle": {
-        "message": "啟用"
+        "message": "Enabled"
     },
     "options_Role_RoleNameTitle": {
-        "message": "昵稱(uid)"
+        "message": "Nickname(uid)"
     },
     "options_Role_RoleServerTitle": {
-        "message": "伺服器"
+        "message": "Server"
     },
     "options_Role_RoleActionTitle": {
-        "message": "操作"
+        "message": "Operation"
     },
     "options_About_VersionTitle": {
-        "message": "版本"
+        "message": "Version"
     },
     "options_About_AuthorTitle": {
-        "message": "作者"
+        "message": "Author"
     },
     "options_About_Author": {
-        "message": "<a class='reverse' href='https://daidr.me' target='_blank'>戴兜</a>"
+        "message": "<a class='reverse' href='https://daidr.me' target='_blank'>daidr</a>"
     },
     "options_About_OpenSourceTitle": {
-        "message": "開源說明"
+        "message": "Open Source"
     },
     "options_About_OpenSource": {
-        "message": "本擴展開源在 <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a> <del>(求個star)</del>，使用源碼請遵循 MIT 開源協定。\n遇到問題可以嘗試給我提 <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a>，我會盡可能幫助你解決問題。也歡迎大家發 PR👍"
+        "message": "The extension is open source and hosted on <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>, obey the MIT license to use the source code please.\nYou can try to create <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a> if you have any problems and I'll help you solve them as much as possible. It would be better if you could create PR👍"
     },
     "options_About_ThankTitle": {
-        "message": "鳴謝"
+        "message": "Credits"
     },
     "options_About_Thank": {
-        "message": "感謝本擴展倉庫的所有貢獻者\n本擴展靈感來源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
     },
     "options_Alert_Setting": {
-        "message": "設置"
+        "message": "Settings"
     },
     "options_Alert_Resin": {
-        "message": "原粹樹脂閾值"
+        "message": "resin threshold"
     },
     "options_Alert_Transformer": {
-        "message": "參數質變儀可用"
+        "message": "transformer is available"
     },
     "options_Alert_RealmCurrency": {
-        "message": "洞天寶錢溢出"
+        "message": "realm currency overflowed"
     },
     "options_Alert_NoRoleFound": {
-        "message": "沒有找到任何角色"
+        "message": "No role found"
     },
     "options_Alert_IsEnabledTitle": {
-        "message": "提醒"
+        "message": "Alert"
     },
     "options_Alert_RoleNameTitle": {
-        "message": "昵稱(uid)"
+        "message": "Nickname(uid)"
     },
     "options_Alert_RoleServerTitle": {
-        "message": "伺服器"
+        "message": "Server"
     },
     "options_Alert_Notify_Title": {
-        "message": "派蒙提醒"
+        "message": "Paimon Alert"
     },
     "options_Alert_Notify_Resin": {
-        "message": "你的原粹樹脂量為 $1，已超過閾值"
+        "message": "Your amount of Original Resin is $1 and the threshold has been exceeded."
     },
     "options_Alert_Notify_Resin_Firefox": {
-        "message": "$1 的原粹樹脂已超過閾值"
+        "message": "The Original Resin of $1 has exceeded the threshold."
     },
     "options_Alert_Notify_Transformer": {
-        "message": "參數質變儀可用了"
+        "message": "The Parametric Transformer is available."
     },
     "options_Alert_Notify_Transformer_Firefox": {
-        "message": "$1 的參數質變儀可用了"
+        "message": "The Parametric Transformer belonging to $1 is available."
     },
     "options_Alert_Notify_RealmCurrency": {
-        "message": "你的洞天寶錢溢出了"
+        "message": "Your realm currency overflowed."
     },
     "options_Alert_Notify_RealmCurrency_Firefox": {
-        "message": "$1 的洞天寶錢溢出了"
+        "message": "The realm currency of $1 overflowed."
     }
 }
