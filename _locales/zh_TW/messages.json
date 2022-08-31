@@ -147,13 +147,13 @@
         "message": "第二步：獲取用戶憑證"
     },
     "options_Tips_1": {
-        "message": "擴展需要您的米遊社用戶憑證(cookies)才能夠獲取相關資料。"
+        "message": "擴展需要您的米遊社用戶憑證 (cookies) 才能夠獲取相關資料。"
     },
     "options_Tips_2": {
         "message": "別擔心，這些資料均儲存在本地，且不會提交到任何伺服器。"
     },
     "options_Tips_3": {
-        "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://bbs.mihoyo.com/ys' target='_blank'>米遊社</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效"
+        "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://bbs.mihoyo.com/ys' target='_blank'>米遊社(國服)</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效"
     },
     "options_Tips_4": {
         "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效 <br>(HoYoLAB 遮罩了中國大陸的訪問，中國大陸的使用者添加海外服需要自備魔法上網)"
@@ -198,7 +198,7 @@
         "message": "開源說明"
     },
     "options_About_OpenSource": {
-        "message": "本擴展開源在 <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a> <del>(求個star)</del>，使用源碼請遵循 MIT 開源協定。\n遇到問題可以嘗試給我提 <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a>，我會盡可能幫助你解決問題。也歡迎大家發 PR👍"
+        "message": "本擴展開源在 <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>，使用源碼請遵循 MIT 開源協定。\n遇到問題可以嘗試給我提 <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a>，我會盡可能幫助你解決問題。也歡迎大家發 PR👍"
     },
     "options_About_ThankTitle": {
         "message": "鳴謝"
