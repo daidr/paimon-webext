@@ -234,7 +234,7 @@
         "message": "Паймон Тревога"
     },
     "options_Alert_Notify_Resin": {
-        "message": "Your amount of Original Resin is $1 and the threshold has been exceeded."
+        "message": "Ваше количество первородной смолы достигло $1, порог превышен."
     },
     "options_Alert_Notify_Resin_Firefox": {
         "message": "The Original Resin of $1 has exceeded the threshold."
