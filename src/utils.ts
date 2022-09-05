@@ -1,4 +1,4 @@
-import { IRoleDataItem, IUserData, serverRegions } from './types'
+import type { IRoleDataItem, IUserData, serverRegions } from './types'
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -14,10 +14,12 @@ function md5(string: string) {
     const lX4 = lX & 0x40000000
     const lY4 = lY & 0x40000000
     const lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF)
-    if (lX4 & lY4) return lResult ^ 0x80000000 ^ lX8 ^ lY8
+    if (lX4 & lY4)
+      return lResult ^ 0x80000000 ^ lX8 ^ lY8
 
     if (lX4 | lY4) {
-      if (lResult & 0x40000000) return lResult ^ 0xC0000000 ^ lX8 ^ lY8
+      if (lResult & 0x40000000)
+        return lResult ^ 0xC0000000 ^ lX8 ^ lY8
       else return lResult ^ 0x40000000 ^ lX8 ^ lY8
     }
     else {
@@ -284,7 +286,8 @@ function getClock(time: number) {
   const tomorrow = new Date(timeNow + tillTomorrow - minutesNow - secondsNow)
 
   let str = ''
-  if (timeRecovery < tomorrow) str = 'today'
+  if (timeRecovery < tomorrow)
+    str = 'today'
   else str = 'tomorrow'
 
   // return ` ${str}, ${timeRecovery.getHours()}点${timeRecovery.getMinutes()}分`
@@ -295,7 +298,7 @@ function getClock(time: number) {
   }
 }
 
-function stringifyParams(params: { [key: string]: string }) {
+function stringifyParams(params: Record<string, string>) {
   // 字典序处理
   const keys = Object.keys(params)
   keys.sort()
@@ -309,7 +312,7 @@ function stringifyParams(params: { [key: string]: string }) {
   return paramsStr
 }
 
-function getDS(oversea: boolean, params: { [key: string]: string }, body: object) {
+function getDS(oversea: boolean, params: Record<string, string>, body: object) {
   const timestamp = Math.floor(Date.now() / 1000)
   const randomStr = randomIntFromInterval(100000, 200000)
   const bodyStr = (body && Object.keys(body).length > 0) ? JSON.stringify(body) : ''
@@ -320,7 +323,7 @@ function getDS(oversea: boolean, params: { [key: string]: string }, body: object
   return `${timestamp},${randomStr},${sign}`
 }
 
-const HEADER_TEMPLATE_CN: { [key: string]: string } = {
+const HEADER_TEMPLATE_CN: Record<string, string> = {
   'x-rpc-app_version': '2.23.1',
   'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBS/2.23.1',
   'x-rpc-client_type': '5',
@@ -329,7 +332,7 @@ const HEADER_TEMPLATE_CN: { [key: string]: string } = {
   'Referer': 'https://webstatic.mihoyo.com/',
 }
 
-const HEADER_TEMPLATE_OS: { [key: string]: string } = {
+const HEADER_TEMPLATE_OS: Record<string, string> = {
   'x-rpc-app_version': '2.9.0',
   'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBSOversea/2.9.0',
   'x-rpc-client_type': '2',
@@ -338,7 +341,7 @@ const HEADER_TEMPLATE_OS: { [key: string]: string } = {
   'Referer': 'https://webstatic-sea.hoyolab.com',
 }
 
-function getHeader(oversea: boolean, params: { [key: string]: string }, body: object, ds: boolean) {
+function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
   const client = oversea ? HEADER_TEMPLATE_OS : HEADER_TEMPLATE_CN
   const header = new Headers()
   Object.keys(client).forEach(key => {
