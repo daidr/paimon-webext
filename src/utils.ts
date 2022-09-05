@@ -290,11 +290,10 @@ function getClock(time: number) {
     str = 'today'
   else str = 'tomorrow'
 
-  // return ` ${str}, ${timeRecovery.getHours()}点${timeRecovery.getMinutes()}分`
   return {
     day: str,
-    hour: timeRecovery.getHours(),
-    minute: timeRecovery.getMinutes(),
+    hour: timeRecovery.getHours().toString().padStart(2, '0'),
+    minute: timeRecovery.getMinutes().toString().padStart(2, '0'),
   }
 }
 
