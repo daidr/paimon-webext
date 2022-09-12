@@ -1,4 +1,4 @@
-// import { ProtocolWithReturn } from 'webext-bridge'
+import type { ProtocolWithReturn } from 'webext-bridge'
 
 declare module 'webext-bridge' {
   export interface ProtocolMap {
@@ -6,5 +6,10 @@ declare module 'webext-bridge' {
     // see https://github.com/antfu/webext-bridge#type-safe-protocols
     // 'tab-prev': { title: string | undefined }
     // 'get-current-tab': ProtocolWithReturn<{ tabId: number }, { title?: string }>
+    'set_selected_role': { uid: string }
+    'set_role_status': { uid: string; status: boolean }
+    'set_role_alert_status': { uid: string; status: boolean }
+    'delete_role_request': ProtocolWithReturn<{ uid: string }, boolean>
+    'request_cookie_read': ProtocolWithReturn<{ oversea: boolean }, number>
   }
 }
