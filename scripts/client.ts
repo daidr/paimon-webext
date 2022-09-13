@@ -101,7 +101,6 @@ async function handleMessage(payload: HMRPayload) {
           )
           if (el) {
             const newPath = `${base}${searchUrl.slice(1)}${searchUrl.includes('?') ? '&' : '?'}t=${timestamp}`
-            // const newPath = `${base}${searchUrl.slice(1)}${searchUrl.includes('?') ? '&' : '?'}t=${timestamp}`
             el.href = new URL(newPath, el.href).href
           }
           console.log(`[vite] css hot updated: ${searchUrl}`)
@@ -329,8 +328,7 @@ async function fetchUpdate({ path, acceptedPath, timestamp }: Update) {
       try {
         const newMod = await import(
           /* @vite-ignore */
-          // `${base + path.slice(1)}.js?import&t=${timestamp}${query ? `&${query}` : ''}`
-          normalizeViteUrl(`${base + path.slice(1)}.js${query ? `_${query}` : ''}`, timestamp)
+          normalizeScriptUrl(`${base + path.slice(1)}.js${query ? `_${query}` : ''}`, timestamp)
         )
         moduleMap.set(dep, newMod)
       }
@@ -348,7 +346,7 @@ async function fetchUpdate({ path, acceptedPath, timestamp }: Update) {
   }
 }
 
-function normalizeViteUrl(url: string, timestamp: number) {
+function normalizeScriptUrl(url: string, timestamp: number) {
   if (!url.endsWith('.js') && !url.endsWith('.mjs'))
     url = `${url}.js`
   return `${url}?t=${timestamp}`
