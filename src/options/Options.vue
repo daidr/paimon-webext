@@ -65,7 +65,9 @@ const onCookieReadBtnClick = () => {
     refreshText.value = ''
     if (data > 0) {
       // 用户凭据获取成功
-      refreshText.value = i18n.getMessage('options_FetchBtnAlert_2', [data.toString()])
+      refreshText.value = i18n.getMessage('options_FetchBtnAlert_2', [
+        data.toString(),
+      ])
     }
     else if (data === 0) {
       // 用户凭据没有角色
@@ -146,13 +148,18 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         <p class="tips" v-html="i18n.getMessage('options_Tips_1')" />
         <p class="tips" v-html="i18n.getMessage('options_Tips_2')" />
         <p
-          class="tips" v-html="
+          class="tips"
+          v-html="
             ServerSelectValue === '0'
               ? i18n.getMessage('options_Tips_3')
               : i18n.getMessage('options_Tips_4')
           "
         />
-        <div class="btn" :class="{ 'is-fetching': isFetching }" @click="onCookieReadBtnClick">
+        <div
+          class="btn"
+          :class="{ 'is-fetching': isFetching }"
+          @click="onCookieReadBtnClick"
+        >
           {{
             refreshText === ""
               ? i18n.getMessage("options_FetchBtnTitle")
@@ -183,7 +190,9 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                 <tr v-for="(role, index) in roleList" :key="role.uid">
                   <td>
                     <input
-                      :id="`role-checkbox-${index}`" type="checkbox" :checked="role.isEnabled"
+                      :id="`role-checkbox-${index}`"
+                      type="checkbox"
+                      :checked="role.isEnabled"
                       @change="onRoleCheckboxChange(role.uid, $event)"
                     >
                     <label :for="`role-checkbox-${index}`" />
@@ -191,7 +200,10 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                   <td>{{ role.nickname }}({{ role.uid }})</td>
                   <td>{{ i18n.getMessage(role.serverRegion) }}</td>
                   <td>
-                    <div class="delete-role-btn" @click="onDeleteRoleBtnClick(role.uid)">
+                    <div
+                      class="delete-role-btn"
+                      @click="onDeleteRoleBtnClick(role.uid)"
+                    >
                       <uil:multiply />
                     </div>
                   </td>
@@ -211,23 +223,41 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
           </div>
           <div class="content">
             <div class="checkbox-item">
-              <input id="ResinCheck" v-model="alertSetting.resin" type="checkbox">
+              <input
+                id="ResinCheck"
+                v-model="alertSetting.resin"
+                type="checkbox"
+              >
               <label for="ResinCheck">
                 {{ i18n.getMessage("options_Alert_Resin") }}
               </label>
               <div v-if="alertSetting.resin" class="input-item">
                 ≥
-                <input id="ResinInput" v-model.lazy="alertSetting.resinThreshold" type="number" min="60" max="160">
+                <input
+                  id="ResinInput"
+                  v-model.lazy="alertSetting.resinThreshold"
+                  type="number"
+                  min="60"
+                  max="160"
+                >
               </div>
             </div>
             <div class="checkbox-item">
-              <input id="TransformerCheck" v-model="alertSetting.transformer" type="checkbox">
+              <input
+                id="TransformerCheck"
+                v-model="alertSetting.transformer"
+                type="checkbox"
+              >
               <label for="TransformerCheck">
                 {{ i18n.getMessage("options_Alert_Transformer") }}
               </label>
             </div>
             <div class="checkbox-item">
-              <input id="RealmCurrencyCheck" v-model="alertSetting.realmCurrency" type="checkbox">
+              <input
+                id="RealmCurrencyCheck"
+                v-model="alertSetting.realmCurrency"
+                type="checkbox"
+              >
               <label for="RealmCurrencyCheck">
                 {{ i18n.getMessage("options_Alert_RealmCurrency") }}
               </label>
@@ -252,11 +282,18 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(role, index) in roleList" :key="role.uid" :class="{ disabled: !role.isEnabled }">
+                <tr
+                  v-for="(role, index) in roleList"
+                  :key="role.uid"
+                  :class="{ disabled: !role.isEnabled }"
+                >
                   <td>
                     <input
-                      v-if="role.isEnabled" :id="`role-checkbox-${index}`" type="checkbox"
-                      :checked="role.enabledAlert" @change="onRoleAlertCheckboxChange(role.uid, $event)"
+                      v-if="role.isEnabled"
+                      :id="`role-checkbox-${index}`"
+                      type="checkbox"
+                      :checked="role.enabledAlert"
+                      @change="onRoleAlertCheckboxChange(role.uid, $event)"
                     >
                     <label :for="`role-checkbox-${index}`" />
                   </td>
@@ -287,7 +324,10 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                   {{ i18n.getMessage("options_About_AuthorTitle") }}
                 </div>
               </td>
-              <td class="value" v-html="i18n.getMessage('options_About_Author')" />
+              <td
+                class="value"
+                v-html="i18n.getMessage('options_About_Author')"
+              />
             </tr>
             <tr>
               <td class="key">
@@ -295,7 +335,10 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                   {{ i18n.getMessage("options_About_OpenSourceTitle") }}
                 </div>
               </td>
-              <td class="value" v-html="i18n.getMessage('options_About_OpenSource')" />
+              <td
+                class="value"
+                v-html="i18n.getMessage('options_About_OpenSource')"
+              />
             </tr>
             <tr>
               <td class="key">
@@ -303,7 +346,10 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                   {{ i18n.getMessage("options_About_ThankTitle") }}
                 </div>
               </td>
-              <td class="value" v-html="i18n.getMessage('options_About_Thank')" />
+              <td
+                class="value"
+                v-html="i18n.getMessage('options_About_Thank')"
+              />
             </tr>
           </tbody>
         </table>
@@ -313,288 +359,284 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
 </template>
 
 <style lang="scss">
-a {
-  @apply transition;
-  @apply text-primary-light;
-  @apply border-dashed border-b-1 border-primary-light/80;
+  a {
+    @apply transition;
+    @apply text-primary-light;
+    @apply border-dashed border-b-1 border-primary-light/80;
 
-  &:hover {
-    @apply opacity-80;
+    &:hover {
+      @apply opacity-80;
+    }
+
+    &.reverse {
+      @apply border-dashed border-b-1 border-primary-dark text-primary-dark;
+    }
   }
 
-  &.reverse {
-    @apply border-dashed border-b-1 border-primary-dark text-primary-dark;
+  ::selection {
+    @apply text-primary-light bg-primary-dark;
   }
-}
-
-::selection {
-  @apply text-primary-light bg-primary-dark;
-}
 </style>
 
 <style lang="scss" scoped>
-html {
-  @apply text-base;
-}
+  html {
+    @apply text-base;
+  }
 
-nav {
-  @apply flex mb-4 gap-x-2 w-full;
-  @apply select-none;
+  nav {
+    @apply flex mb-4 gap-x-2 w-full;
+    @apply select-none;
 
-  div {
-    @apply px-2 py-1.5 h-9;
-    @apply rounded-md text-sm;
-    @apply cursor-pointer;
-    @apply transition-all;
-    @apply text-primary-light bg-transparent;
-    @apply whitespace-nowrap;
-    @apply flex items-center;
-    @apply flex-shrink;
-
-    span {
-      @apply overflow-hidden;
-      @apply max-w-0 m-l-0;
-
-      transition: max-width 0.15s ease-out, margin 0.15s ease-out;
-    }
-
-    &:hover {
-      @apply bg-primary-light/70;
-      @apply text-primary-dark;
-    }
-
-    &.active {
-      @apply cursor-default;
-      @apply bg-primary-light bg-opacity-100;
-      @apply text-primary-dark;
+    div {
+      @apply px-2 py-1.5 h-9;
+      @apply rounded-md text-sm;
+      @apply cursor-pointer;
+      @apply transition-all;
+      @apply text-primary-light bg-transparent;
+      @apply whitespace-nowrap;
+      @apply flex items-center;
+      @apply flex-shrink;
 
       span {
-        @apply max-w-40 m-l-0.5;
+        @apply overflow-hidden;
+        @apply max-w-0 m-l-0;
+
+        transition: max-width 0.15s ease-out, margin 0.15s ease-out;
+      }
+
+      &:hover {
+        @apply bg-primary-light/70;
+        @apply text-primary-dark;
+      }
+
+      &.active {
+        @apply cursor-default;
+        @apply bg-primary-light bg-opacity-100;
+        @apply text-primary-dark;
+
+        span {
+          @apply max-w-40 m-l-0.5;
+        }
       }
     }
   }
-}
 
-main {
-  background: linear-gradient(to bottom, #141d2e 0%, #1e2f48 100%);
-  @apply min-h-screen;
-}
-
-.btn {
-  @apply text-lg rounded-md text-center select-none;
-  @apply cursor-pointer transition-all transform-gpu;
-  @apply px-2 py-1 m-2 mt-3;
-  @apply text-primary-dark;
-
-  background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-
-  &:hover {
-    @apply opacity-90;
+  main {
+    background: linear-gradient(to bottom, #141d2e 0%, #1e2f48 100%);
+    @apply min-h-screen;
   }
 
-  &:active {
-    @apply scale-96 opacity-100;
-  }
+  .btn {
+    @apply text-lg rounded-md text-center select-none;
+    @apply cursor-pointer transition-all transform-gpu;
+    @apply px-2 py-1 m-2 mt-3;
+    @apply text-primary-dark;
 
-  &.is-fetching {
-    @apply opacity-50;
-    @apply pointer-events-none;
-  }
-}
+    background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
 
-h1 {
-  @apply text-xl select-none mb-2;
-  @apply text-primary-light;
-}
-
-.tips {
-  @apply text-sm select-none mx-2;
-  @apply text-primary-light;
-}
-
-.divider {
-  background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-  @apply h-0.5 opacity-30 rounded-full;
-}
-
-.setting-panel {
-  .config-item {
-    @apply m-2;
-
-    p {
-      @apply text-base mb-1 select-none;
-      @apply text-primary-light;
+    &:hover {
+      @apply opacity-90;
     }
 
-    input,
-    select {
-      @apply w-full;
-      @apply text-lg rounded-md transition;
-      @apply px-2 py-1;
-      background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-      @apply text-primary-dark;
+    &:active {
+      @apply scale-96 opacity-100;
+    }
 
-      &:focus {
-        @apply shadow-lg shadow-[#e6decc];
+    &.is-fetching {
+      @apply opacity-50;
+      @apply pointer-events-none;
+    }
+  }
+
+  h1 {
+    @apply text-xl select-none mb-2;
+    @apply text-primary-light;
+  }
+
+  .tips {
+    @apply text-sm select-none mx-2;
+    @apply text-primary-light;
+  }
+
+  .divider {
+    background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+    @apply h-0.5 opacity-30 rounded-full;
+  }
+
+  .setting-panel {
+    .config-item {
+      @apply m-2;
+
+      p {
+        @apply text-base mb-1 select-none;
+        @apply text-primary-light;
+      }
+
+      input,
+      select {
+        @apply w-full;
+        @apply text-lg rounded-md transition;
+        @apply px-2 py-1;
+        background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+        @apply text-primary-dark;
+      }
+
+      select {
+        @apply select-none;
       }
     }
+  }
 
-    select {
+  .role-panel {
+    .role-not-found {
+      @apply text-lg text-primary-light text-center;
       @apply select-none;
     }
-  }
-}
 
-.role-panel {
-  .role-not-found {
-    @apply text-lg text-primary-light text-center;
-    @apply select-none;
-  }
+    .role-list {
+      @apply text-base text-primary-dark text-center;
 
-  .role-list {
-    @apply text-base text-primary-dark text-center;
+      .role-table {
+        @apply w-full border-separate;
 
-    .role-table {
-      @apply w-full border-separate;
+        border-spacing: 0px 5px;
 
-      border-spacing: 0px 5px;
-
-      tr {
-        background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-      }
-
-      th {
-        @apply select-none;
-      }
-
-      td:first-of-type,
-      th:first-of-type {
-        @apply rounded-l-md;
-      }
-
-      td:last-of-type,
-      th:last-of-type {
-        @apply rounded-r-md;
-      }
-
-      .delete-role-btn {
-        @apply text-primary-dark;
-        @apply flex justify-center items-start;
-        @apply text-base;
-        @apply w-full h-full;
-        @apply cursor-pointer;
-
-        svg {
-          @apply p-0.5 rounded-full;
-          @apply transition;
+        tr {
+          background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
         }
 
-        &:hover {
+        th {
+          @apply select-none;
+        }
+
+        td:first-of-type,
+        th:first-of-type {
+          @apply rounded-l-md;
+        }
+
+        td:last-of-type,
+        th:last-of-type {
+          @apply rounded-r-md;
+        }
+
+        .delete-role-btn {
+          @apply text-primary-dark;
+          @apply flex justify-center items-start;
+          @apply text-base;
+          @apply w-full h-full;
+          @apply cursor-pointer;
+
           svg {
-            @apply bg-red-700 text-white;
+            @apply p-0.5 rounded-full;
+            @apply transition;
           }
-        }
 
-        &:active {
-          svg {
-            @apply opacity-70;
+          &:hover {
+            svg {
+              @apply bg-red-700 text-white;
+            }
+          }
+
+          &:active {
+            svg {
+              @apply opacity-70;
+            }
           }
         }
       }
     }
   }
-}
 
-.alert-panel {
-  .alert-setting {
-    @apply rounded-md p-1;
-    border: 2px solid #e5dbc7;
+  .alert-panel {
+    .alert-setting {
+      @apply rounded-md p-1;
+      border: 2px solid #e5dbc7;
 
-    .title {
-      @apply text-base font-bold text-[#e5dbc7];
-      @apply flex items-center gap-x-1 select-none;
+      .title {
+        @apply text-base font-bold text-[#e5dbc7];
+        @apply flex items-center gap-x-1 select-none;
+      }
+
+      .content {
+        @apply ml-2 mt-2;
+        @apply text-[#e5dbc7] text-sm;
+
+        .checkbox-item {
+          @apply flex items-center gap-x-1;
+
+          input[type="number"] {
+            &::selection {
+              background: #e5dbc7;
+              color: #141d2e;
+            }
+
+            @apply bg-transparent;
+            @apply text-[#e5dbc7] w-12 border-b-1 border-[#e5dbc7];
+          }
+        }
+      }
     }
 
-    .content {
-      @apply ml-2 mt-2;
-      @apply text-[#e5dbc7] text-sm;
+    .role-not-found {
+      @apply text-lg text-primary-light text-center;
+      @apply select-none;
+    }
 
-      .checkbox-item {
-        @apply flex items-center gap-x-1;
+    .role-list {
+      @apply text-base text-primary-dark text-center;
 
-        input[type="number"] {
-          &::selection {
-            background: #e5dbc7;
-            color: #141d2e;
+      .role-table {
+        @apply w-full border-separate;
+
+        border-spacing: 0px 5px;
+
+        tr {
+          background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+
+          &.disabled {
+            @apply opacity-50 cursor-not-allowed;
           }
+        }
 
-          @apply bg-transparent;
-          @apply text-[#e5dbc7] w-12 border-b-1 border-[#e5dbc7];
+        th {
+          @apply select-none;
+        }
+
+        td:first-of-type,
+        th:first-of-type {
+          @apply rounded-l-md;
+        }
+
+        td:last-of-type,
+        th:last-of-type {
+          @apply rounded-r-md;
         }
       }
     }
   }
 
-  .role-not-found {
-    @apply text-lg text-primary-light text-center;
-    @apply select-none;
-  }
+  .about-panel {
+    .about-table {
+      @apply text-primary-dark text-base;
+      @apply w-full border-separate table-auto;
+      border-spacing: 8px;
 
-  .role-list {
-    @apply text-base text-primary-dark text-center;
+      .key {
+        @apply font-bold;
+        @apply select-none align-top;
 
-    .role-table {
-      @apply w-full border-separate;
+        div {
+          @apply whitespace-normal;
+          word-break: keep-all;
+          @apply p-1.5 rounded-md;
+          background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+        }
+      }
 
-      border-spacing: 0px 5px;
-
-      tr {
+      .value {
+        @apply p-1.5 rounded-md whitespace-pre-wrap;
         background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-
-        &.disabled {
-          @apply opacity-50 cursor-not-allowed;
-        }
-      }
-
-      th {
-        @apply select-none;
-      }
-
-      td:first-of-type,
-      th:first-of-type {
-        @apply rounded-l-md;
-      }
-
-      td:last-of-type,
-      th:last-of-type {
-        @apply rounded-r-md;
       }
     }
   }
-}
-
-.about-panel {
-  .about-table {
-    @apply text-primary-dark text-base;
-    @apply w-full border-separate table-auto;
-    border-spacing: 8px;
-
-    .key {
-      @apply font-bold;
-      @apply select-none align-top;
-
-      div {
-        @apply whitespace-normal;
-        word-break: keep-all;
-        @apply p-1.5 rounded-md;
-        background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-      }
-    }
-
-    .value {
-      @apply p-1.5 rounded-md whitespace-pre-wrap;
-      background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-    }
-  }
-}
 </style>

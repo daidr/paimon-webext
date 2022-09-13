@@ -326,10 +326,6 @@ a {
       @apply px-2 py-1;
       background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
       color: #141d2e;
-
-      &:focus {
-        @apply shadow-lg shadow-[#e6decc];
-      }
     }
 
     ::selection {
