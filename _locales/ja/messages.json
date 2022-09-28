@@ -1,12 +1,12 @@
 {
     "pluginDesc": {
-        "message": "Track Genshin Impact stats in your browser."
+        "message": "ブラウザでGenshin Impactの統計情報を追跡します。"
     },
     "cn_gf01": {
-        "message": "天空岛(CN)"
+        "message": "天空島(CN)"
     },
     "cn_qd01": {
-        "message": "世界树(CN)"
+        "message": "世界樹(CN)"
     },
     "os_usa": {
         "message": "NA"
@@ -27,85 +27,85 @@
         "message": ""
     },
     "popup_today": {
-        "message": "Today"
+        "message": "今日"
     },
     "popup_tomorrow": {
-        "message": "Tomorrow"
+        "message": "明日"
     },
     "popup_recovery_day": {
-        "message": "d"
+        "message": "日"
     },
     "popup_recovery_hour": {
-        "message": "h"
+        "message": "時"
     },
     "popup_recovery_minute": {
-        "message": "m"
+        "message": "分"
     },
     "popup_recovery_second": {
-        "message": "s"
+        "message": "秒"
     },
     "popup_CurrentTitle": {
-        "message": "Current: "
+        "message": "現在: "
     },
     "popup_ServerTitle": {
-        "message": "Server: "
+        "message": "サーバー: "
     },
     "popup_ResinTitle": {
-        "message": "Current Resin"
+        "message": "現在の天然樹脂"
     },
     "popup_FullyReplenishedTitle": {
-        "message": "Fully Replenished"
+        "message": "補充完了まで"
     },
     "popup_ETATitle": {
-        "message": "ETA"
+        "message": "完了予定日時"
     },
     "popup_ExpeditionsTitle": {
-        "message": "Expeditions"
+        "message": "探索派遣"
     },
     "popup_ExploringStatus": {
-        "message": "Exploring"
+        "message": "探索中"
     },
     "popup_FinishedStatus": {
-        "message": "Finished"
+        "message": "終了"
     },
     "popup_DailyCommissionsTitle": {
-        "message": "Daily commissions"
+        "message": "デイリークエスト"
     },
     "popup_ExtraTaskReceived": {
-        "message": "(Received)"
+        "message": "(獲得済み)"
     },
     "popup_ExtraTaskNotReceived": {
-        "message": "(Unreceived)"
+        "message": "(未獲得)"
     },
     "popup_RealmCurrencyTitle": {
-        "message": "Realm currency"
+        "message": "洞天宝銭"
     },
     "popup_WeeklyBossesTitle": {
-        "message": "Weekly boss"
+        "message": "週ボス"
     },
     "popup_ParametricTransformerTitle": {
-        "message": "Parametric Transformer"
+        "message": "参量物質変化器"
     },
     "popup_Available": {
-        "message": "Available"
+        "message": "利用可能"
     },
     "popup_ConfigurationTitle": {
-        "message": "Configuration"
+        "message": "設定"
     },
     "popup_ConfigurationTips": {
-        "message": "You just need to complete a few simple configurations, and then you are ready to enjoy it!"
+        "message": "簡単な設定を行うだけで、すぐに楽しむことができます。"
     },
     "popup_ConfigurationButtonText": {
-        "message": "Open Options"
+        "message": "オプションを開く"
     },
     "popup_UpdateTimeTitle": {
-        "message": "Update: "
+        "message": "アップデート: "
     },
     "popup_ErrorTitle": {
-        "message": "Error"
+        "message": "エラー"
     },
     "popup_ErrorTips_1": {
-        "message": "We are unable to access your game data, try going to the options page to check if the configuration below is correct."
+        "message": "あなたのゲームデータにアクセスできません。オプションページで、以下の設定が正しいかどうか確認してみてください。"
     },
     "popup_ErrorTips_2": {
         "message": "Is the network currently available?"
