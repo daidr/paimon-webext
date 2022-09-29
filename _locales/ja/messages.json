@@ -33,16 +33,16 @@
         "message": "明日"
     },
     "popup_recovery_day": {
-        "message": "日"
+        "message": "d"
     },
     "popup_recovery_hour": {
-        "message": "時"
+        "message": "h"
     },
     "popup_recovery_minute": {
-        "message": "分"
+        "message": "m"
     },
     "popup_recovery_second": {
-        "message": "秒"
+        "message": "s"
     },
     "popup_CurrentTitle": {
         "message": "現在: "
