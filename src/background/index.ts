@@ -1,5 +1,5 @@
 import { onMessage } from 'webext-bridge'
-import { alarms, cookies, i18n, notifications, runtime, storage } from 'webextension-polyfill'
+import { action, alarms, cookies, i18n, notifications, runtime, storage } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
 import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
 import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
@@ -163,6 +163,9 @@ const writeDataToStorage = async function <T>(key: string, data: T) {
   await storage.local.set({ [key]: data })
 }
 
+// selected uid
+let selectedUid = ''
+
 const targetPages = [
   'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
   'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie*',
@@ -228,6 +231,10 @@ const readDataFromStorage = async function <T>(key: string, defaultVal: T): Prom
     return data[key]
   else
     return defaultVal
+}
+
+const getSelectedUid = async () => {
+  return await readDataFromStorage<string>('selectedRole', '')
 }
 
 // 获取国服cookie
@@ -386,15 +393,16 @@ const refreshData = async function () {
   }
 
   // 遍历启用的 role
-  for (const role of enabledRoleList) {
+  for (const [index, role] of enabledRoleList.entries()) {
     const data = await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
+
     if (data) {
       // 更新 roleList
-      const index = originRoleList.findIndex((item) => {
+      const roleIndex = originRoleList.findIndex((item) => {
         return item.uid === role.uid
       })
 
-      originRoleList.splice(index, 1, {
+      originRoleList.splice(roleIndex, 1, {
         ...role,
         data,
         isError: false,
@@ -402,6 +410,20 @@ const refreshData = async function () {
         updateTimestamp: Date.now(),
       })
       doAlertCheck(role)
+
+      if (!selectedUid)
+        selectedUid = await getSelectedUid() // 如果当前还没有 selectedUid 则获取一个
+
+      let isUpdateBadge = false
+      if (selectedUid && selectedUid === role.uid)
+        isUpdateBadge = true // 更新 selectedUid 当前的 resin 数据到 badge
+      else if (index === 0)
+        isUpdateBadge = true // 没有 selectedUid 就更新 index 为 0 的 role 的 resin 数据到 badge
+
+      if (isUpdateBadge && role?.data?.current_resin) {
+        action.setBadgeText({ text: `${role.data.current_resin}` })
+        action.setBadgeBackgroundColor({ color: '#6F9FDF' })
+      }
     }
     else {
       // 获取失败，写入错误信息
@@ -457,7 +479,7 @@ onMessage('get_role_list', async () => {
 })
 
 onMessage('get_selected_role', async () => {
-  return await readDataFromStorage<string>('selectedRole', '')
+  return await getSelectedUid()
 })
 
 onMessage('refresh_request', async () => {
@@ -466,7 +488,9 @@ onMessage('refresh_request', async () => {
 })
 
 onMessage<{ uid: string }, 'set_selected_role'>('set_selected_role', async ({ data: { uid } }) => {
+  selectedUid = uid // update cache
   await writeDataToStorage('selectedRole', uid)
+  refreshData()
 })
 
 onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status', async ({ data: { uid, status } }) => {
