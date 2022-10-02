@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
-import { IUserDataItem, IAlertSetting } from '~/types'
+import type { IAlertSetting, IUserDataItem } from '~/types'
 
 const ServerSelectEl = ref()
 const ServerSelectValue = ref('0')
@@ -27,7 +27,8 @@ watch(activeNavItem, (newValue) => {
     sendMessage('get_role_list', {}).then((data) => {
       roleList.value = (data as unknown) as IUserDataItem[]
     })
-  } else if (newValue === 3) {
+  }
+  else if (newValue === 3) {
     // 当切换到 提醒 时，尝试获取角色列表 和 通知设定
     sendMessage('get_role_list', {}).then((data) => {
       roleList.value = (data as unknown) as IUserDataItem[]
@@ -43,8 +44,10 @@ watch(activeNavItem, (newValue) => {
 })
 
 watch(alertSetting, (newValue) => {
-  if (newValue.resinThreshold < 60) alertSetting.resinThreshold = 60
-  else if (newValue.resinThreshold > 160) alertSetting.resinThreshold = 160
+  if (newValue.resinThreshold < 60)
+    alertSetting.resinThreshold = 60
+  else if (newValue.resinThreshold > 160)
+    alertSetting.resinThreshold = 160
 
   sendMessage<number, 'set_alert_setting'>('set_alert_setting', {
     ...newValue,
@@ -62,11 +65,15 @@ const onCookieReadBtnClick = () => {
     refreshText.value = ''
     if (data > 0) {
       // 用户凭据获取成功
-      refreshText.value = i18n.getMessage('options_FetchBtnAlert_2', [data])
-    } else if (data === 0) {
+      refreshText.value = i18n.getMessage('options_FetchBtnAlert_2', [
+        data.toString(),
+      ])
+    }
+    else if (data === 0) {
       // 用户凭据没有角色
       refreshText.value = i18n.getMessage('options_FetchBtnAlert_3')
-    } else {
+    }
+    else {
       // 用户凭据获取失败
       refreshText.value = i18n.getMessage('options_FetchBtnAlert_1')
     }
@@ -81,7 +88,7 @@ const onDeleteRoleBtnClick = (roleUid: string) => {
     uid: roleUid,
   }).then(() => {
     sendMessage('get_role_list', {}).then((data) => {
-      roleList.value = (data as unknown) as IUserDataItem[]
+      roleList.value = data as unknown as IUserDataItem[]
     })
   })
 }
@@ -102,70 +109,65 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
 </script>
 
 <template>
-  <main class="px-4 py-5">
+  <main class="px-4 py-5" :lang="i18n.getUILanguage()">
     <nav>
-      <div :class="{ active: activeNavItem == 0 }" @click="activeNavItem = 0">
+      <div :class="{ active: activeNavItem === 0 }" @click="activeNavItem = 0">
         <uil:user-plus />
-        <span>{{ i18n.getMessage('options_Nav_AddNewRole') }}</span>
+        <span>{{ i18n.getMessage("options_Nav_AddNewRole") }}</span>
       </div>
-      <div :class="{ active: activeNavItem == 1 }" @click="activeNavItem = 1">
+      <div :class="{ active: activeNavItem === 1 }" @click="activeNavItem = 1">
         <uil:list-ul />
-        <span>{{ i18n.getMessage('options_Nav_RoleListSetting') }}</span>
+        <span>{{ i18n.getMessage("options_Nav_RoleListSetting") }}</span>
       </div>
-      <div :class="{ active: activeNavItem == 3 }" @click="activeNavItem = 3">
+      <div :class="{ active: activeNavItem === 3 }" @click="activeNavItem = 3">
         <uil:bell />
-        <span>{{ i18n.getMessage('options_Nav_AlertSetting') }}</span>
+        <span>{{ i18n.getMessage("options_Nav_AlertSetting") }}</span>
       </div>
-      <div :class="{ active: activeNavItem == 2 }" @click="activeNavItem = 2">
+      <div :class="{ active: activeNavItem === 2 }" @click="activeNavItem = 2">
         <uil:info-circle />
-        <span>{{ i18n.getMessage('options_Nav_About') }}</span>
+        <span>{{ i18n.getMessage("options_Nav_About") }}</span>
       </div>
     </nav>
-    <template v-if="activeNavItem == 0">
+    <template v-if="activeNavItem === 0">
       <div class="setting-panel add-panel">
-        <h1>{{ i18n.getMessage('options_SelectServer') }}</h1>
+        <h1>{{ i18n.getMessage("options_SelectServer") }}</h1>
         <div class="config-item">
           <select ref="ServerSelectEl" v-model="ServerSelectValue">
             <option value="0">
-              {{ i18n.getMessage('options_ServerCN') }}
+              {{ i18n.getMessage("options_ServerCN") }}
             </option>
             <option value="1">
-              {{ i18n.getMessage('options_ServerOS') }}
+              {{ i18n.getMessage("options_ServerOS") }}
             </option>
           </select>
         </div>
       </div>
-      <div class="divider my-4"></div>
+      <div class="divider my-4" />
       <div class="cookie-refresh-panel">
-        <h1>{{ i18n.getMessage('options_FetchUserCookie') }}</h1>
-        <p class="tips" v-html="i18n.getMessage('options_Tips_1')"></p>
-        <p class="tips" v-html="i18n.getMessage('options_Tips_2')"></p>
+        <h1>{{ i18n.getMessage("options_FetchUserCookie") }}</h1>
+        <p class="tips" v-html="i18n.getMessage('options_Tips_1')" />
+        <p class="tips" v-html="i18n.getMessage('options_Tips_2')" />
         <p
-          class="tips"
-          v-html="
-            ServerSelectValue == '0'
+          class="tips" v-html="
+            ServerSelectValue === '0'
               ? i18n.getMessage('options_Tips_3')
               : i18n.getMessage('options_Tips_4')
           "
-        ></p>
-        <div
-          class="btn"
-          :class="{ 'is-fetching': isFetching }"
-          @click="onCookieReadBtnClick"
-        >
+        />
+        <div class="btn" :class="{ 'is-fetching': isFetching }" @click="onCookieReadBtnClick">
           {{
-            refreshText == ''
-              ? i18n.getMessage('options_FetchBtnTitle')
+            refreshText === ""
+              ? i18n.getMessage("options_FetchBtnTitle")
               : refreshText
           }}
         </div>
       </div>
     </template>
-    <template v-if="activeNavItem == 1">
+    <template v-if="activeNavItem === 1">
       <div class="setting-panel role-panel">
-        <template v-if="!roleList || roleList.length == 0">
+        <template v-if="!roleList || roleList.length === 0">
           <div class="role-not-found">
-            {{ i18n.getMessage('options_Role_NoRoleFound') }}
+            {{ i18n.getMessage("options_Role_NoRoleFound") }}
           </div>
         </template>
         <template v-else>
@@ -173,30 +175,25 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
             <table class="role-table">
               <thead>
                 <tr>
-                  <th>{{ i18n.getMessage('options_Role_IsEnabledTitle') }}</th>
-                  <th>{{ i18n.getMessage('options_Role_RoleNameTitle') }}</th>
-                  <th>{{ i18n.getMessage('options_Role_RoleServerTitle') }}</th>
-                  <th>{{ i18n.getMessage('options_Role_RoleActionTitle') }}</th>
+                  <th>{{ i18n.getMessage("options_Role_IsEnabledTitle") }}</th>
+                  <th>{{ i18n.getMessage("options_Role_RoleNameTitle") }}</th>
+                  <th>{{ i18n.getMessage("options_Role_RoleServerTitle") }}</th>
+                  <th>{{ i18n.getMessage("options_Role_RoleActionTitle") }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(role, index) in roleList" :key="role.uid">
                   <td>
                     <input
-                      :id="`role-checkbox-${index}`"
-                      type="checkbox"
-                      :checked="role.isEnabled"
+                      :id="`role-checkbox-${index}`" type="checkbox" :checked="role.isEnabled"
                       @change="onRoleCheckboxChange(role.uid, $event)"
-                    />
-                    <label :for="`role-checkbox-${index}`"></label>
+                    >
+                    <label :for="`role-checkbox-${index}`" />
                   </td>
                   <td>{{ role.nickname }}({{ role.uid }})</td>
                   <td>{{ i18n.getMessage(role.serverRegion) }}</td>
                   <td>
-                    <div
-                      class="delete-role-btn"
-                      @click="onDeleteRoleBtnClick(role.uid)"
-                    >
+                    <div class="delete-role-btn" @click="onDeleteRoleBtnClick(role.uid)">
                       <uil:multiply />
                     </div>
                   </td>
@@ -207,59 +204,41 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         </template>
       </div>
     </template>
-    <template v-if="activeNavItem == 3">
+    <template v-if="activeNavItem === 3">
       <div class="setting-panel alert-panel">
         <div v-if="'resin' in alertSetting" class="alert-setting">
           <div class="title">
             <uil:setting />
-            {{ i18n.getMessage('options_Alert_Setting') }}
+            {{ i18n.getMessage("options_Alert_Setting") }}
           </div>
           <div class="content">
             <div class="checkbox-item">
-              <input
-                id="ResinCheck"
-                v-model="alertSetting.resin"
-                type="checkbox"
-              />
+              <input id="ResinCheck" v-model="alertSetting.resin" type="checkbox">
               <label for="ResinCheck">
-                {{ i18n.getMessage('options_Alert_Resin') }}
+                {{ i18n.getMessage("options_Alert_Resin") }}
               </label>
               <div v-if="alertSetting.resin" class="input-item">
                 ≥
-                <input
-                  id="ResinInput"
-                  v-model.lazy="alertSetting.resinThreshold"
-                  type="number"
-                  min="60"
-                  max="160"
-                />
+                <input id="ResinInput" v-model.lazy="alertSetting.resinThreshold" type="number" min="60" max="160">
               </div>
             </div>
             <div class="checkbox-item">
-              <input
-                id="TransformerCheck"
-                v-model="alertSetting.transformer"
-                type="checkbox"
-              />
+              <input id="TransformerCheck" v-model="alertSetting.transformer" type="checkbox">
               <label for="TransformerCheck">
-                {{ i18n.getMessage('options_Alert_Transformer') }}
+                {{ i18n.getMessage("options_Alert_Transformer") }}
               </label>
             </div>
             <div class="checkbox-item">
-              <input
-                id="RealmCurrencyCheck"
-                v-model="alertSetting.realmCurrency"
-                type="checkbox"
-              />
+              <input id="RealmCurrencyCheck" v-model="alertSetting.realmCurrency" type="checkbox">
               <label for="RealmCurrencyCheck">
-                {{ i18n.getMessage('options_Alert_RealmCurrency') }}
+                {{ i18n.getMessage("options_Alert_RealmCurrency") }}
               </label>
             </div>
           </div>
         </div>
-        <template v-if="!roleList || roleList.length == 0">
+        <template v-if="!roleList || roleList.length === 0">
           <div class="role-not-found">
-            {{ i18n.getMessage('options_Alert_NoRoleFound') }}
+            {{ i18n.getMessage("options_Alert_NoRoleFound") }}
           </div>
         </template>
         <template v-else>
@@ -267,28 +246,21 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
             <table class="role-table">
               <thead>
                 <tr>
-                  <th>{{ i18n.getMessage('options_Alert_IsEnabledTitle') }}</th>
-                  <th>{{ i18n.getMessage('options_Alert_RoleNameTitle') }}</th>
+                  <th>{{ i18n.getMessage("options_Alert_IsEnabledTitle") }}</th>
+                  <th>{{ i18n.getMessage("options_Alert_RoleNameTitle") }}</th>
                   <th>
-                    {{ i18n.getMessage('options_Alert_RoleServerTitle') }}
+                    {{ i18n.getMessage("options_Alert_RoleServerTitle") }}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(role, index) in roleList"
-                  :key="role.uid"
-                  :class="{ disabled: !role.isEnabled }"
-                >
+                <tr v-for="(role, index) in roleList" :key="role.uid" :class="{ disabled: !role.isEnabled }">
                   <td>
                     <input
-                      v-if="role.isEnabled"
-                      :id="`role-checkbox-${index}`"
-                      type="checkbox"
-                      :checked="role.enabledAlert"
-                      @change="onRoleAlertCheckboxChange(role.uid, $event)"
-                    />
-                    <label :for="`role-checkbox-${index}`"></label>
+                      v-if="role.isEnabled" :id="`role-checkbox-${index}`" type="checkbox"
+                      :checked="role.enabledAlert" @change="onRoleAlertCheckboxChange(role.uid, $event)"
+                    >
+                    <label :for="`role-checkbox-${index}`" />
                   </td>
                   <td>{{ role.nickname }}({{ role.uid }})</td>
                   <td>{{ i18n.getMessage(role.serverRegion) }}</td>
@@ -299,50 +271,41 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         </template>
       </div>
     </template>
-    <template v-if="activeNavItem == 2">
+    <template v-if="activeNavItem === 2">
       <div class="setting-panel about-panel">
         <table class="about-table">
           <tbody>
             <tr>
               <td class="key">
                 <div>
-                  {{ i18n.getMessage('options_About_VersionTitle') }}
+                  {{ i18n.getMessage("options_About_VersionTitle") }}
                 </div>
               </td>
-              <td class="value" v-html="manifestData.version"></td>
+              <td class="value" v-html="manifestData.version" />
             </tr>
             <tr>
               <td class="key">
                 <div>
-                  {{ i18n.getMessage('options_About_AuthorTitle') }}
+                  {{ i18n.getMessage("options_About_AuthorTitle") }}
                 </div>
               </td>
-              <td
-                class="value"
-                v-html="i18n.getMessage('options_About_Author')"
-              ></td>
+              <td class="value" v-html="i18n.getMessage('options_About_Author')" />
             </tr>
             <tr>
               <td class="key">
                 <div>
-                  {{ i18n.getMessage('options_About_OpenSourceTitle') }}
+                  {{ i18n.getMessage("options_About_OpenSourceTitle") }}
                 </div>
               </td>
-              <td
-                class="value"
-                v-html="i18n.getMessage('options_About_OpenSource')"
-              ></td>
+              <td class="value" v-html="i18n.getMessage('options_About_OpenSource')" />
             </tr>
             <tr>
               <td class="key">
                 <div>
-                  {{ i18n.getMessage('options_About_ThankTitle') }}
+                  {{ i18n.getMessage("options_About_ThankTitle") }}
                 </div>
               </td>
-              <td
-                class="value"
-                v-html="i18n.getMessage('options_About_Thank')"
-              ></td>
+              <td class="value" v-html="i18n.getMessage('options_About_Thank')" />
             </tr>
           </tbody>
         </table>
@@ -352,10 +315,6 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
 </template>
 
 <style lang="scss">
-html {
-  @apply text-base;
-}
-
 a {
   @apply transition;
   @apply text-primary-light;
@@ -376,6 +335,10 @@ a {
 </style>
 
 <style lang="scss" scoped>
+html {
+  @apply text-base;
+}
+
 nav {
   @apply flex mb-4 gap-x-2 w-full;
   @apply select-none;
@@ -394,7 +357,12 @@ nav {
       @apply overflow-hidden;
       @apply max-w-0 m-l-0;
 
-      transition: max-width 0.15s ease-out, margin 0.15s ease-out;
+      transition: max-width 0.15s ease-out,
+        margin 0.15s ease-out;
+
+      &:lang(ja) {
+        @apply text-xs;
+      }
     }
 
     &:hover {
@@ -406,6 +374,7 @@ nav {
       @apply cursor-default;
       @apply bg-primary-light bg-opacity-100;
       @apply text-primary-dark;
+
       span {
         @apply max-w-40 m-l-0.5;
       }
@@ -471,10 +440,6 @@ h1 {
       @apply px-2 py-1;
       background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
       @apply text-primary-dark;
-
-      &:focus {
-        @apply shadow-lg shadow-[#e6decc];
-      }
     }
 
     select {
@@ -560,11 +525,12 @@ h1 {
       .checkbox-item {
         @apply flex items-center gap-x-1;
 
-        input[type='number'] {
+        input[type="number"] {
           &::selection {
             background: #e5dbc7;
             color: #141d2e;
           }
+
           @apply bg-transparent;
           @apply text-[#e5dbc7] w-12 border-b-1 border-[#e5dbc7];
         }
@@ -619,6 +585,7 @@ h1 {
     .key {
       @apply font-bold;
       @apply select-none align-top;
+
       div {
         @apply whitespace-normal;
         word-break: keep-all;
