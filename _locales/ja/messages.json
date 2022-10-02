@@ -1,0 +1,254 @@
+{
+    "pluginDesc": {
+        "message": "ブラウザでGenshin Impactの統計情報を追跡します。"
+    },
+    "cn_gf01": {
+        "message": "天空島(CN)"
+    },
+    "cn_qd01": {
+        "message": "世界樹(CN)"
+    },
+    "os_usa": {
+        "message": "NA"
+    },
+    "os_euro": {
+        "message": "EU"
+    },
+    "os_asia": {
+        "message": "Asia"
+    },
+    "os_cht": {
+        "message": "SAR"
+    },
+    "popup_hour": {
+        "message": ":"
+    },
+    "popup_minute": {
+        "message": ""
+    },
+    "popup_today": {
+        "message": "今日"
+    },
+    "popup_tomorrow": {
+        "message": "明日"
+    },
+    "popup_recovery_day": {
+        "message": "d"
+    },
+    "popup_recovery_hour": {
+        "message": "h"
+    },
+    "popup_recovery_minute": {
+        "message": "m"
+    },
+    "popup_recovery_second": {
+        "message": "s"
+    },
+    "popup_CurrentTitle": {
+        "message": "現在: "
+    },
+    "popup_ServerTitle": {
+        "message": "サーバー: "
+    },
+    "popup_ResinTitle": {
+        "message": "現在の天然樹脂"
+    },
+    "popup_FullyReplenishedTitle": {
+        "message": "補充完了まで"
+    },
+    "popup_ETATitle": {
+        "message": "完了予定日時"
+    },
+    "popup_ExpeditionsTitle": {
+        "message": "探索派遣"
+    },
+    "popup_ExploringStatus": {
+        "message": "探索中"
+    },
+    "popup_FinishedStatus": {
+        "message": "終了"
+    },
+    "popup_DailyCommissionsTitle": {
+        "message": "デイリークエスト"
+    },
+    "popup_ExtraTaskReceived": {
+        "message": "(獲得済み)"
+    },
+    "popup_ExtraTaskNotReceived": {
+        "message": "(未獲得)"
+    },
+    "popup_RealmCurrencyTitle": {
+        "message": "洞天宝銭"
+    },
+    "popup_WeeklyBossesTitle": {
+        "message": "週ボス"
+    },
+    "popup_ParametricTransformerTitle": {
+        "message": "参量物質変化器"
+    },
+    "popup_Available": {
+        "message": "利用可能"
+    },
+    "popup_ConfigurationTitle": {
+        "message": "設定"
+    },
+    "popup_ConfigurationTips": {
+        "message": "簡単な設定を行うだけで、すぐに楽しむことができます。"
+    },
+    "popup_ConfigurationButtonText": {
+        "message": "オプションを開く"
+    },
+    "popup_UpdateTimeTitle": {
+        "message": "アップデート: "
+    },
+    "popup_ErrorTitle": {
+        "message": "エラー"
+    },
+    "popup_ErrorTips_1": {
+        "message": "あなたのゲームデータにアクセスできません。オプションページで、以下の設定が正しいかどうか確認してみてください。"
+    },
+    "popup_ErrorTips_2": {
+        "message": "現在、ネットワークは利用可能ですか？"
+    },
+    "popup_ErrorTips_3": {
+        "message": "現在有効なアカウントはありますか?"
+    },
+    "popup_ErrorTips_4": {
+        "message": "中国本土にお住まいの場合は、海外サービスのデータにアクセスするためのプロキシが必要です"
+    },
+    "popup_ErrorOpenConfigButtonText": {
+        "message": "オプションを開く"
+    },
+    "popup_ErrorRefreshButtonText": {
+        "message": "再読み込み"
+    },
+    "options_Nav_AddNewRole": {
+        "message": "新しいアカウントを追加する"
+    },
+    "options_Nav_RoleListSetting": {
+        "message": "アカウントリストと設定"
+    },
+    "options_Nav_AlertSetting": {
+        "message": "アラート"
+    },
+    "options_Nav_About": {
+        "message": "その他"
+    },
+    "options_SelectServer": {
+        "message": "サーバー選択"
+    },
+    "options_ServerCN": {
+        "message": "中国"
+    },
+    "options_ServerOS": {
+        "message": "中国以外"
+    },
+    "options_FetchUserCookie": {
+        "message": "II. クッキーを取得"
+    },
+    "options_Tips_1": {
+        "message": "関連するデータにアクセスするには、HoYoLABユーザー資格情報(クッキー) が必要です。"
+    },
+    "options_Tips_2": {
+        "message": "これらのデータはすべてローカルに保存され、第三者のサービスには送信されません。"
+    },
+    "options_Tips_3": {
+        "message": "下のボタンをクリックする前に、このブラウザで<a href='https://bbs.mihoyo.com/ys' target='_blank'>HoYoLAB(China)</a> にログインしていることを確認してください。 Cookieを正常に取得した後。 手動ログアウトによりクッキーが無効になるのを防ぐため、HoYoLABを非ログイン状態に復元します。"
+    },
+    "options_Tips_4": {
+        "message": "下のボタンをクリックする前に、このブラウザで <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> ログインしていることを確認してください <br>クッキーの取得に成功した後、手動ログアウトによるクッキーの無効化を防ぐために、この拡張機能はHoYoLABを非ログイン状態に戻します <br>(HoYoLAB は中国からのアクセスをブロックしており、中国のユーザーは海外サービスのデータ取得にプロキシが必要です)。"
+    },
+    "options_FetchBtnTitle": {
+        "message": "Cookieを取得"
+    },
+    "options_FetchBtnAlert_1": {
+        "message": "アカウントの取得に失敗しました"
+    },
+    "options_FetchBtnAlert_2": {
+        "message": "$1アカウントの追加に成功しました"
+    },
+    "options_FetchBtnAlert_3": {
+        "message": "アカウントバインディングがありません"
+    },
+    "options_Role_NoRoleFound": {
+        "message": "アカウントが見つかりません"
+    },
+    "options_Role_IsEnabledTitle": {
+        "message": "有効"
+    },
+    "options_Role_RoleNameTitle": {
+        "message": "ニックネーム(uid)"
+    },
+    "options_Role_RoleServerTitle": {
+        "message": "サーバー"
+    },
+    "options_Role_RoleActionTitle": {
+        "message": "操作"
+    },
+    "options_About_VersionTitle": {
+        "message": "バージョン"
+    },
+    "options_About_AuthorTitle": {
+        "message": "作者"
+    },
+    "options_About_Author": {
+        "message": "<a class='reverse' href='https://daidr.me' target='_blank'>daidr</a>"
+    },
+    "options_About_OpenSourceTitle": {
+        "message": "オープンソース"
+    },
+    "options_About_OpenSource": {
+        "message": "この拡張機能はオープンソースで、<a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>にホストされています、ソースコードを使用するためにMITライセンスに従いますお願いします。\nもし何か問題があれば <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a>を作成してみてください、可能な限り解決するお手伝いをします。PRを作成していただけると幸いです。👍"
+    },
+    "options_About_ThankTitle": {
+        "message": "クレジット"
+    },
+    "options_About_Thank": {
+        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
+    },
+    "options_Alert_Setting": {
+        "message": "設定"
+    },
+    "options_Alert_Resin": {
+        "message": "樹脂のしきい値"
+    },
+    "options_Alert_Transformer": {
+        "message": "トランスは利用可能です"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "洞天宝銭が最大です"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "アカウントが見つかりません"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "アラート"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "ニックネーム(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "サーバー"
+    },
+    "options_Alert_Notify_Title": {
+        "message": "パイモンアラート"
+    },
+    "options_Alert_Notify_Resin": {
+        "message": "樹脂の量は $1 であり、しきい値を超えています。"
+    },
+    "options_Alert_Notify_Resin_Firefox": {
+        "message": "$1の樹脂がしきい値を超えました。"
+    },
+    "options_Alert_Notify_Transformer": {
+        "message": "参量物質変化器が利用可能です"
+    },
+    "options_Alert_Notify_Transformer_Firefox": {
+        "message": "$1の参量物質変化器が利用可能です。"
+    },
+    "options_Alert_Notify_RealmCurrency": {
+        "message": "洞天宝銭が最大です。"
+    },
+    "options_Alert_Notify_RealmCurrency_Firefox": {
+        "message": "$1の洞天宝銭が最大です。"
+    }
+}

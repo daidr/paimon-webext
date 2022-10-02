@@ -204,7 +204,7 @@
         "message": "鳴謝"
     },
     "options_About_Thank": {
-        "message": "感謝本擴展倉庫的所有貢獻者\n本擴展靈感來源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_Alert_Setting": {
         "message": "設置"
