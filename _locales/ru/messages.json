@@ -204,7 +204,7 @@
         "message": "Спасибо"
     },
     "options_About_Thank": {
-        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
+        "message": "Особая благодарность всем участникам этого расширения\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_Alert_Setting": {
         "message": "настройки"
