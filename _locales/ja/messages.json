@@ -204,7 +204,7 @@
         "message": "クレジット"
     },
     "options_About_Thank": {
-        "message": "この拡張機能のすべての貢献者に感謝します\nUI リファレンス: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_Alert_Setting": {
         "message": "設定"
