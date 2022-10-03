@@ -71,6 +71,7 @@ pnpm build
 - 繁体中文 @stevened7246
 - English @daidr
 - Русский @133718
+- 日本語(Not proofread) @Rigaln
 
 Click the badge below to help us translate Paimon to your language:
 
