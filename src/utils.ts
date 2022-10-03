@@ -357,8 +357,8 @@ function getHeader(oversea: boolean, params: Record<string, string>, body: objec
 async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?: Function): Promise<IRoleDataItem[] | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
-    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
-    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
+    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global&asource=paimon'
+    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn&asource=paimon'
 
   // 生成 header
   const headers = getHeader(oversea, {}, {}, false)
@@ -398,6 +398,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   const params = {
     server: serverRegion,
     role_id,
+    asource: 'paimon',
   }
 
   for (const [key, value] of Object.entries(params))
