@@ -396,9 +396,9 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
 
   // 补全 url query
   const params = {
+    asource: 'paimon',
     server: serverRegion,
     role_id,
-    asource: 'paimon',
   }
 
   for (const [key, value] of Object.entries(params))
