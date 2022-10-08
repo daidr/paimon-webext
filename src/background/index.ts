@@ -379,7 +379,7 @@ const doAlertCheck = async function (roleInfo: IUserDataItem) {
   }
 }
 
-const refreshData = async function () {
+const refreshData = async function (uiOnly = false) {
   // 取出原始 roleList
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
   // 取出启用的 role
@@ -406,7 +406,7 @@ const refreshData = async function () {
   let hasUpdatedBadge = false
   // 遍历启用的 role
   for (const role of enabledRoleList) {
-    const data = await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
+    const data = uiOnly ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
 
     if (data) {
       // 更新 roleList
@@ -513,6 +513,8 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
   clearNotifications(originRoleList[index].alertStatus)
   originRoleList[index].alertStatus = defaultAlertStatus
   await writeDataToStorage('roleList', originRoleList)
+  // 刷新一次数据（仅刷新ui，例如badge/notification）
+  refreshData(true)
 })
 
 onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_alert_status', async ({ data: { uid, status } }) => {
