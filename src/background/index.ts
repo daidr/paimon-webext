@@ -387,13 +387,25 @@ const refreshData = async function () {
     return item.isEnabled
   })
 
+  // 如果当前还没有 selectedUid 则获取一个
+  let _selectedUid = selectedUid || await getSelectedUid()
+
+  if (enabledRoleList.length > 0) {
+    // 查看选中uid是否已经启用
+    if (!enabledRoleList.find(item => item.uid === _selectedUid)) {
+      // 未启用则选中第一个
+      _selectedUid = enabledRoleList[0]?.uid
+    }
+  }
+
   const setCookie = async (cookie: string) => {
     currentCookie = cookie
     await updateRules()
   }
 
+  let hasUpdatedBadge = false
   // 遍历启用的 role
-  for (const [index, role] of enabledRoleList.entries()) {
+  for (const role of enabledRoleList) {
     const data = await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
 
     if (data) {
@@ -411,18 +423,16 @@ const refreshData = async function () {
       })
       doAlertCheck(role)
 
-      if (!selectedUid)
-        selectedUid = await getSelectedUid() // 如果当前还没有 selectedUid 则获取一个
+      if (!hasUpdatedBadge) {
+        let shouldUpdateBadge = false
+        if (_selectedUid && _selectedUid === role.uid)
+          shouldUpdateBadge = true // 更新 _selectedUid 当前的 resin 数据到 badge
 
-      let isUpdateBadge = false
-      if (selectedUid && selectedUid === role.uid)
-        isUpdateBadge = true // 更新 selectedUid 当前的 resin 数据到 badge
-      else if (index === 0)
-        isUpdateBadge = true // 没有 selectedUid 就更新 index 为 0 的 role 的 resin 数据到 badge
-
-      if (isUpdateBadge && role?.data?.current_resin) {
-        action.setBadgeText({ text: `${role.data.current_resin}` })
-        action.setBadgeBackgroundColor({ color: '#6F9FDF' })
+        if (shouldUpdateBadge && role?.data?.current_resin) {
+          action.setBadgeText({ text: `${role.data.current_resin}` })
+          action.setBadgeBackgroundColor({ color: '#6F9FDF' })
+          hasUpdatedBadge = true
+        }
       }
     }
     else {
