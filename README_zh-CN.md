@@ -69,6 +69,7 @@ pnpm build
 - 繁体中文 @stevened7246
 - English @daidr
 - Русский @133718
+- 日本語(未校对) @Rigaln
 
 点击下方的徽章来参与翻译：
 

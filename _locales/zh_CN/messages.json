@@ -204,7 +204,7 @@
         "message": "鸣谢"
     },
     "options_About_Thank": {
-        "message": "感谢本扩展仓库的所有贡献者\n本扩展灵感来源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>spencerwooo/PaimonMenuBar</a>"
+        "message": "感谢本扩展仓库的所有贡献者\n本扩展灵感来源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_Alert_Setting": {
         "message": "设置"
