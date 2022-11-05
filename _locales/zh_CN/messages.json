@@ -117,13 +117,13 @@
         "message": "倘若你处于中国大陆，查看海外服数据需要自备魔法上网"
     },
     "popup_ErrorTips_5": {
-        "message": "当前账号触发风控，需要完成人机验证"
+        "message": "The current account triggers risk control and requires HMI verification"
     },
     "popup_ErrorTips_6": {
-        "message": "登录账号后重新导入角色"
+        "message": "Login to your account and re-import your roles"
     },
     "popup_ErrorTips_7": {
-        "message": "点击下面的人机验证按钮"
+        "message": "Click on the captcha button below"
     },
     "popup_ErrorOpenConfigButtonText": {
         "message": "打开配置页面"
@@ -132,7 +132,7 @@
         "message": "刷新"
     },
     "popup_CaptchaButtonText": {
-        "message": "打开人机验证"
+        "message": "Open Captcha Page"
     },
     "options_Nav_AddNewRole": {
         "message": "增加新角色"
