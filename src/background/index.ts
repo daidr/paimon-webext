@@ -167,14 +167,14 @@ const writeDataToStorage = async function <T>(key: string, data: T) {
 let selectedUid = ''
 
 const targetPages = [
-  'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global&asource=paimon',
-  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn&asource=paimon',
-  'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote?asource=paimon*',
-  'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote?asource=paimon*',
-  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification?asource=paimon*',
-  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification?asource=paimon*',
-  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/createVerification?asource=paimon*',
-  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/verifyVerification?asource=paimon*',
+  'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global',
+  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn',
+  'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification*',
+  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/createVerification*',
+  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/verifyVerification*',
 ]
 
 let currentCookie = ''
@@ -182,7 +182,7 @@ const ruleID = 114514
 
 const updateRules = async () => {
   const rules = []
-  for (const i of [0, 1, 2, 3]) {
+  for (const i of [0, 1, 2, 3, 4, 5, 6, 7]) {
     rules.push({
       id: ruleID + i,
       priority: 1,
@@ -196,7 +196,11 @@ const updateRules = async () => {
     })
   }
 
-  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3], addRules: rules })
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7], addRules: rules })
+}
+
+const resetRules = async () => {
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7] })
 }
 
 const responseRuleID = 19198
@@ -410,7 +414,7 @@ const refreshData = async function (uiOnly = false) {
   let hasUpdatedBadge = false
   // 遍历启用的 role
   for (const role of enabledRoleList) {
-    const data = uiOnly ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
+    const data = uiOnly ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie, resetRules)
 
     if (Number.isInteger(data)) {
       // error code
@@ -575,7 +579,7 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
     await updateRules()
   }
 
-  const result = await getRoleInfoByCookie(oversea, cookie, setCookie)
+  const result = await getRoleInfoByCookie(oversea, cookie, setCookie, resetRules)
 
   if (result) {
     for (const item of result)
@@ -611,7 +615,7 @@ onMessage<{ uid: string }, 'create_verification'>('create_verification', async (
     await updateRules()
   }
 
-  return await createVerification(oversea, cookie, setCookie)
+  return await createVerification(oversea, cookie, setCookie, resetRules)
 })
 
 onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ data: { uid } }) => {
@@ -652,7 +656,7 @@ onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ 
     await updateRules()
   }
 
-  const verification = await createVerification(oversea, cookie, setCookie)
+  const verification = await createVerification(oversea, cookie, setCookie, resetRules)
   if (verification && curtab.id)
     await sendMessage('request_captcha', { verification, uid, tabId: curtab.id }, { tabId: curtab.id, context: 'content-script' })
 })
@@ -669,10 +673,10 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
     currentCookie = cookie
     await updateRules()
   }
-  const result = await verifyVerification(oversea, cookie, geetest, setCookie)
+  const result = await verifyVerification(oversea, cookie, geetest, setCookie, resetRules)
 
   tabs.remove(tabId)
-  getRoleInfoByCookie(oversea, cookie, setCookie)
+  getRoleInfoByCookie(oversea, cookie, setCookie, resetRules)
   refreshData()
   return result
 })

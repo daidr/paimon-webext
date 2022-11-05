@@ -354,11 +354,11 @@ function getHeader(oversea: boolean, params: Record<string, string>, body: objec
   return header
 }
 
-async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?: Function): Promise<IRoleDataItem[] | false> {
+async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?: Function, resetCookie?: Function): Promise<IRoleDataItem[] | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
-    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global&asource=paimon'
-    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn&asource=paimon'
+    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
+    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
 
   // 生成 header
   const headers = getHeader(oversea, {}, {}, false)
@@ -377,7 +377,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
   )
 
   // 发送请求
-  return await fetch(req)
+  const _ret = await fetch(req)
     .then(response => {
       // get Set-Cookie header
       const setCookieHeader = response.headers.get('Set-Cookie')
@@ -393,15 +393,16 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
     .catch(() => {
       return false
     })
+  resetCookie && await resetCookie()
+  return _ret
 }
 
-async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function): Promise<IUserData | false | number> {
+async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function, resetCookie?: Function): Promise<IUserData | false | number> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
 
   // 补全 url query
   const params = {
-    asource: 'paimon',
     server: serverRegion,
     role_id,
   }
@@ -426,7 +427,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   )
 
   // 发送请求
-  return await fetch(req)
+  const _ret = await fetch(req)
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -440,15 +441,16 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     .catch(() => {
       return false
     })
+  resetCookie && await resetCookie()
+  return _ret
 }
 
-async function createVerification(oversea: boolean, cookie: string, setCookie?: Function): Promise<ICaptchaResponse | false> {
+async function createVerification(oversea: boolean, cookie: string, setCookie?: Function, resetCookie?: Function): Promise<ICaptchaResponse | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
 
   // 补全 url query
   const params = {
-    asource: 'paimon',
     is_high: 'true',
   }
 
@@ -472,7 +474,7 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
   )
 
   // 发送请求
-  return await fetch(req)
+  const _ret = await fetch(req)
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -483,22 +485,16 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
     .catch(() => {
       return false
     })
+  resetCookie && await resetCookie()
+  return _ret
 }
 
-async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest, setCookie?: Function): Promise<boolean> {
+async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest, setCookie?: Function, resetCookie?: Function): Promise<boolean> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
 
-  // 补全 url query
-  const params = {
-    asource: 'paimon',
-  }
-
-  for (const [key, value] of Object.entries(params))
-    url.searchParams.append(key, value)
-
   // 生成 header
-  const headers = getHeader(oversea, params, geetest, true)
+  const headers = getHeader(oversea, {}, geetest, true)
 
   // 为 header 追加 cookie
   headers.set('Cookie', cookie)
@@ -515,7 +511,7 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   )
 
   // 发送请求
-  return await fetch(req)
+  const _ret = await fetch(req)
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -526,6 +522,9 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
     .catch(() => {
       return false
     })
+
+  resetCookie && await resetCookie()
+  return _ret
 }
 
 export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification }
