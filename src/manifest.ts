@@ -21,6 +21,12 @@ export async function getManifest() {
     background: {
       service_worker: './dist/background/index.mjs',
     },
+    content_scripts: [
+      {
+        matches: ['https://paimon-webext.daidr.me/captcha.html'],
+        js: ['./dist/contentScripts/index.global.js'],
+      },
+    ],
     options_ui: {
       page: './dist/options/index.html',
       open_in_tab: false,
@@ -38,6 +44,7 @@ export async function getManifest() {
 
   if (isDev) {
     // add dev-only features here
+    delete manifest.content_scripts
     manifest.permissions?.push('webNavigation')
   }
 

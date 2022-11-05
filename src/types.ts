@@ -146,3 +146,15 @@ export interface IRoleDataItem {
    */
   level: number
 }
+
+export interface ICaptchaResponse {
+  gt: string
+  challenge: string
+  new_captcha: boolean | number
+}
+
+export interface ICaptchaRequest {
+  geetest_challenge: string
+  geetest_seccode: string
+  geetest_validate: string
+}

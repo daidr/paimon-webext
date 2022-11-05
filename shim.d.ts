@@ -1,4 +1,5 @@
 import type { ProtocolWithReturn } from 'webext-bridge'
+import type { ICaptchaResponse } from '~/types'
 
 declare module 'webext-bridge' {
   export interface ProtocolMap {
@@ -11,5 +12,9 @@ declare module 'webext-bridge' {
     'set_role_alert_status': { uid: string; status: boolean }
     'delete_role_request': ProtocolWithReturn<{ uid: string }, boolean>
     'request_cookie_read': ProtocolWithReturn<{ oversea: boolean }, number>
+    'create_verification': ProtocolWithReturn<{ uid: string }, ICaptchaResponse | false>
+    'get_selected_role': ProtocolWithReturn<{}, string>
+    'finish_captcha': ProtocolWithReturn<{ geetest: ICaptchaRequest; uid: string; tabId: number }, boolean>
+    'request_captcha': { verification: ICaptchaResponse; uid: string; tabId: number }
   }
 }

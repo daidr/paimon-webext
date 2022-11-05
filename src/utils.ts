@@ -1,4 +1,4 @@
-import type { IRoleDataItem, IUserData, serverRegions } from './types'
+import type { ICaptchaRequest, ICaptchaResponse, IRoleDataItem, IUserData, serverRegions } from './types'
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -378,7 +378,12 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
 
   // 发送请求
   return await fetch(req)
-    .then(response => response.json())
+    .then(response => {
+      // get Set-Cookie header
+      const setCookieHeader = response.headers.get('Set-Cookie')
+      console.log('setCookieHeader', setCookieHeader)
+      return response.json()
+    })
     .then((data) => {
       if (data.retcode === 0)
         return data.data.list
@@ -390,7 +395,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
     })
 }
 
-async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function): Promise<IUserData | false> {
+async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function): Promise<IUserData | false | number> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
 
@@ -426,6 +431,9 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     .then((data) => {
       if (data.retcode === 0)
         return data.data
+      else if (data.retcode === 1034)
+        // risk control
+        return 1034
       else
         return false
     })
@@ -434,4 +442,90 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     })
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie }
+async function createVerification(oversea: boolean, cookie: string, setCookie?: Function): Promise<ICaptchaResponse | false> {
+  // 根据 oversea 参数选择对应 api 地址
+  const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
+
+  // 补全 url query
+  const params = {
+    asource: 'paimon',
+    is_high: 'true',
+  }
+
+  for (const [key, value] of Object.entries(params))
+    url.searchParams.append(key, value)
+
+  // 生成 header
+  const headers = getHeader(oversea, params, {}, true)
+
+  // 为 header 追加 cookie
+  headers.set('Cookie', cookie)
+  setCookie && await setCookie(cookie)
+
+  // 构造请求
+  const req = new Request(
+    url.toString(),
+    {
+      method: 'get',
+      headers,
+    },
+  )
+
+  // 发送请求
+  return await fetch(req)
+    .then(response => response.json())
+    .then((data) => {
+      if (data.retcode === 0)
+        return data.data
+      else
+        return false
+    })
+    .catch(() => {
+      return false
+    })
+}
+
+async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest, setCookie?: Function): Promise<boolean> {
+  // 根据 oversea 参数选择对应 api 地址
+  const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
+
+  // 补全 url query
+  const params = {
+    asource: 'paimon',
+  }
+
+  for (const [key, value] of Object.entries(params))
+    url.searchParams.append(key, value)
+
+  // 生成 header
+  const headers = getHeader(oversea, params, geetest, true)
+
+  // 为 header 追加 cookie
+  headers.set('Cookie', cookie)
+  setCookie && await setCookie(cookie)
+
+  // 构造请求
+  const req = new Request(
+    url.toString(),
+    {
+      method: 'post',
+      headers,
+      body: JSON.stringify(geetest),
+    },
+  )
+
+  // 发送请求
+  return await fetch(req)
+    .then(response => response.json())
+    .then((data) => {
+      if (data.retcode === 0)
+        return data.data
+      else
+        return false
+    })
+    .catch(() => {
+      return false
+    })
+}
+
+export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification }

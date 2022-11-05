@@ -1,11 +1,11 @@
-import { onMessage } from 'webext-bridge'
-import { action, alarms, cookies, i18n, notifications, runtime, storage } from 'webextension-polyfill'
+import { onMessage, sendMessage } from 'webext-bridge'
+import { action, alarms, cookies, i18n, notifications, runtime, storage, tabs } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
 import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
-import { getRoleDataByCookie, getRoleInfoByCookie } from '~/utils'
+import { createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
 
 // 一分钟
-const INTERVAL_TIME = 1
+const INTERVAL_TIME = 3
 
 // 角色的默认提醒设定
 const defaultAlertSetting: IAlertSetting = {
@@ -171,6 +171,10 @@ const targetPages = [
   'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn&asource=paimon',
   'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote?asource=paimon*',
   'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote?asource=paimon*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification?asource=paimon*',
+  'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification?asource=paimon*',
+  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/createVerification?asource=paimon*',
+  'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/verifyVerification?asource=paimon*',
 ]
 
 let currentCookie = ''
@@ -408,7 +412,19 @@ const refreshData = async function (uiOnly = false) {
   for (const role of enabledRoleList) {
     const data = uiOnly ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie)
 
-    if (data) {
+    if (Number.isInteger(data)) {
+      // error code
+      switch (data) {
+        case 1034:
+          // risk control
+          // 获取失败，写入错误信息
+          role.isError = true
+          role.errorMessage = '触发风控'
+          role.updateTimestamp = Date.now()
+          break
+      }
+    }
+    else if (data && typeof data === 'object') {
       // 更新 roleList
       const roleIndex = originRoleList.findIndex((item) => {
         return item.uid === role.uid
@@ -580,4 +596,83 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
   else {
     return -1
   }
+})
+
+onMessage<{ uid: string }, 'create_verification'>('create_verification', async ({ data: { uid } }) => {
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+  const cookie = originRoleList[index].cookie
+  const oversea = originRoleList[index].serverType === 'os'
+
+  const setCookie = async (cookie: string) => {
+    currentCookie = cookie
+    await updateRules()
+  }
+
+  return await createVerification(oversea, cookie, setCookie)
+})
+
+onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ data: { uid } }) => {
+  // open captcha tab
+  const curtab = await tabs.create({
+    url: 'https://paimon-webext.daidr.me/captcha.html',
+  })
+
+  // wait for curtab loaded
+  await new Promise((resolve, reject) => {
+    const check = async () => {
+      if (curtab.id === undefined) {
+        reject(new Error('tab id is undefined'))
+        return
+      }
+
+      const tab = await tabs.get(curtab.id)
+      if (tab.status === 'complete')
+        resolve(true)
+      else
+        setTimeout(check, 100)
+    }
+    check()
+  })
+
+  console.log('tab loaded')
+
+  // send message to captcha tab
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+  const cookie = originRoleList[index].cookie
+  const oversea = originRoleList[index].serverType === 'os'
+
+  const setCookie = async (cookie: string) => {
+    currentCookie = cookie
+    await updateRules()
+  }
+
+  const verification = await createVerification(oversea, cookie, setCookie)
+  if (verification && curtab.id)
+    await sendMessage('request_captcha', { verification, uid, tabId: curtab.id }, { tabId: curtab.id, context: 'content-script' })
+})
+
+onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+
+  const cookie = originRoleList[index].cookie
+  const oversea = originRoleList[index].serverType === 'os'
+  const setCookie = async (cookie: string) => {
+    currentCookie = cookie
+    await updateRules()
+  }
+  const result = await verifyVerification(oversea, cookie, geetest, setCookie)
+
+  tabs.remove(tabId)
+  getRoleInfoByCookie(oversea, cookie, setCookie)
+  // refreshData()
+  return result
 })
