@@ -673,6 +673,6 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
 
   tabs.remove(tabId)
   getRoleInfoByCookie(oversea, cookie, setCookie)
-  // refreshData()
+  refreshData()
   return result
 })
