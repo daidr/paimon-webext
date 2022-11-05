@@ -116,11 +116,23 @@
     "popup_ErrorTips_4": {
         "message": "If you are in China Mainland, you need a proxy to access the data of the overseas service"
     },
+    "popup_ErrorTips_5": {
+        "message": "The current account triggers risk control and requires HMI verification"
+    },
+    "popup_ErrorTips_6": {
+        "message": "Login to your account and re-import your roles"
+    },
+    "popup_ErrorTips_7": {
+        "message": "Click on the captcha button below"
+    },
     "popup_ErrorOpenConfigButtonText": {
         "message": "Open Options"
     },
     "popup_ErrorRefreshButtonText": {
         "message": "Refresh"
+    },
+    "popup_CaptchaButtonText": {
+        "message": "Open Captcha Page"
     },
     "options_Nav_AddNewRole": {
         "message": "Add New Roles"
