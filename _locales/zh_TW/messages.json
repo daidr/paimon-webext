@@ -116,11 +116,23 @@
     "popup_ErrorTips_4": {
         "message": "如果您處於中國大陸，查看國際服資料需要自備魔法上網"
     },
+    "popup_ErrorTips_5": {
+        "message": "The current account triggers risk control and requires HMI verification"
+    },
+    "popup_ErrorTips_6": {
+        "message": "Login to your account and re-import your roles"
+    },
+    "popup_ErrorTips_7": {
+        "message": "Click on the captcha button below"
+    },
     "popup_ErrorOpenConfigButtonText": {
         "message": "打開設置頁面"
     },
     "popup_ErrorRefreshButtonText": {
         "message": "刷新"
+    },
+    "popup_CaptchaButtonText": {
+        "message": "Open Captcha Page"
     },
     "options_Nav_AddNewRole": {
         "message": "增加新角色"
