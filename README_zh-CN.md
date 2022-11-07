@@ -7,15 +7,17 @@
 
 <img align="right" src="https://cdn.jsdelivr.net/gh/daidr/paimon-webext@main/screenshots/popup_zh-CN.png" width="320px" height="auto" alt="screenshot_popup" />
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
+[![wakatime](https://wakatime.com/badge/github/daidr/paimon-webext.svg)](https://wakatime.com/badge/github/daidr/paimon-webext)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/daidr/paimon-webext?label=commits)
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/daidr/paimon-webext)
 [![Mozilla Add-on](https://img.shields.io/amo/users/%E6%B4%BE%E8%92%99-paimon?label=firefox&color=green)](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B4%BE%E8%92%99-paimon/)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ecafadojbjpamdlbhdgmfhihdojeekdd?label=chrome&color=green)](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 [![Microsoft Edge Addons](https://img.shields.io/badge/dynamic/json?label=edge&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Famlfaonbmcninlpijbjkblmfgcanjdih&color=green)](https://microsoftedge.microsoft.com/addons/detail/%E6%B4%BE%E8%92%99-paimon/amlfaonbmcninlpijbjkblmfgcanjdih)
 
 > 在浏览器中实时查看原神游戏状态
 
-派蒙的特色功能： 
+派蒙的特色功能：
 
 * 🌙 显示实时树脂及恢复情况
 * 💰 探索派遣/每日委托/洞天宝钱/参量质变仪/周本 Boss 情况提示
@@ -30,6 +32,10 @@
 [Chrome Webstore 链接](https://chrome.google.com/webstore/detail/%E6%B4%BE%E8%92%99-paimon/ecafadojbjpamdlbhdgmfhihdojeekdd)
 
 [Edge Addons 链接](https://microsoftedge.microsoft.com/addons/detail/amlfaonbmcninlpijbjkblmfgcanjdih)
+
+## 反馈 & 建议
+
+由于今日国内米游社频繁风控，为了更好地了解使用情况，建了一个Q群方便交流：757411736
 
 ## 开发
 
