@@ -123,7 +123,7 @@
         "message": "Login to your account and re-import your roles"
     },
     "popup_ErrorTips_7": {
-        "message": "Click on the captcha button below"
+        "message": "Нажмите для проверки"
     },
     "popup_ErrorOpenConfigButtonText": {
         "message": "Открыть настройки"
