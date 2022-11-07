@@ -117,10 +117,10 @@
         "message": "Если вы находитесь на материковой части Китая, вам нужен прокси-сервер для доступа к данным зарубежной службы"
     },
     "popup_ErrorTips_5": {
-        "message": "The current account triggers risk control and requires HMI verification"
+        "message": "Текущая учетная вызывать контроль рисков и должна пройти ЧМИ"
     },
     "popup_ErrorTips_6": {
-        "message": "Login to your account and re-import your roles"
+        "message": "Войдите в учетную запись и повторно импортируйте свои роли"
     },
     "popup_ErrorTips_7": {
         "message": "Нажмите для проверки"
@@ -132,7 +132,7 @@
         "message": "Обновить"
     },
     "popup_CaptchaButtonText": {
-        "message": "Open Captcha Page"
+        "message": "Откройте страницу Captcha"
     },
     "options_Nav_AddNewRole": {
         "message": "Добавить аккаунт"
