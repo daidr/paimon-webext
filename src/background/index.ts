@@ -520,7 +520,7 @@ onMessage('refresh_request', async () => {
 onMessage<{ uid: string }, 'set_selected_role'>('set_selected_role', async ({ data: { uid } }) => {
   selectedUid = uid // update cache
   await writeDataToStorage('selectedRole', uid)
-  refreshData()
+  refreshData(true)
 })
 
 onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status', async ({ data: { uid, status } }) => {
