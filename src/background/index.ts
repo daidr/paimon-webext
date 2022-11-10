@@ -35,7 +35,7 @@ const randomNotificationId = () => {
 }
 
 // type: 0 resin; 1 realmCurrency; 2 transformer
-const showNotification = (alertStatus: IAlertStatus, type: 0 | 1 | 2, scope: any) => {
+const showNotification = async (alertStatus: IAlertStatus, type: 0 | 1 | 2, scope: any) => {
   // @ts-expect-error: update 方法在 firefox 中不存在
   const isFirefox = !notifications.update
   if (!isFirefox) {
@@ -56,7 +56,12 @@ const showNotification = (alertStatus: IAlertStatus, type: 0 | 1 | 2, scope: any
       }
       else {
         // 更新通知
-        notifications.update(alertStatus.resin, notificationData)
+        const _ret = await notifications.update(alertStatus.resin, notificationData)
+
+        if (!_ret) {
+          alertStatus.resin = randomNotificationId()
+          notifications.create(alertStatus.resin, notificationData)
+        }
       }
     }
     else if (type === 1) {
