@@ -323,8 +323,8 @@ function getDS(oversea: boolean, params: Record<string, string>, body: object) {
 }
 
 const HEADER_TEMPLATE_CN: Record<string, string> = {
-  'x-rpc-app_version': '2.38.1',
-  'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBS/2.38.1',
+  'x-rpc-app_version': '2.40.1',
+  'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.40.1',
   'x-rpc-client_type': '5',
   'Origin': 'https://webstatic.mihoyo.com',
   'X-Requested-With': 'com.mihoyo.hyperion',
