@@ -183,6 +183,7 @@ const targetPages = [
 ]
 
 let currentCookie = ''
+let currentReferer = ''
 const ruleID = 114514
 
 const updateRules = async () => {
@@ -194,7 +195,9 @@ const updateRules = async () => {
       action: {
         type: 'modifyHeaders',
         requestHeaders: [
-          { header: 'cookie', operation: 'set', value: currentCookie },
+          { header: 'Cookie', operation: 'set', value: currentCookie },
+          { header: 'Referer', operation: 'set', value: currentReferer },
+          { header: 'Origin', operation: 'set', value: currentReferer },
         ],
       },
       condition: { urlFilter: targetPages[i] },
@@ -411,8 +414,9 @@ const refreshData = async function (uiOnly = false) {
     }
   }
 
-  const setCookie = async (cookie: string) => {
+  const setCookie = async (cookie: string, referer: string) => {
     currentCookie = cookie
+    currentReferer = referer
     await updateRules()
   }
 
@@ -579,8 +583,9 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
   if (cookie === '')
     return -1
 
-  const setCookie = async (cookie: string) => {
+  const setCookie = async (cookie: string, referer: string) => {
     currentCookie = cookie
+    currentReferer = referer
     await updateRules()
   }
 
@@ -615,8 +620,9 @@ onMessage<{ uid: string }, 'create_verification'>('create_verification', async (
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  const setCookie = async (cookie: string) => {
+  const setCookie = async (cookie: string, referer: string) => {
     currentCookie = cookie
+    currentReferer = referer
     await updateRules()
   }
 
@@ -656,8 +662,9 @@ onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ 
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  const setCookie = async (cookie: string) => {
+  const setCookie = async (cookie: string, referer: string) => {
     currentCookie = cookie
+    currentReferer = referer
     await updateRules()
   }
 
@@ -674,10 +681,13 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
 
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
-  const setCookie = async (cookie: string) => {
+
+  const setCookie = async (cookie: string, referer: string) => {
     currentCookie = cookie
+    currentReferer = referer
     await updateRules()
   }
+
   const result = await verifyVerification(oversea, cookie, geetest, setCookie, resetRules)
 
   tabs.remove(tabId)
