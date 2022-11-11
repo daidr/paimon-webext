@@ -360,13 +360,14 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
     ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
     : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
 
-  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
+  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 生成 header
   const headers = getHeader(oversea, {}, {}, false)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer)
+  setCookie && await setCookie(cookie, referer, userAgent)
 
   // 构造请求
   const req = new Request(
@@ -380,9 +381,6 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
   // 发送请求
   const _ret = await fetch(req)
     .then(response => {
-      // get Set-Cookie header
-      const setCookieHeader = response.headers.get('Set-Cookie')
-      console.log('setCookieHeader', setCookieHeader)
       return response.json()
     })
     .then((data) => {
@@ -402,7 +400,8 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
 
-  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
+  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 补全 url query
   const params = {
@@ -417,7 +416,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   const headers = getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer)
+  setCookie && await setCookie(cookie, referer, userAgent)
 
   // 构造请求
   const req = new Request(
@@ -451,7 +450,8 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
 
-  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
+  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 补全 url query
   const params = {
@@ -465,7 +465,7 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
   const headers = getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer)
+  setCookie && await setCookie(cookie, referer, userAgent)
 
   // 构造请求
   const req = new Request(
@@ -496,13 +496,14 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
 
-  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
+  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 生成 header
   const headers = getHeader(oversea, {}, geetest, true)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer)
+  setCookie && await setCookie(cookie, referer, userAgent)
 
   // 构造请求
   const req = new Request(

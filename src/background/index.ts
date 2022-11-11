@@ -184,6 +184,7 @@ const targetPages = [
 
 let currentCookie = ''
 let currentReferer = ''
+let currentUA = ''
 const ruleID = 114514
 
 const updateRules = async () => {
@@ -198,6 +199,7 @@ const updateRules = async () => {
           { header: 'Cookie', operation: 'set', value: currentCookie },
           { header: 'Referer', operation: 'set', value: currentReferer },
           { header: 'Origin', operation: 'set', value: currentReferer },
+          { header: 'User-Agent', operation: 'set', value: currentUA },
         ],
       },
       condition: { urlFilter: targetPages[i] },
@@ -414,9 +416,10 @@ const refreshData = async function (uiOnly = false) {
     }
   }
 
-  const setCookie = async (cookie: string, referer: string) => {
+  const setCookie = async (cookie: string, referer: string, ua: string) => {
     currentCookie = cookie
     currentReferer = referer
+    currentUA = ua
     await updateRules()
   }
 
@@ -583,9 +586,10 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
   if (cookie === '')
     return -1
 
-  const setCookie = async (cookie: string, referer: string) => {
+  const setCookie = async (cookie: string, referer: string, ua: string) => {
     currentCookie = cookie
     currentReferer = referer
+    currentUA = ua
     await updateRules()
   }
 
@@ -620,9 +624,10 @@ onMessage<{ uid: string }, 'create_verification'>('create_verification', async (
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  const setCookie = async (cookie: string, referer: string) => {
+  const setCookie = async (cookie: string, referer: string, ua: string) => {
     currentCookie = cookie
     currentReferer = referer
+    currentUA = ua
     await updateRules()
   }
 
@@ -662,9 +667,10 @@ onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ 
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  const setCookie = async (cookie: string, referer: string) => {
+  const setCookie = async (cookie: string, referer: string, ua: string) => {
     currentCookie = cookie
     currentReferer = referer
+    currentUA = ua
     await updateRules()
   }
 
@@ -682,9 +688,10 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  const setCookie = async (cookie: string, referer: string) => {
+  const setCookie = async (cookie: string, referer: string, ua: string) => {
     currentCookie = cookie
     currentReferer = referer
+    currentUA = ua
     await updateRules()
   }
 
