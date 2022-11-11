@@ -332,12 +332,12 @@ const HEADER_TEMPLATE_CN: Record<string, string> = {
 }
 
 const HEADER_TEMPLATE_OS: Record<string, string> = {
-  'x-rpc-app_version': '2.21.1',
-  'User-Agent': 'Mozilla/5.0 (Linux; Android 12; Mi 10 Pro Build/SKQ1.211006.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 miHoYoBBSOversea/2.21.1',
+  'x-rpc-app_version': '2.22.0',
+  'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBSOversea/2.22.0',
   'x-rpc-client_type': '2',
-  'Origin': 'https://webstatic-sea.hoyolab.com',
+  'Origin': 'https://act.hoyolab.com',
   'X-Requested-With': 'com.mihoyo.hoyolab',
-  'Referer': 'https://webstatic-sea.hoyolab.com',
+  'Referer': 'https://act.hoyolab.com',
 }
 
 function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
@@ -360,7 +360,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
     ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
     : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
 
-  const referer = oversea ? 'https://webstatic-sea.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
 
   // 生成 header
   const headers = getHeader(oversea, {}, {}, false)
@@ -402,7 +402,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
 
-  const referer = oversea ? 'https://webstatic-sea.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
 
   // 补全 url query
   const params = {
@@ -451,7 +451,7 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
 
-  const referer = oversea ? 'https://webstatic-sea.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
 
   // 补全 url query
   const params = {
@@ -496,7 +496,7 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
 
-  const referer = oversea ? 'https://webstatic-sea.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
+  const referer = oversea ? 'https://act.hoyolab.com/' : 'https://webstatic.mihoyo.com/'
 
   // 生成 header
   const headers = getHeader(oversea, {}, geetest, true)
