@@ -5,7 +5,7 @@ import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataIt
 import { createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
 
 // 一分钟
-const INTERVAL_TIME = 3
+const INTERVAL_TIME = 5
 
 // 角色的默认提醒设定
 const defaultAlertSetting: IAlertSetting = {
@@ -482,7 +482,14 @@ const refreshData = async function (uiOnly = false) {
 }
 
 // 定时器，定时获取玩家数据
-alarms.create('refresh_data', { periodInMinutes: INTERVAL_TIME })
+
+const initAlarm = async (interval_time = INTERVAL_TIME) => {
+  await alarms.clear('refresh_data')
+  alarms.create('refresh_data', { periodInMinutes: interval_time })
+}
+
+initAlarm()
+
 alarms.onAlarm.addListener((alarmInfo) => {
   if (alarmInfo.name === 'refresh_data')
     refreshData()
