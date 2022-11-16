@@ -138,10 +138,13 @@
         "message": "新しいアカウントを追加する"
     },
     "options_Nav_RoleListSetting": {
-        "message": "アカウントリストと設定"
+        "message": "Role List"
     },
     "options_Nav_AlertSetting": {
         "message": "アラート"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
     },
     "options_Nav_About": {
         "message": "その他"
