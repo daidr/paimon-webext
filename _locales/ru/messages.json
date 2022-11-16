@@ -116,20 +116,35 @@
     "popup_ErrorTips_4": {
         "message": "Если вы находитесь на материковой части Китая, вам нужен прокси-сервер для доступа к данным зарубежной службы"
     },
+    "popup_ErrorTips_5": {
+        "message": "Текущая учетная вызывать контроль рисков и должна пройти ЧМИ"
+    },
+    "popup_ErrorTips_6": {
+        "message": "Войдите в учетную запись и повторно импортируйте свои роли"
+    },
+    "popup_ErrorTips_7": {
+        "message": "Нажмите для проверки"
+    },
     "popup_ErrorOpenConfigButtonText": {
         "message": "Открыть настройки"
     },
     "popup_ErrorRefreshButtonText": {
         "message": "Обновить"
     },
+    "popup_CaptchaButtonText": {
+        "message": "Откройте страницу Captcha"
+    },
     "options_Nav_AddNewRole": {
         "message": "Добавить аккаунт"
     },
     "options_Nav_RoleListSetting": {
-        "message": "Аккаунты и настройки"
+        "message": "Role List"
     },
     "options_Nav_AlertSetting": {
         "message": "Тревога"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
     },
     "options_Nav_About": {
         "message": "Дополнение и автор"

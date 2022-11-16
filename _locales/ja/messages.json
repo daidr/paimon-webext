@@ -116,20 +116,35 @@
     "popup_ErrorTips_4": {
         "message": "中国本土にお住まいの場合は、海外サービスのデータにアクセスするためのプロキシが必要です"
     },
+    "popup_ErrorTips_5": {
+        "message": "The current account triggers risk control and requires HMI verification"
+    },
+    "popup_ErrorTips_6": {
+        "message": "Login to your account and re-import your roles"
+    },
+    "popup_ErrorTips_7": {
+        "message": "Click on the captcha button below"
+    },
     "popup_ErrorOpenConfigButtonText": {
         "message": "オプションを開く"
     },
     "popup_ErrorRefreshButtonText": {
         "message": "再読み込み"
     },
+    "popup_CaptchaButtonText": {
+        "message": "Open Captcha Page"
+    },
     "options_Nav_AddNewRole": {
         "message": "新しいアカウントを追加する"
     },
     "options_Nav_RoleListSetting": {
-        "message": "アカウントリストと設定"
+        "message": "Role List"
     },
     "options_Nav_AlertSetting": {
         "message": "アラート"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
     },
     "options_Nav_About": {
         "message": "その他"

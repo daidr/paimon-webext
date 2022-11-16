@@ -116,20 +116,35 @@
     "popup_ErrorTips_4": {
         "message": "如果您處於中國大陸，查看國際服資料需要自備魔法上網"
     },
+    "popup_ErrorTips_5": {
+        "message": "當前賬戶觸發風控，需要進行人機驗證"
+    },
+    "popup_ErrorTips_6": {
+        "message": "登錄到您的帳戶並重新導入您的角色"
+    },
+    "popup_ErrorTips_7": {
+        "message": "點擊下面的人機驗證按鈕"
+    },
     "popup_ErrorOpenConfigButtonText": {
         "message": "打開設置頁面"
     },
     "popup_ErrorRefreshButtonText": {
         "message": "刷新"
     },
+    "popup_CaptchaButtonText": {
+        "message": "打開人機驗證"
+    },
     "options_Nav_AddNewRole": {
         "message": "增加新角色"
     },
     "options_Nav_RoleListSetting": {
-        "message": "角色列表&設置"
+        "message": "Role List"
     },
     "options_Nav_AlertSetting": {
         "message": "提醒"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
     },
     "options_Nav_About": {
         "message": "關於"
