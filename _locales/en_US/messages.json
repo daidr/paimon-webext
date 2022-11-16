@@ -143,6 +143,9 @@
     "options_Nav_AlertSetting": {
         "message": "Alert"
     },
+    "options_Nav_Setting": {
+        "message": "Settings"
+    },
     "options_Nav_About": {
         "message": "About"
     },
