@@ -138,13 +138,13 @@
         "message": "增加新角色"
     },
     "options_Nav_RoleListSetting": {
-        "message": "Role List"
+        "message": "角色列表"
     },
     "options_Nav_AlertSetting": {
         "message": "提醒"
     },
     "options_Nav_Setting": {
-        "message": "Settings"
+        "message": "設置"
     },
     "options_Nav_About": {
         "message": "關於"
