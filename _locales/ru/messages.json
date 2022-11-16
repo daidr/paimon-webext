@@ -138,10 +138,13 @@
         "message": "Добавить аккаунт"
     },
     "options_Nav_RoleListSetting": {
-        "message": "Аккаунты и настройки"
+        "message": "Role List"
     },
     "options_Nav_AlertSetting": {
         "message": "Тревога"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
     },
     "options_Nav_About": {
         "message": "Дополнение и автор"
