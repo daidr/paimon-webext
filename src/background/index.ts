@@ -453,7 +453,8 @@ const refreshData = async function (uiOnly = false) {
         errorMessage: '',
         updateTimestamp: Date.now(),
       })
-      doAlertCheck(role)
+
+      !uiOnly && doAlertCheck(role)
 
       if (!hasUpdatedBadge) {
         let shouldUpdateBadge = false
@@ -476,7 +477,8 @@ const refreshData = async function (uiOnly = false) {
   }
 
   // 更新 roleList
-  await writeDataToStorage('roleList', originRoleList)
+  !uiOnly && await writeDataToStorage('roleList', originRoleList)
+  !uiOnly && refreshData(true)
 }
 
 // 定时器，定时获取玩家数据
