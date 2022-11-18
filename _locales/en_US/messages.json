@@ -282,6 +282,6 @@
         "message": "m"
     },
     "options_Setting_Item_DataRefreshInterval_Protips": {
-        "message": "If the data refresh interval is longer than 8 minutes, we'll attempt to impute some of the data locally."
+        "message": "If the value is longer than 8 minutes, we'll attempt to impute some of the data locally."
     }
 }
