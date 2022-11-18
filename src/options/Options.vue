@@ -123,6 +123,10 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         <uil:bell />
         <span>{{ i18n.getMessage("options_Nav_AlertSetting") }}</span>
       </div>
+      <div :class="{ active: activeNavItem === 4 }" @click="activeNavItem = 4">
+        <uil:setting />
+        <span>{{ i18n.getMessage("options_Nav_Setting") }}</span>
+      </div>
       <div :class="{ active: activeNavItem === 2 }" @click="activeNavItem = 2">
         <uil:info-circle />
         <span>{{ i18n.getMessage("options_Nav_About") }}</span>
@@ -163,7 +167,7 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         </div>
       </div>
     </template>
-    <template v-if="activeNavItem === 1">
+    <template v-else-if="activeNavItem === 1">
       <div class="setting-panel role-panel">
         <template v-if="!roleList || roleList.length === 0">
           <div class="role-not-found">
@@ -204,7 +208,7 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         </template>
       </div>
     </template>
-    <template v-if="activeNavItem === 3">
+    <template v-else-if="activeNavItem === 3">
       <div class="setting-panel alert-panel">
         <div v-if="'resin' in alertSetting" class="alert-setting">
           <div class="title">
@@ -271,7 +275,40 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
         </template>
       </div>
     </template>
-    <template v-if="activeNavItem === 2">
+    <template v-else-if="activeNavItem === 4">
+      <div class="setting-panel settings-panel">
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="top">
+              <div class="key">
+                {{ i18n.getMessage("options_Setting_Item_Badge") }}
+              </div>
+              <div class="value">
+                <input type="checkbox">
+              </div>
+            </div>
+          </div>
+          <div class="settings-item">
+            <div class="top">
+              <div class="key">
+                {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval") }}
+              </div>
+              <div class="value">
+                <input type="number">
+                {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Unit") }}
+              </div>
+            </div>
+            <div class="desc">
+              {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips") }}
+            </div>
+          </div>
+        </div>
+        <div class="apply-btn btn">
+          {{ i18n.getMessage("options_Setting_Apply") }}
+        </div>
+      </div>
+    </template>
+    <template v-else-if="activeNavItem === 2">
       <div class="setting-panel about-panel">
         <table class="about-table">
           <tbody>
@@ -329,6 +366,16 @@ a {
   }
 }
 
+input[type="number"] {
+  &::selection {
+    background: #e5dbc7;
+    color: #141d2e;
+  }
+
+  @apply bg-transparent;
+  @apply text-[#e5dbc7] w-12 border-b-1 border-[#e5dbc7];
+}
+
 ::selection {
   @apply text-primary-light bg-primary-dark;
 }
@@ -357,8 +404,7 @@ nav {
       @apply overflow-hidden;
       @apply max-w-0 m-l-0;
 
-      transition: max-width 0.15s ease-out,
-        margin 0.15s ease-out;
+      transition: max-width 0.15s ease-out, margin 0.15s ease-out;
 
       &:lang(ja) {
         @apply text-xs;
@@ -524,16 +570,6 @@ h1 {
 
       .checkbox-item {
         @apply flex items-center gap-x-1;
-
-        input[type="number"] {
-          &::selection {
-            background: #e5dbc7;
-            color: #141d2e;
-          }
-
-          @apply bg-transparent;
-          @apply text-[#e5dbc7] w-12 border-b-1 border-[#e5dbc7];
-        }
       }
     }
   }
@@ -597,6 +633,37 @@ h1 {
     .value {
       @apply p-1.5 rounded-md whitespace-pre-wrap;
       background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
+    }
+  }
+}
+
+.settings-panel {
+  .settings-list {
+    @apply px-5;
+    @apply flex flex-col gap-y-5;
+    @apply text-primary-light text-base;
+
+    .settings-item {
+
+      .top {
+        @apply flex justify-between;
+      }
+
+      .value {
+        @apply flex;
+      }
+
+      .desc {
+        @apply text-xs;
+      }
+    }
+  }
+
+  .apply-btn {
+    @apply mt-5;
+
+    &.disabled {
+      @apply filter grayscale pointer-events-none opacity-80 brightness-50;
     }
   }
 }
