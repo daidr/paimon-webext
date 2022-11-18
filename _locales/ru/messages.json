@@ -265,5 +265,23 @@
     },
     "options_Alert_Notify_RealmCurrency_Firefox": {
         "message": "Количество сокровищ обители превысило предел в $1."
+    },
+    "options_Setting_Apply": {
+        "message": "Apply"
+    },
+    "options_Setting_Unsaved": {
+        "message": "Unsaved"
+    },
+    "options_Setting_Item_Badge": {
+        "message": "Extension Badge"
+    },
+    "options_Setting_Item_DataRefreshInterval": {
+        "message": "Refresh Interval"
+    },
+    "options_Setting_Item_DataRefreshInterval_Unit": {
+        "message": "m"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips": {
+        "message": "If the value is longer than 8 minutes, we'll attempt to impute some of the data locally."
     }
 }
