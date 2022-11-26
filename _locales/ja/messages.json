@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "この拡張機能のすべての貢献者に感謝します\nUI リファレンス: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "Donate"
+    },
     "options_Alert_Setting": {
         "message": "設定"
     },
