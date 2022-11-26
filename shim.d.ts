@@ -1,5 +1,5 @@
 import type { ProtocolWithReturn } from 'webext-bridge'
-import type { ICaptchaResponse } from '~/types'
+import type { ICaptchaResponse, ISettingsMap } from '~/types'
 
 declare module 'webext-bridge' {
   export interface ProtocolMap {
@@ -16,5 +16,7 @@ declare module 'webext-bridge' {
     'get_selected_role': ProtocolWithReturn<{}, string>
     'finish_captcha': ProtocolWithReturn<{ geetest: ICaptchaRequest; uid: string; tabId: number }, boolean>
     'request_captcha': { verification: ICaptchaResponse; uid: string; tabId: number }
+    'write_settings': ISettingsMap
+    'read_settings': ProtocolWithReturn<{ }, ISettingsMap>
   }
 }

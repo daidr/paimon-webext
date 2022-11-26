@@ -245,7 +245,7 @@ initResponseRules()
 // 从storage读取数据
 const readDataFromStorage = async function <T>(key: string, defaultVal: T): Promise<T> {
   const data = await storage.local.get(key)
-  if (data[key])
+  if (data[key] !== undefined)
     return data[key]
   else
     return defaultVal
@@ -259,8 +259,17 @@ const getRefreshInterval = async () => {
   return await readDataFromStorage<number>('refreshInterval', 30)
 }
 
+const setRefreshInterval = async (interval: number) => {
+  await writeDataToStorage('refreshInterval', interval)
+}
+
 const getBadgeVisibility = async () => {
   return await readDataFromStorage<boolean>('badgeVisibility', true)
+}
+
+const setBadgeVisibility = async (visibility: boolean) => {
+  console.log(111, visibility)
+  await writeDataToStorage('badgeVisibility', visibility)
 }
 
 // 获取国服cookie
@@ -742,4 +751,18 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
   getRoleInfoByCookie(oversea, cookie, setCookie, resetRules)
   refreshData()
   return result
+})
+
+onMessage('read_settings', async () => {
+  const settings = {
+    refreshInterval: await getRefreshInterval(),
+    badgeVisibility: await getBadgeVisibility(),
+  }
+  return settings
+})
+
+onMessage('write_settings', async ({ data: { refreshInterval, badgeVisibility } }) => {
+  await setRefreshInterval(refreshInterval)
+  await setBadgeVisibility(badgeVisibility)
+  await refreshData()
 })

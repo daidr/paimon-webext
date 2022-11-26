@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
-import type { IAlertSetting, IUserDataItem } from '~/types'
+import type { IAlertSetting, ISettingsMap, IUserDataItem } from '~/types'
 
 const ServerSelectEl = ref()
 const ServerSelectValue = ref('0')
@@ -105,6 +106,35 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
     uid: roleUid,
     status: e.target.checked,
   })
+}
+
+const settingsMap: ISettingsMap = reactive({
+  refreshInterval: -1,
+  badgeVisibility: true,
+})
+
+const getSettingsMap = async () => {
+  const result = await sendMessage('read_settings', {})
+  settingsMap.refreshInterval = result.refreshInterval
+  settingsMap.badgeVisibility = result.badgeVisibility
+}
+
+watch(settingsMap, (newValue) => {
+  if (newValue.refreshInterval < 3)
+    settingsMap.refreshInterval = 3
+  else if (newValue.refreshInterval > 60)
+    settingsMap.refreshInterval = 60
+})
+
+getSettingsMap()
+
+const setSettingsMap = async () => {
+  console.log(settingsMap.badgeVisibility)
+  await sendMessage('write_settings', {
+    refreshInterval: settingsMap.refreshInterval,
+    badgeVisibility: settingsMap.badgeVisibility,
+  })
+  getSettingsMap()
 }
 </script>
 
@@ -217,7 +247,7 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
           </div>
           <div class="content">
             <div class="checkbox-item">
-              <input id="ResinCheck" v-model="alertSetting.resin" type="checkbox">
+              <input id="ResinCheck" v-model="alertSetting.resin" type="checkbox" :true-value="true" :false-value="false">
               <label for="ResinCheck">
                 {{ i18n.getMessage("options_Alert_Resin") }}
               </label>
@@ -227,13 +257,13 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
               </div>
             </div>
             <div class="checkbox-item">
-              <input id="TransformerCheck" v-model="alertSetting.transformer" type="checkbox">
+              <input id="TransformerCheck" v-model="alertSetting.transformer" type="checkbox" :true-value="true" :false-value="false">
               <label for="TransformerCheck">
                 {{ i18n.getMessage("options_Alert_Transformer") }}
               </label>
             </div>
             <div class="checkbox-item">
-              <input id="RealmCurrencyCheck" v-model="alertSetting.realmCurrency" type="checkbox">
+              <input id="RealmCurrencyCheck" v-model="alertSetting.realmCurrency" type="checkbox" :true-value="true" :false-value="false">
               <label for="RealmCurrencyCheck">
                 {{ i18n.getMessage("options_Alert_RealmCurrency") }}
               </label>
@@ -277,14 +307,14 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
     </template>
     <template v-else-if="activeNavItem === 4">
       <div class="setting-panel settings-panel">
-        <div class="settings-list">
+        <div v-if="settingsMap.refreshInterval !== -1" class="settings-list">
           <div class="settings-item">
             <div class="top">
               <div class="key">
                 {{ i18n.getMessage("options_Setting_Item_Badge") }}
               </div>
               <div class="value">
-                <input type="checkbox">
+                <input v-model="settingsMap.badgeVisibility" type="checkbox" :true-value="true" :false-value="false">
               </div>
             </div>
           </div>
@@ -294,16 +324,18 @@ const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
                 {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval") }}
               </div>
               <div class="value">
-                <input type="number">
+                <input v-model="settingsMap.refreshInterval" type="number">
                 {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Unit") }}
               </div>
             </div>
             <div class="desc">
-              {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips") }}
+              {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips_1") }}
+              <br>
+              {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips_2") }}
             </div>
           </div>
         </div>
-        <div class="apply-btn btn">
+        <div class="apply-btn btn" @click="setSettingsMap">
           {{ i18n.getMessage("options_Setting_Apply") }}
         </div>
       </div>

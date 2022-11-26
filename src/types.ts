@@ -158,3 +158,8 @@ export interface ICaptchaRequest {
   geetest_seccode: string
   geetest_validate: string
 }
+
+export interface ISettingsMap {
+  refreshInterval: number
+  badgeVisibility: boolean
+}
