@@ -222,7 +222,7 @@
         "message": "感谢本扩展仓库的所有贡献者\n本扩展灵感来源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_About_DonateTitle": {
-        "message": "Donate"
+        "message": "捐赠"
     },
     "options_Alert_Setting": {
         "message": "设置"
