@@ -1,3 +1,4 @@
+import { storage } from 'webextension-polyfill'
 import type { ICaptchaRequest, ICaptchaResponse, IRoleDataItem, IUserData, IUserDataItem, serverRegions } from './types'
 
 function randomIntFromInterval(min: number, max: number) {
@@ -263,6 +264,41 @@ function md5(string: string) {
   ).toLowerCase()
 }
 
+// 向storage写入数据
+export const writeDataToStorage = async function <T>(key: string, data: T) {
+  await storage.local.set({ [key]: data })
+}
+
+// 从storage读取数据
+export const readDataFromStorage = async function <T>(key: string, defaultVal: T): Promise<T> {
+  const data = await storage.local.get(key)
+  if (data[key] !== undefined)
+    return data[key]
+  else
+    return defaultVal
+}
+
+function uuid() {
+  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
+
+// 随机生成的 deviceId
+export const getDeviceId = async () => {
+  // 首先尝试从 storage 中读取 deviceId
+  let deviceId = await readDataFromStorage('deviceId', '')
+
+  // 如果 storage 中没有 deviceId，则生成一个新的 deviceId
+  if (deviceId === '') {
+    deviceId = uuid()
+    await writeDataToStorage('deviceId', deviceId)
+  }
+
+  return deviceId
+}
+
 function getTime(time: number) {
   const hh = ~~(time / 3600)
   const mm = ~~((time % 3600) / 60)
@@ -341,7 +377,7 @@ const HEADER_TEMPLATE_OS: Record<string, string> = {
   'Referer': 'https://act.hoyolab.com',
 }
 
-function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
+async function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
   const client = oversea ? HEADER_TEMPLATE_OS : HEADER_TEMPLATE_CN
   const headers = { ...client }
 
@@ -349,6 +385,8 @@ function getHeader(oversea: boolean, params: Record<string, string>, body: objec
     const dsStr = getDS(oversea, params, body)
     headers.DS = dsStr
   }
+
+  headers['x-rpc-device_id'] = await getDeviceId()
   return headers
 }
 
@@ -362,7 +400,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
   const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 生成 header
-  const headers = getHeader(oversea, {}, {}, false)
+  const headers = await getHeader(oversea, {}, {}, false)
 
   // 为 header 追加 cookie
   setCookie && await setCookie(cookie, referer, userAgent)
@@ -411,7 +449,7 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     url.searchParams.append(key, value)
 
   // 生成 header
-  const headers = getHeader(oversea, params, {}, true)
+  const headers = await getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
   setCookie && await setCookie(cookie, referer, userAgent)
@@ -460,7 +498,7 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
     url.searchParams.append(key, value)
 
   // 生成 header
-  const headers = getHeader(oversea, params, {}, true)
+  const headers = await getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
   setCookie && await setCookie(cookie, referer, userAgent)
@@ -498,7 +536,7 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 生成 header
-  const headers = getHeader(oversea, {}, geetest, true)
+  const headers = await getHeader(oversea, {}, geetest, true)
 
   // 为 header 追加 cookie
   setCookie && await setCookie(cookie, referer, userAgent)

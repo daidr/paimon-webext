@@ -1,8 +1,8 @@
 import { onMessage, sendMessage } from 'webext-bridge'
-import { action, alarms, cookies, i18n, notifications, runtime, storage, tabs } from 'webextension-polyfill'
+import { action, alarms, cookies, i18n, notifications, runtime, tabs } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
 import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
-import { calcRoleDataLocally, createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
+import { calcRoleDataLocally, createVerification, getRoleDataByCookie, getRoleInfoByCookie, readDataFromStorage, verifyVerification, writeDataToStorage } from '~/utils'
 
 // 一分钟
 const INTERVAL_TIME = 1
@@ -163,11 +163,6 @@ const removeNotification = (alertStatus: IAlertStatus, type: 0 | 1 | 2) => {
   }
 }
 
-// 向storage写入数据
-const writeDataToStorage = async function <T>(key: string, data: T) {
-  await storage.local.set({ [key]: data })
-}
-
 // selected uid
 let selectedUid = ''
 
@@ -241,15 +236,6 @@ initResponseRules()
 //   { urls: targetPages },
 //   ['blocking', 'requestHeaders', chrome.webRequest.OnBeforeSendHeadersOptions.EXTRA_HEADERS].filter(Boolean),
 // )
-
-// 从storage读取数据
-const readDataFromStorage = async function <T>(key: string, defaultVal: T): Promise<T> {
-  const data = await storage.local.get(key)
-  if (data[key] !== undefined)
-    return data[key]
-  else
-    return defaultVal
-}
 
 const getSelectedUid = async () => {
   return await readDataFromStorage<string>('selectedRole', '')
