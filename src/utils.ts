@@ -328,6 +328,7 @@ const HEADER_TEMPLATE_CN: Record<string, string> = {
   'x-rpc-client_type': '5',
   'Origin': 'https://webstatic.mihoyo.com',
   'X-Requested-With': 'com.mihoyo.hyperion',
+  'x-rpc-page': '3.1.3_#/ys',
   'Referer': 'https://webstatic.mihoyo.com/',
 }
 
@@ -342,10 +343,7 @@ const HEADER_TEMPLATE_OS: Record<string, string> = {
 
 function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
   const client = oversea ? HEADER_TEMPLATE_OS : HEADER_TEMPLATE_CN
-  const headers: any = {}
-  Object.keys(client).forEach(key => {
-    headers[key] = client[key]
-  })
+  const headers = { ...client }
 
   if (ds) {
     const dsStr = getDS(oversea, params, body)
