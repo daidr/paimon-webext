@@ -283,7 +283,6 @@ const openCaptcha = async () => {
         <template v-if="userData.errorMessage === '触发风控'">
           {{ i18n.getMessage("popup_ErrorTips_5") }}
           <ol>
-            <li>{{ i18n.getMessage("popup_ErrorTips_6") }}</li>
             <li>{{ i18n.getMessage("popup_ErrorTips_7") }}</li>
           </ol>
         </template>
