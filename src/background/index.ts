@@ -436,7 +436,7 @@ const refreshData = async function (uiOnly = false) {
           // 获取失败，写入错误信息
           role.isError = true
           role.errorMessage = '触发风控'
-          role.updateTimestamp = Date.now()
+          // role.updateTimestamp = Date.now()
           break
       }
     }
@@ -472,7 +472,7 @@ const refreshData = async function (uiOnly = false) {
       // 获取失败，写入错误信息
       role.isError = true
       role.errorMessage = '获取数据失败'
-      role.updateTimestamp = Date.now()
+      // role.updateTimestamp = Date.now()
     }
   }
 
