@@ -2,7 +2,7 @@ import { onMessage, sendMessage } from 'webext-bridge'
 import { action, alarms, cookies, i18n, notifications, runtime, storage, tabs } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
 import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
-import { createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
+import { calcRoleDataLocally, createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
 
 // 一分钟
 const INTERVAL_TIME = 1
@@ -369,13 +369,13 @@ let alertSettings: IAlertSetting = defaultAlertSetting;
   alertSettings = await readDataFromStorage<IAlertSetting>('alertSetting', defaultAlertSetting)
 })()
 
-const doAlertCheck = async function (roleInfo: IUserDataItem) {
+const doAlertCheck = async function (roleInfo: IUserDataItem, editableRoleInfo: IUserDataItem) {
   if (!roleInfo.enabledAlert)
     return
   // 树脂检查
   if (alertSettings.resin) {
     if (roleInfo.data.current_resin >= alertSettings.resinThreshold) {
-      showNotification(roleInfo.alertStatus, 0, {
+      showNotification(editableRoleInfo.alertStatus, 0, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
@@ -383,33 +383,33 @@ const doAlertCheck = async function (roleInfo: IUserDataItem) {
       })
     }
     else {
-      removeNotification(roleInfo.alertStatus, 0)
+      removeNotification(editableRoleInfo.alertStatus, 0)
     }
   }
   // 洞天宝钱检查
   if (alertSettings.realmCurrency) {
     if (roleInfo.data.current_home_coin === roleInfo.data.max_home_coin && roleInfo.data.current_home_coin > 0) {
-      showNotification(roleInfo.alertStatus, 1, {
+      showNotification(editableRoleInfo.alertStatus, 1, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
       })
     }
     else {
-      removeNotification(roleInfo.alertStatus, 1)
+      removeNotification(editableRoleInfo.alertStatus, 1)
     }
   }
   // 参量质变仪检查
   if (alertSettings.transformer) {
     if (roleInfo.data.transformer.obtained && roleInfo.data.transformer.recovery_time.reached) {
-      showNotification(roleInfo.alertStatus, 2, {
+      showNotification(editableRoleInfo.alertStatus, 2, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
       })
     }
     else {
-      removeNotification(roleInfo.alertStatus, 2)
+      removeNotification(editableRoleInfo.alertStatus, 2)
     }
   }
 }
@@ -476,15 +476,19 @@ const refreshData = async function (uiOnly = false, fromPopup = false, forceRefr
         return item.uid === role.uid
       })
 
-      originRoleList.splice(roleIndex, 1, {
+      const _newItem = {
         ...role,
         data,
         isError: false,
         errorMessage: '',
         updateTimestamp: useCache ? role.updateTimestamp : Date.now(),
-      })
+      }
 
-      !uiOnly && doAlertCheck(role)
+      originRoleList.splice(roleIndex, 1, _newItem)
+
+      const _copyItem = calcRoleDataLocally(_newItem)
+
+      !uiOnly && doAlertCheck(_copyItem, _newItem)
 
       if (!badgeVisibility && !hasUpdatedBadge) {
         // 如果设置不显示 badge，则不更新
@@ -494,11 +498,11 @@ const refreshData = async function (uiOnly = false, fromPopup = false, forceRefr
 
       if (!hasUpdatedBadge) {
         let shouldUpdateBadge = false
-        if (_selectedUid && _selectedUid === role.uid)
+        if (_selectedUid && _selectedUid === _copyItem.uid)
           shouldUpdateBadge = true // 更新 _selectedUid 当前的 resin 数据到 badge
 
-        if (shouldUpdateBadge && role?.data?.current_resin) {
-          action.setBadgeText({ text: `${role.data.current_resin}` })
+        if (shouldUpdateBadge && _copyItem?.data?.current_resin) {
+          action.setBadgeText({ text: `${_copyItem.data.current_resin}` })
           action.setBadgeBackgroundColor({ color: '#6F9FDF' })
           hasUpdatedBadge = true
         }
@@ -529,13 +533,9 @@ initAlarm()
 alarms.onAlarm.addListener((alarmInfo) => {
   if (alarmInfo.name === 'refresh_data')
     refreshData()
-});
+})
 
-(() => {
-  setTimeout(() => {
-    refreshData()
-  }, 1000)
-})()
+refreshData()
 
 // 传入 AlertStatus，对存在的通知进行清理
 const clearNotifications = async function (alertStatus: IAlertStatus) {

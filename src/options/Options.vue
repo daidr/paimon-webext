@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
 import type { IAlertSetting, ISettingsMap, IUserDataItem } from '~/types'

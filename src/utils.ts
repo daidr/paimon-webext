@@ -1,4 +1,4 @@
-import type { ICaptchaRequest, ICaptchaResponse, IRoleDataItem, IUserData, serverRegions } from './types'
+import type { ICaptchaRequest, ICaptchaResponse, IRoleDataItem, IUserData, IUserDataItem, serverRegions } from './types'
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -530,4 +530,31 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   return _ret
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification }
+const calcRoleDataLocally = (role: IUserDataItem) => {
+  const _role = JSON.parse(JSON.stringify(role))
+
+  const updateTimestamp = _role.updateTimestamp
+  const curTimestamp = Date.now()
+
+  const maxResin = _role.data.max_resin
+  const curResin = _role.data.current_resin
+
+  // 树脂每 8 分钟恢复 1 点
+  _role.data.current_resin = Math.min(maxResin, curResin + Math.floor((curTimestamp - updateTimestamp) / 1000 / 60 / 8))
+
+  if (_role.data.expeditions && _role.data.expeditions.length > 0) {
+    for (const expedition of _role.data.expeditions) {
+      if (expedition.status === 'Ongoing') {
+        // 单位为 秒
+        const remainTime = Number(expedition.remained_time)
+        expedition.remained_time = Math.max(0, remainTime - Math.floor((curTimestamp - updateTimestamp) / 1000)).toString()
+        if (expedition.remained_time === '0')
+          expedition.status = 'Finished'
+      }
+    }
+  }
+
+  return _role
+}
+
+export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally }
