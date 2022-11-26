@@ -362,6 +362,18 @@ const setSettingsMap = async () => {
             <tr>
               <td class="key">
                 <div>
+                  {{ i18n.getMessage("options_About_DonateTitle") }}
+                </div>
+              </td>
+              <td class="value">
+                <a class="reverse" href="https://patreon.com/daidr" target="_blank" rel="noopener noreferrer">Patreon</a>
+                <br>
+                <a class="reverse" href="https://afdian.net/a/daidr" target="_blank" rel="noopener noreferrer">爱发电</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="key">
+                <div>
                   {{ i18n.getMessage("options_About_OpenSourceTitle") }}
                 </div>
               </td>
