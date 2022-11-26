@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "Особая благодарность всем участникам этого расширения\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "Donate"
+    },
     "options_Alert_Setting": {
         "message": "настройки"
     },
@@ -265,5 +268,26 @@
     },
     "options_Alert_Notify_RealmCurrency_Firefox": {
         "message": "Количество сокровищ обители превысило предел в $1."
+    },
+    "options_Setting_Apply": {
+        "message": "Apply"
+    },
+    "options_Setting_Unsaved": {
+        "message": "Unsaved"
+    },
+    "options_Setting_Item_Badge": {
+        "message": "Extension Badge"
+    },
+    "options_Setting_Item_DataRefreshInterval": {
+        "message": "Refresh Interval"
+    },
+    "options_Setting_Item_DataRefreshInterval_Unit": {
+        "message": "m"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_1": {
+        "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_2": {
+        "message": "Range: 3 ~ 60 min"
     }
 }

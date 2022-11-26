@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "この拡張機能のすべての貢献者に感謝します\nUI リファレンス: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "寄付する"
+    },
     "options_Alert_Setting": {
         "message": "設定"
     },
@@ -265,5 +268,26 @@
     },
     "options_Alert_Notify_RealmCurrency_Firefox": {
         "message": "$1の洞天宝銭が最大です。"
+    },
+    "options_Setting_Apply": {
+        "message": "Apply"
+    },
+    "options_Setting_Unsaved": {
+        "message": "Unsaved"
+    },
+    "options_Setting_Item_Badge": {
+        "message": "Extension Badge"
+    },
+    "options_Setting_Item_DataRefreshInterval": {
+        "message": "Refresh Interval"
+    },
+    "options_Setting_Item_DataRefreshInterval_Unit": {
+        "message": "m"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_1": {
+        "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_2": {
+        "message": "Range: 3 ~ 60 min"
     }
 }

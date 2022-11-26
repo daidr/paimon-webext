@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "感謝本擴展倉庫的所有貢獻者\n本擴展靈感來源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "資助"
+    },
     "options_Alert_Setting": {
         "message": "設置"
     },
@@ -265,5 +268,26 @@
     },
     "options_Alert_Notify_RealmCurrency_Firefox": {
         "message": "$1 的洞天寶錢溢出了"
+    },
+    "options_Setting_Apply": {
+        "message": "應用"
+    },
+    "options_Setting_Unsaved": {
+        "message": "尚未儲存"
+    },
+    "options_Setting_Item_Badge": {
+        "message": "擴展徽章"
+    },
+    "options_Setting_Item_DataRefreshInterval": {
+        "message": "刷新间隔"
+    },
+    "options_Setting_Item_DataRefreshInterval_Unit": {
+        "message": "分鐘"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_1": {
+        "message": "如果該数值超過 10 分鐘，我們將嘗試在本地插補某些數據。"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_2": {
+        "message": "範圍：3~60分鐘"
     }
 }
