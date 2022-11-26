@@ -5,7 +5,7 @@ import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataIt
 import { createVerification, getRoleDataByCookie, getRoleInfoByCookie, verifyVerification } from '~/utils'
 
 // 一分钟
-const INTERVAL_TIME = 5
+const INTERVAL_TIME = 1
 
 // 角色的默认提醒设定
 const defaultAlertSetting: IAlertSetting = {
@@ -255,6 +255,10 @@ const getSelectedUid = async () => {
   return await readDataFromStorage<string>('selectedRole', '')
 }
 
+const getRefreshInterval = async () => {
+  return await readDataFromStorage<number>('refreshInterval', 30)
+}
+
 // 获取国服cookie
 const getMiHoYoCookie = async function () {
   let cookieString = ''
@@ -397,7 +401,14 @@ const doAlertCheck = async function (roleInfo: IUserDataItem) {
   }
 }
 
-const refreshData = async function (uiOnly = false) {
+const getLatestUpdatedTime = function (role: IUserDataItem) {
+  return role.updateTimestamp
+}
+
+const refreshData = async function (uiOnly = false, fromPopup = false) {
+  // 取出刷新时间间隔 (原始数据为分钟，这里转换为毫秒)
+  // 如果 fromPopup 为 true，则间隔时间设置为 1 分钟
+  const refreshInterval = fromPopup ? 60 * 1000 : (await getRefreshInterval()) * 60 * 1000
   // 取出原始 roleList
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
   // 取出启用的 role
@@ -426,7 +437,10 @@ const refreshData = async function (uiOnly = false) {
   let hasUpdatedBadge = false
   // 遍历启用的 role
   for (const role of enabledRoleList) {
-    const data = uiOnly ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie, resetRules)
+    // 如果当前时间 - 上次更新时间 < 刷新时间间隔 或 uiOnly==true，则使用缓存
+    const useCache = (getLatestUpdatedTime(role) && Date.now() - getLatestUpdatedTime(role) < refreshInterval) || uiOnly
+
+    const data = useCache ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie, resetRules)
 
     if (Number.isInteger(data)) {
       // error code
