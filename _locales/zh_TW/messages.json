@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "感謝本擴展倉庫的所有貢獻者\n本擴展靈感來源 <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "Donate"
+    },
     "options_Alert_Setting": {
         "message": "設置"
     },
@@ -267,24 +270,24 @@
         "message": "$1 的洞天寶錢溢出了"
     },
     "options_Setting_Apply": {
-        "message": "Apply"
+        "message": "應用"
     },
     "options_Setting_Unsaved": {
-        "message": "Unsaved"
+        "message": "尚未儲存"
     },
     "options_Setting_Item_Badge": {
-        "message": "Extension Badge"
+        "message": "擴展徽章"
     },
     "options_Setting_Item_DataRefreshInterval": {
-        "message": "Refresh Interval"
+        "message": "刷新间隔"
     },
     "options_Setting_Item_DataRefreshInterval_Unit": {
-        "message": "m"
+        "message": "分鐘"
     },
     "options_Setting_Item_DataRefreshInterval_Protips_1": {
-        "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+        "message": "如果該数值超過 10 分鐘，我們將嘗試在本地插補某些數據。"
     },
     "options_Setting_Item_DataRefreshInterval_Protips_2": {
-        "message": "Range: 3 ~ 60 min"
+        "message": "範圍：3~60分鐘"
     }
 }
