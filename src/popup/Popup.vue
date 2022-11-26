@@ -39,22 +39,28 @@ const updateUserInfo = async () => {
   }
 }
 
-onMounted(() => {
-  updateUserInfo()
-})
-
-setInterval(() => {
-  updateUserInfo()
-}, 10 * 1000)
-
 const openOptionsPage = () => {
   browser.runtime.openOptionsPage()
+}
+
+const refreshRequestForce = async () => {
+  await sendMessage('refresh_request_force', {})
+  updateUserInfo()
 }
 
 const refreshRequest = async () => {
   await sendMessage('refresh_request', {})
   updateUserInfo()
 }
+
+onMounted(() => {
+  updateUserInfo()
+  refreshRequest()
+})
+
+setInterval(() => {
+  updateUserInfo()
+}, 10 * 1000)
 
 const TimeComponent = (props: { time: { hour: number; minute: number } }) => {
   return [
@@ -304,7 +310,7 @@ const openCaptcha = async () => {
         <div class="btn" @click="openOptionsPage">
           {{ i18n.getMessage("popup_ErrorOpenConfigButtonText") }}
         </div>
-        <div class="btn" @click="refreshRequest">
+        <div class="btn" @click="refreshRequestForce">
           {{ i18n.getMessage("popup_ErrorRefreshButtonText") }}
         </div>
       </template>
