@@ -221,6 +221,9 @@
     "options_About_Thank": {
         "message": "Особая благодарность всем участникам этого расширения\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
+    "options_About_DonateTitle": {
+        "message": "Donate"
+    },
     "options_Alert_Setting": {
         "message": "настройки"
     },
