@@ -281,7 +281,10 @@
     "options_Setting_Item_DataRefreshInterval_Unit": {
         "message": "m"
     },
-    "options_Setting_Item_DataRefreshInterval_Protips": {
+    "options_Setting_Item_DataRefreshInterval_Protips_1": {
         "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_2": {
+        "message": "Range: 3 ~ 60 min"
     }
 }
