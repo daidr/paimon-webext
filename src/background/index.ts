@@ -259,6 +259,10 @@ const getRefreshInterval = async () => {
   return await readDataFromStorage<number>('refreshInterval', 30)
 }
 
+const getBadgeVisibility = async () => {
+  return await readDataFromStorage<boolean>('badgeVisibility', true)
+}
+
 // 获取国服cookie
 const getMiHoYoCookie = async function () {
   let cookieString = ''
@@ -405,10 +409,14 @@ const getLatestUpdatedTime = function (role: IUserDataItem) {
   return role.updateTimestamp
 }
 
-const refreshData = async function (uiOnly = false, fromPopup = false) {
+const refreshData = async function (uiOnly = false, fromPopup = false, forceRefresh = false) {
   // 取出刷新时间间隔 (原始数据为分钟，这里转换为毫秒)
   // 如果 fromPopup 为 true，则间隔时间设置为 1 分钟
   const refreshInterval = fromPopup ? 60 * 1000 : (await getRefreshInterval()) * 60 * 1000
+
+  // 是否显示 badge
+  const badgeVisibility = await getBadgeVisibility()
+
   // 取出原始 roleList
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
   // 取出启用的 role
@@ -439,8 +447,7 @@ const refreshData = async function (uiOnly = false, fromPopup = false) {
   for (const role of enabledRoleList) {
     // 如果当前时间 - 上次更新时间 < 刷新时间间隔 或 uiOnly==true，则使用缓存
     const useCache = (getLatestUpdatedTime(role) && Date.now() - getLatestUpdatedTime(role) < refreshInterval) || uiOnly
-
-    const data = useCache ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie, resetRules)
+    const data = useCache && !forceRefresh ? role.data : await getRoleDataByCookie(role.serverType === 'os', role.cookie, role.uid, role.serverRegion, setCookie, resetRules)
 
     if (Number.isInteger(data)) {
       // error code
@@ -465,10 +472,16 @@ const refreshData = async function (uiOnly = false, fromPopup = false) {
         data,
         isError: false,
         errorMessage: '',
-        updateTimestamp: Date.now(),
+        updateTimestamp: useCache ? role.updateTimestamp : Date.now(),
       })
 
       !uiOnly && doAlertCheck(role)
+
+      if (!badgeVisibility && !hasUpdatedBadge) {
+        // 如果设置不显示 badge，则不更新
+        action.setBadgeText({ text: '' })
+        hasUpdatedBadge = true
+      }
 
       if (!hasUpdatedBadge) {
         let shouldUpdateBadge = false
@@ -548,7 +561,12 @@ onMessage('get_selected_role', async () => {
 })
 
 onMessage('refresh_request', async () => {
-  await refreshData()
+  await refreshData(false, true, false)
+  return true
+})
+
+onMessage('refresh_request_force', async () => {
+  await refreshData(false, true, true)
   return true
 })
 
