@@ -63,13 +63,21 @@ setInterval(() => {
 }, 10 * 1000)
 
 const TimeComponent = (props: { time: { hour: number; minute: number } }) => {
-  return [
-    h('span', { class: 'value' }, props.time.hour),
-    h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_hour')),
-    ' ',
-    h('span', { class: 'value' }, props.time.minute),
-    h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_minute')),
-  ]
+  if (props.time.hour === 0) {
+    return [
+      h('span', { class: 'value' }, props.time.minute),
+      h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_minute')),
+    ]
+  }
+  else {
+    return [
+      h('span', { class: 'value' }, props.time.hour),
+      h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_hour')),
+      ' ',
+      h('span', { class: 'value' }, props.time.minute),
+      h('span', { class: 'unit' }, i18n.getMessage('popup_recovery_minute')),
+    ]
+  }
 }
 
 const DayComponent = (props: {
