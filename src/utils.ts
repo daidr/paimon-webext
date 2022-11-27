@@ -596,3 +596,8 @@ const calcRoleDataLocally = (role: IUserDataItem) => {
 }
 
 export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally }
+
+// 随机生成-5到5的整数
+export const getRandomTimeOffset = () => {
+  return Math.floor(Math.random() * 11) - 5
+}

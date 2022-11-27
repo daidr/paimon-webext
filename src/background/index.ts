@@ -2,7 +2,7 @@ import { onMessage, sendMessage } from 'webext-bridge'
 import { action, alarms, cookies, i18n, notifications, runtime, tabs } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
 import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
-import { calcRoleDataLocally, createVerification, getRoleDataByCookie, getRoleInfoByCookie, readDataFromStorage, verifyVerification, writeDataToStorage } from '~/utils'
+import { calcRoleDataLocally, createVerification, getRandomTimeOffset, getRoleDataByCookie, getRoleInfoByCookie, readDataFromStorage, verifyVerification, writeDataToStorage } from '~/utils'
 
 // 一分钟
 const INTERVAL_TIME = 1
@@ -407,7 +407,11 @@ const getLatestUpdatedTime = function (role: IUserDataItem) {
 const refreshData = async function (uiOnly = false, fromPopup = false, forceRefresh = false) {
   // 取出刷新时间间隔 (原始数据为分钟，这里转换为毫秒)
   // 如果 fromPopup 为 true，则间隔时间设置为 1 分钟
-  const refreshInterval = fromPopup ? 60 * 1000 : (await getRefreshInterval()) * 60 * 1000
+  let refreshInterval = fromPopup ? 60 * 1000 : (await getRefreshInterval()) * 60 * 1000
+
+  // 如果刷新间隔大于二十分钟，则进行扰动
+  if (refreshInterval > 20 * 60 * 1000)
+    refreshInterval = refreshInterval + getRandomTimeOffset()
 
   // 是否显示 badge
   const badgeVisibility = await getBadgeVisibility()
