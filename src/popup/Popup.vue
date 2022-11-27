@@ -2,7 +2,7 @@
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
 import type { IUserDataItem } from '~/types'
-import { getClock, getTime } from '~/utils'
+import { calcRoleDataLocally, getClock, getTime } from '~/utils'
 
 const isLoaded = ref(false)
 
@@ -19,7 +19,7 @@ const userData = computed(() => {
   const data = userDataList.value.find(
     (item) => item.uid === selectedUid.value,
   )
-  return data || ({} as IUserDataItem)
+  return data ? calcRoleDataLocally(data) : ({} as IUserDataItem)
 })
 
 const updateUserInfo = async () => {
