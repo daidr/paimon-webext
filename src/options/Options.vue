@@ -119,9 +119,10 @@ const getSettingsMap = async () => {
 }
 
 watch(settingsMap, (newValue) => {
-  if (newValue.refreshInterval < 3)
+  const _refreshInterval = Math.floor(newValue.refreshInterval)
+  if (_refreshInterval < 3)
     settingsMap.refreshInterval = 3
-  else if (newValue.refreshInterval > 60)
+  else if (_refreshInterval > 60)
     settingsMap.refreshInterval = 60
 })
 
