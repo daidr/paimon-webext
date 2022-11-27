@@ -580,6 +580,9 @@ const calcRoleDataLocally = (role: IUserDataItem) => {
   // 树脂每 8 分钟恢复 1 点
   _role.data.current_resin = Math.min(maxResin, curResin + Math.floor((curTimestamp - updateTimestamp) / 1000 / 60 / 8))
 
+  // 更新树脂恢复时间 秒
+  _role.data.resin_recover_time = _role.data.resin_recovery_time - Math.floor((curTimestamp - updateTimestamp) / 1000)
+
   if (_role.data.expeditions && _role.data.expeditions.length > 0) {
     for (const expedition of _role.data.expeditions) {
       if (expedition.status === 'Ongoing') {
