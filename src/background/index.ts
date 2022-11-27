@@ -330,7 +330,7 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
     serverType: oversea ? 'os' : 'cn',
     cookie,
     data: {} as IUserData,
-    updateTimestamp: Date.now(),
+    updateTimestamp: -1,
   }
 
   // 如果不存在，则添加
