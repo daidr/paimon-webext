@@ -78,10 +78,10 @@ export interface IUserDataItem {
    * 是否开启提示功能（默认关闭）
    */
   enabledAlert: boolean
-  /**
-   * 周期内是否提醒过
-   */
-  alertStatus: IAlertStatus
+  // /**
+  //  * 周期内是否提醒过
+  //  */
+  // alertStatus: IAlertStatus
   /**
    * 服务器类型（国服/海外）
    */

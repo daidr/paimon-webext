@@ -34,6 +34,8 @@ const randomNotificationId = () => {
   return Math.random().toString(36).slice(2, 10)
 }
 
+const notificationMap: Record<string, IAlertStatus> = {}
+
 // type: 0 resin; 1 realmCurrency; 2 transformer
 const showNotification = async (alertStatus: IAlertStatus, type: 0 | 1 | 2, scope: any) => {
   // @ts-expect-error: update 方法在 firefox 中不存在
@@ -56,12 +58,13 @@ const showNotification = async (alertStatus: IAlertStatus, type: 0 | 1 | 2, scop
       }
       else {
         // 更新通知
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const _ret = await notifications.update(alertStatus.resin, notificationData)
 
-        if (!_ret) {
-          alertStatus.resin = randomNotificationId()
-          notifications.create(alertStatus.resin, notificationData)
-        }
+        // if (!_ret) {
+        //   alertStatus.resin = randomNotificationId()
+        //   notifications.create(alertStatus.resin, notificationData)
+        // }
       }
     }
     else if (type === 1) {
@@ -255,7 +258,6 @@ const getBadgeVisibility = async () => {
 }
 
 const setBadgeVisibility = async (visibility: boolean) => {
-  console.log(111, visibility)
   await writeDataToStorage('badgeVisibility', visibility)
 }
 
@@ -323,7 +325,6 @@ const addNewRoleToList = async function (oversea: boolean, roleInfo: IRoleDataIt
   const roleItem: IUserDataItem = {
     isEnabled: true,
     enabledAlert: false,
-    alertStatus: defaultAlertStatus,
     uid: roleInfo.game_uid,
     nickname: roleInfo.nickname,
     level: roleInfo.level,
@@ -359,10 +360,14 @@ let alertSettings: IAlertSetting = defaultAlertSetting;
 const doAlertCheck = async function (roleInfo: IUserDataItem, editableRoleInfo: IUserDataItem) {
   if (!roleInfo.enabledAlert)
     return
+  if (!notificationMap[editableRoleInfo.uid]) {
+    notificationMap[editableRoleInfo.uid] = JSON.parse(JSON.stringify(defaultAlertStatus))
+  }
+
   // 树脂检查
   if (alertSettings.resin) {
     if (roleInfo.data.current_resin >= alertSettings.resinThreshold) {
-      showNotification(editableRoleInfo.alertStatus, 0, {
+      showNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 0, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
@@ -370,33 +375,33 @@ const doAlertCheck = async function (roleInfo: IUserDataItem, editableRoleInfo: 
       })
     }
     else {
-      removeNotification(editableRoleInfo.alertStatus, 0)
+      removeNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 0)
     }
   }
   // 洞天宝钱检查
   if (alertSettings.realmCurrency) {
     if (roleInfo.data.current_home_coin === roleInfo.data.max_home_coin && roleInfo.data.current_home_coin > 0) {
-      showNotification(editableRoleInfo.alertStatus, 1, {
+      showNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 1, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
       })
     }
     else {
-      removeNotification(editableRoleInfo.alertStatus, 1)
+      removeNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 1)
     }
   }
   // 参量质变仪检查
   if (alertSettings.transformer) {
     if (roleInfo.data.transformer.obtained && roleInfo.data.transformer.recovery_time.reached) {
-      showNotification(editableRoleInfo.alertStatus, 2, {
+      showNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 2, {
         name: roleInfo.nickname,
         uid: roleInfo.uid,
         server: roleInfo.serverRegion,
       })
     }
     else {
-      removeNotification(editableRoleInfo.alertStatus, 2)
+      removeNotification(notificationMap[editableRoleInfo.uid] as IAlertStatus, 2)
     }
   }
 }
@@ -589,10 +594,12 @@ onMessage<{ uid: string; status: boolean }, 'set_role_status'>('set_role_status'
   const index = originRoleList.findIndex((item) => {
     return item.uid === uid
   })
+  if (!notificationMap[uid]) {
+    notificationMap[uid] = JSON.parse(JSON.stringify(defaultAlertStatus))
+  }
   originRoleList[index].isEnabled = status
   // 重置角色提醒状态
-  clearNotifications(originRoleList[index].alertStatus)
-  originRoleList[index].alertStatus = defaultAlertStatus
+  clearNotifications(notificationMap[uid] as IAlertStatus)
   await writeDataToStorage('roleList', originRoleList)
   // 刷新一次数据（仅刷新ui，例如badge/notification）
   refreshData(true)
@@ -603,10 +610,12 @@ onMessage<{ uid: string; status: boolean }, 'set_role_alert_status'>('set_role_a
   const index = originRoleList.findIndex((item) => {
     return item.uid === uid
   })
+  if (!notificationMap[uid]) {
+    notificationMap[uid] = JSON.parse(JSON.stringify(defaultAlertStatus))
+  }
   originRoleList[index].enabledAlert = status
   // 重置角色提醒状态
-  clearNotifications(originRoleList[index].alertStatus)
-  originRoleList[index].alertStatus = defaultAlertStatus
+  clearNotifications(notificationMap[uid] as IAlertStatus)
   await writeDataToStorage('roleList', originRoleList)
 })
 
