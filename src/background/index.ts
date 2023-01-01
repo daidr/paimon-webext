@@ -1,8 +1,8 @@
 import { onMessage, sendMessage } from 'webext-bridge'
 import { action, alarms, cookies, i18n, notifications, runtime, tabs } from 'webextension-polyfill'
 import type { Cookies, Notifications } from 'webextension-polyfill'
-import type { IAlertSetting, IAlertStatus, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
-import { calcRoleDataLocally, createVerification, getRandomTimeOffset, getRoleDataByCookie, getRoleInfoByCookie, readDataFromStorage, verifyVerification, writeDataToStorage } from '~/utils'
+import type { IAlertSetting, IAlertStatus, ICaptchaRequest, IRoleDataItem, IUserData, IUserDataItem } from '~/types'
+import { calcRoleDataLocally, createVerification, getGeetestChallenge, getRandomTimeOffset, getRoleDataByCookie, getRoleInfoByCookie, readDataFromStorage, verifyVerification, writeDataToStorage } from '~/utils'
 
 // 一分钟
 const INTERVAL_TIME = 1
@@ -175,6 +175,7 @@ const targetPages = [
   'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification*',
   'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/createVerification*',
   'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/verifyVerification*',
+  'https://apiv6.geetest.com/ajax.php?pt=3&client_type=web_mobile&lang=zh-cn*',
 ]
 
 let currentCookie = ''
@@ -182,16 +183,16 @@ let currentReferer = ''
 let currentUA = ''
 const ruleID = 114514
 
-const updateRules = async () => {
+const updateRules = async (ignoreCookie = false) => {
   const rules = []
-  for (const i of [0, 1, 2, 3, 4, 5, 6, 7]) {
+  for (let i = 0; i < targetPages.length; i++) {
     rules.push({
       id: ruleID + i,
       priority: 1,
       action: {
         type: 'modifyHeaders',
         requestHeaders: [
-          { header: 'Cookie', operation: 'set', value: currentCookie },
+          { header: 'Cookie', operation: 'set', value: ignoreCookie ? '' : currentCookie },
           { header: 'Referer', operation: 'set', value: currentReferer },
           { header: 'Origin', operation: 'set', value: currentReferer },
           { header: 'User-Agent', operation: 'set', value: currentUA },
@@ -201,18 +202,18 @@ const updateRules = async () => {
     })
   }
 
-  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7], addRules: rules })
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7, ruleID + 8], addRules: rules })
 }
 
 const resetRules = async () => {
-  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7] })
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleID, ruleID + 1, ruleID + 2, ruleID + 3, ruleID + 4, ruleID + 5, ruleID + 6, ruleID + 7, ruleID + 8] })
 }
 
 const responseRuleID = 19198
 
 const initResponseRules = async () => {
   const rules = []
-  for (const i of [0, 1, 2, 3]) {
+  for (let i = 0; i < targetPages.length; i++) {
     rules.push({
       id: responseRuleID + i,
       priority: 1,
@@ -226,7 +227,7 @@ const initResponseRules = async () => {
     })
   }
 
-  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [responseRuleID, responseRuleID + 1, responseRuleID + 2, responseRuleID + 3], addRules: rules })
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [responseRuleID, responseRuleID + 1, responseRuleID + 2, responseRuleID + 3, responseRuleID + 4, responseRuleID + 5, responseRuleID + 6, responseRuleID + 7, responseRuleID + 8], addRules: rules })
 }
 
 initResponseRules()
@@ -452,12 +453,20 @@ const refreshData = async function (uiOnly = false, fromPopup = false, forceRefr
       // error code
       switch (data) {
         case 1034:
+        {
           // risk control
+
+          // 尝试自动解决
+          const __ret = await autoGeetestChallenge(role.uid)
+          if (__ret)
+            return
+
           // 获取失败，写入错误信息
           role.isError = true
           role.errorMessage = '触发风控'
-          // role.updateTimestamp = Date.now()
-          break
+          role.updateTimestamp = Date.now()
+          return
+        }
       }
     }
     else if (data && typeof data === 'object') {
@@ -657,6 +666,10 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>('request_cookie_read', as
 })
 
 onMessage<{ uid: string }, 'create_verification'>('create_verification', async ({ data: { uid } }) => {
+  return await _createVerification(uid)
+})
+
+async function _createVerification(uid: string) {
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
   const index = originRoleList.findIndex((item) => {
     return item.uid === uid
@@ -672,7 +685,7 @@ onMessage<{ uid: string }, 'create_verification'>('create_verification', async (
   }
 
   return await createVerification(oversea, cookie, setCookie, resetRules)
-})
+}
 
 onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ data: { uid } }) => {
   // open captcha tab
@@ -720,6 +733,13 @@ onMessage<{ uid: string }, 'request_captcha_bg'>('request_captcha_bg', async ({ 
 })
 
 onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
+  const _ret = await _verifyVerification(uid, geetest)
+  tabs.remove(tabId)
+
+  return _ret
+})
+
+async function _verifyVerification(uid: string, geetest: ICaptchaRequest) {
   const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
   const index = originRoleList.findIndex((item) => {
     return item.uid === uid
@@ -737,11 +757,10 @@ onMessage('finish_captcha', async ({ data: { tabId, uid, geetest } }) => {
 
   const result = await verifyVerification(oversea, cookie, geetest, setCookie, resetRules)
 
-  tabs.remove(tabId)
   getRoleInfoByCookie(oversea, cookie, setCookie, resetRules)
   refreshData(false, false, true)
   return result
-})
+}
 
 onMessage('read_settings', async () => {
   const settings = {
@@ -756,3 +775,31 @@ onMessage('write_settings', async ({ data: { refreshInterval, badgeVisibility } 
   await setBadgeVisibility(badgeVisibility)
   await refreshData()
 })
+
+async function autoGeetestChallenge(uid: string) {
+  const originRoleList = await readDataFromStorage<IUserDataItem[]>('roleList', [])
+  const index = originRoleList.findIndex((item) => {
+    return item.uid === uid
+  })
+  const oversea = originRoleList[index].serverType === 'os'
+
+  const setRules = async (referer: string, ua: string) => {
+    currentReferer = referer
+    currentUA = ua
+    await updateRules(true)
+  }
+
+  const challenge = await _createVerification(uid)
+  if (challenge) {
+    const _validate = await getGeetestChallenge(oversea, challenge.challenge, challenge.gt, setRules, resetRules)
+    if (_validate) {
+      const _ret = await _verifyVerification(uid, {
+        geetest_challenge: challenge.challenge,
+        geetest_validate: _validate,
+        geetest_seccode: `${_validate}|jordan`,
+      })
+      return _ret
+    }
+  }
+  return false
+}

@@ -598,9 +598,55 @@ const calcRoleDataLocally = (role: IUserDataItem) => {
   return _role
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally }
+async function getGeetestChallenge(oversea: boolean, challenge: string, gt: string, setRule?: Function, resetRule?: Function): Promise<string | false> {
+  const url = `https://apiv6.geetest.com/ajax.php?pt=3&client_type=web_mobile&lang=zh-cn&challenge=${challenge}&gt=${gt}`
+
+  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
+  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
+
+  // 为 header 追加 cookie
+  setRule && await setRule(referer, userAgent)
+
+  // 构造请求
+  const req = new Request(
+    url,
+    {
+      method: 'get',
+    },
+  )
+
+  // 发送请求
+  const _ret = await fetch(req)
+    .then(response => {
+      const data = response.text()
+      return data
+    })
+    .then(text => {
+      const bracketLeft = text.indexOf('{')
+      const bracketRight = text.lastIndexOf('}')
+      return JSON.parse(text.substring(bracketLeft, bracketRight + 1))
+    })
+    .then((data) => {
+      if (data.status === 'success') {
+        if (data.data.result === 'success' && data.data.validate) {
+          return data.data.validate
+        } else {
+          return false
+        }
+      }
+      else { return false }
+    })
+    .catch(() => {
+      return false
+    })
+  resetRule && await resetRule()
+  return _ret
+}
+
+export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally, getGeetestChallenge }
 
 // 随机生成-5到5的整数
 export const getRandomTimeOffset = () => {
   return Math.floor(Math.random() * 11) - 5
 }
+
