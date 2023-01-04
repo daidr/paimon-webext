@@ -168,7 +168,7 @@
         "message": "别担心，这些数据均储存在本地，且不会提交到任何第三方服务器。"
     },
     "options_Tips_3": {
-        "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://bbs.mihoyo.com/ys' target='_blank'>米游社(国内)</a> <br>扩展在成功获取cookies后，会将米游社恢复到未登录状态，防止手动登出导致cookies失效"
+        "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://www.miyoushe.com/ys' target='_blank'>米游社(国内)</a> <br>扩展在成功获取cookies后，会将米游社恢复到未登录状态，防止手动登出导致cookies失效"
     },
     "options_Tips_4": {
         "message": "点按下面的按钮之前，请确保您已经在此浏览器登录了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> <br>扩展在成功获取cookies后，会将米游社恢复到未登录状态，防止手动登出导致cookies失效 <br>(HoYoLAB 屏蔽了中国大陆的访问，中国大陆的用户添加海外服需要自备魔法上网)"
