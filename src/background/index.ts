@@ -184,7 +184,7 @@ let selectedUid = ''
 
 const targetPages = [
   'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global',
-  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn',
+  'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookieToken?game_biz=hk4e_cn',
   'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote*',
   'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote*',
   'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification*',
@@ -277,7 +277,9 @@ const setBadgeVisibility = async (visibility: boolean) => {
 // 获取国服cookie
 const getMiHoYoCookie = async function () {
   let cookieString = ''
-  const _cookies = await cookies.getAll({ domain: 'mihoyo.com' })
+  let _cookies = await cookies.getAll({ domain: 'miyoushe.com' })
+  // 过滤name相同的cookies
+  _cookies = _cookies.filter((cookie, index, self) => self.findIndex((t) => t.name === cookie.name) === index)
   if (_cookies.length !== 0) {
     cookieString = ''
     for (const cookie of _cookies)
@@ -305,10 +307,10 @@ const getHoYoLABCookie = async function () {
 }
 
 const clearMiHoYoCookie = async function () {
-  const originCookieList: Cookies.Cookie[] = await cookies.getAll({ domain: 'mihoyo.com' })
+  const originCookieList: Cookies.Cookie[] = await cookies.getAll({ domain: 'miyoushe.com' })
   const cookieList: Cookies.RemoveDetailsType[] = originCookieList.map((cookie) => ({
     name: cookie.name,
-    url: 'https://mihoyo.com',
+    url: 'https://miyoushe.com',
   }))
   for (const cookie of cookieList)
     await cookies.remove(cookie)

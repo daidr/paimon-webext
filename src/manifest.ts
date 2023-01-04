@@ -39,7 +39,7 @@ export async function getManifest() {
       128: './assets/icon-128.png',
     },
     permissions: ['storage', 'cookies', 'alarms', 'notifications', 'declarativeNetRequest'],
-    host_permissions: ['*://*.mihoyo.com/', '*://*.hoyolab.com/', '*://*.geetest.com/'],
+    host_permissions: ['*://*.mihoyo.com/', '*://*.miyoushe.com/', '*://*.hoyolab.com/', '*://*.geetest.com/'],
   }
 
   if (isDev) {

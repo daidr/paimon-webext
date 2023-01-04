@@ -394,7 +394,7 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
     ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
-    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_cn'
+    : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookieToken?game_biz=hk4e_cn'
 
   const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
   const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
