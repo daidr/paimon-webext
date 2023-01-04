@@ -168,7 +168,7 @@
         "message": "Не волнуйтесь, все эти данные хранятся локально и не будут переданы никаким сторонним сервисам."
     },
     "options_Tips_3": {
-        "message": "Please make sure you are logged into <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
+        "message": "Пожалуйста, убедитесь, что вы вошли в <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(Китай)</a> в этом браузере, прежде чем нажать на кнопку ниже <br>После успешного получения файлов cookie расширение изменит пару настройек в HoYoLAB, чтобы предотвратить файлы cookie от аннулирования из-за ручного выхода из системы"
     },
     "options_Tips_4": {
         "message": "Пожалуйста, убедитесь, что вы вошли в <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> в этом браузере, прежде чем нажать на кнопку ниже <br>После успешного получения файлов cookie расширение изменит пару настройек в HoYoLAB, чтобы предотвратить файлы cookie от аннулирования из-за ручного выхода из системы <br> (HoYoLAB заблокировал доступ с материковой части Китая, пользователям с материковой части Китая нужен прокси-сервер для получения данных зарубежного сервиса)"
