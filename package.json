@@ -1,7 +1,7 @@
 {
   "name": "paimon-webext",
   "displayName": "派蒙 Paimon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "在浏览器中实时查看原神游戏状态 Track Genshin Impact stats in your browser.",
   "author": {
     "name": "daidr",
