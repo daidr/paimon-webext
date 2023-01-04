@@ -168,7 +168,7 @@
         "message": "これらのデータはすべてローカルに保存され、第三者のサービスには送信されません。"
     },
     "options_Tips_3": {
-        "message": "下のボタンをクリックする前に、このブラウザで<a href='https://bbs.mihoyo.com/ys' target='_blank'>HoYoLAB(China)</a> にログインしていることを確認してください。 Cookieを正常に取得した後。 手動ログアウトによりクッキーが無効になるのを防ぐため、HoYoLABを非ログイン状態に復元します。"
+        "message": "Please make sure you are logged into <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
     },
     "options_Tips_4": {
         "message": "下のボタンをクリックする前に、このブラウザで <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> ログインしていることを確認してください <br>クッキーの取得に成功した後、手動ログアウトによるクッキーの無効化を防ぐために、この拡張機能はHoYoLABを非ログイン状態に戻します <br>(HoYoLAB は中国からのアクセスをブロックしており、中国のユーザーは海外サービスのデータ取得にプロキシが必要です)。"
