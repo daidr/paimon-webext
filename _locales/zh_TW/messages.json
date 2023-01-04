@@ -168,7 +168,7 @@
         "message": "別擔心，這些資料均儲存在本地，且不會提交到任何伺服器。"
     },
     "options_Tips_3": {
-        "message": "Please make sure you are logged into <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
+        "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://www.miyoushe.com/ys' target='_blank'>米遊社(國服)</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效"
     },
     "options_Tips_4": {
         "message": "點擊下面的按鈕之前，請確保您已經在此瀏覽器登錄了 <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> <br>擴展在成功獲取cookies後，會將米遊社恢復到未登錄狀態，防止手動登出導致cookies失效 <br>(HoYoLAB 遮罩了中國大陸的訪問，中國大陸的使用者添加海外服需要自備魔法上網)"
