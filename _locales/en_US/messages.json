@@ -168,7 +168,7 @@
         "message": "Don't worry, all these data are stored locally and will not be submitted to any third party service."
     },
     "options_Tips_3": {
-        "message": "Please make sure you are logged into <a href='https://bbs.mihoyo.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
+        "message": "Please make sure you are logged into <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
     },
     "options_Tips_4": {
         "message": "Please make sure you are logged into <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout <br>(HoYoLAB blocked access from China Mainland, users from China Mainland need a proxy to get the data of overseas service)"
