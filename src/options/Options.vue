@@ -370,6 +370,8 @@ const setSettingsMap = async () => {
                 <a class="reverse" href="https://patreon.com/daidr" target="_blank" rel="noopener noreferrer">Patreon</a>
                 <br>
                 <a class="reverse" href="https://afdian.net/a/daidr" target="_blank" rel="noopener noreferrer">爱发电</a>
+                <br>
+                <a class="reverse" href="https://sponsor.daidr.me" target="_blank" rel="noopener noreferrer">Sponsor list</a>
               </td>
             </tr>
             <tr>
