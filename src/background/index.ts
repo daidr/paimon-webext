@@ -283,7 +283,7 @@ const getMiHoYoCookie = async function () {
   if (_cookies.length !== 0) {
     cookieString = ''
     for (const cookie of _cookies)
-      cookieString += `${cookie.name}=${encodeURIComponent(cookie.value)};`
+      cookieString += `${cookie.name}=${cookie.value};`
     return cookieString
   }
   else {
@@ -298,7 +298,7 @@ const getHoYoLABCookie = async function () {
   if (_cookies.length !== 0) {
     cookieString = ''
     for (const cookie of _cookies)
-      cookieString += `${cookie.name}=${encodeURIComponent(cookie.value)};`
+      cookieString += `${cookie.name}=${cookie.value};`
     return cookieString
   }
   else {
