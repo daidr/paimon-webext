@@ -2,7 +2,7 @@
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
 import type { IUserDataItem } from '~/types'
-import { calcRoleDataLocally, getClock, getTime } from '~/utils'
+import { calcRoleDataLocally, getClock, getTime } from '~/utils/utils'
 
 const isLoaded = ref(false)
 
@@ -81,7 +81,7 @@ const TimeComponent = (props: { time: { hour: number; minute: number } }) => {
 }
 
 const DayComponent = (props: {
-  time: { day: 'today' | 'tomorrow'; hour: number; minute: number }
+  time: { day: 'today' | 'tomorrow'; hour: string; minute: string }
 }) => {
   return [
     h('span', { class: 'unit' }, i18n.getMessage(`popup_${props.time.day}`)),
