@@ -2,14 +2,13 @@ import { onMessage, sendMessage } from 'webext-bridge'
 import {
   action,
   alarms,
-  cookies,
   i18n,
   notifications,
   runtime,
   tabs,
   webRequest,
 } from 'webextension-polyfill'
-import type { Cookies, Notifications } from 'webextension-polyfill'
+import type { Notifications } from 'webextension-polyfill'
 import type {
   IAlertSetting,
   IAlertStatus,
@@ -25,11 +24,13 @@ import {
   getRandomTimeOffset,
   getRoleDataByCookie,
   getRoleInfoByCookie,
+  range,
   readDataFromStorage,
   verifyVerification,
   writeDataToStorage,
-} from '~/utils'
+} from '~/utils/utils'
 import { isFirefox } from '~/env'
+import { clearHoYoLABCookie, clearMiHoYoCookie, getHoYoLABCookie, getMiHoYoCookie } from '~/utils/cookie'
 
 // 一分钟
 const INTERVAL_TIME = 1
@@ -82,15 +83,12 @@ const setNotificationItem = async (
   map[uid] = item
   await writeDataToStorage('notificationMap', JSON.stringify(map))
 }
-
 // type: 0 resin; 1 realmCurrency; 2 transformer
 const showNotification = async (
   alertStatus: IAlertStatus,
   type: 0 | 1 | 2,
   scope: any,
 ) => {
-  // @ts-expect-error: update 方法在 firefox 中不存在
-  const isFirefox = !notifications.update
   if (!isFirefox) {
     // chromium 系浏览器
     if (type === 0) {
@@ -357,17 +355,7 @@ const updateRules = async (ignoreCookie = false) => {
     }
 
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: [
-        ruleID,
-        ruleID + 1,
-        ruleID + 2,
-        ruleID + 3,
-        ruleID + 4,
-        ruleID + 5,
-        ruleID + 6,
-        ruleID + 7,
-        ruleID + 8,
-      ],
+      removeRuleIds: range(ruleID, ruleID + 8),
       addRules: rules,
     })
   }
@@ -378,17 +366,7 @@ const resetRules = async () => {
     isRewriteEnabled_Firefox = false
   } else {
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: [
-        ruleID,
-        ruleID + 1,
-        ruleID + 2,
-        ruleID + 3,
-        ruleID + 4,
-        ruleID + 5,
-        ruleID + 6,
-        ruleID + 7,
-        ruleID + 8,
-      ],
+      removeRuleIds: range(ruleID, ruleID + 8),
     })
   }
 }
@@ -413,29 +391,13 @@ const initResponseRules = async () => {
     }
 
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: [
-        responseRuleID,
-        responseRuleID + 1,
-        responseRuleID + 2,
-        responseRuleID + 3,
-        responseRuleID + 4,
-        responseRuleID + 5,
-        responseRuleID + 6,
-        responseRuleID + 7,
-        responseRuleID + 8,
-      ],
+      removeRuleIds: range(responseRuleID, responseRuleID + 8),
       addRules: rules,
     })
   }
 }
 
 initResponseRules()
-
-// webRequest.onBeforeSendHeaders.addListener(
-//   rewriteCookieHeader,
-//   { urls: targetPages },
-//   ['blocking', 'requestHeaders', chrome.webRequest.OnBeforeSendHeadersOptions.EXTRA_HEADERS].filter(Boolean),
-// )
 
 const getSelectedUid = async () => {
   return await readDataFromStorage<string>('selectedRole', '')
@@ -455,66 +417,6 @@ const getBadgeVisibility = async () => {
 
 const setBadgeVisibility = async (visibility: boolean) => {
   await writeDataToStorage('badgeVisibility', visibility)
-}
-
-// 获取国服cookie
-const getMiHoYoCookie = async function () {
-  let cookieString = ''
-  let _cookies = await cookies.getAll({ domain: 'miyoushe.com' })
-  // 过滤name相同的cookies
-  _cookies = _cookies.filter(
-    (cookie, index, self) =>
-      self.findIndex((t) => t.name === cookie.name) === index,
-  )
-  if (_cookies.length !== 0) {
-    cookieString = ''
-    for (const cookie of _cookies)
-      cookieString += `${cookie.name}=${cookie.value};`
-    return cookieString
-  } else {
-    return ''
-  }
-}
-
-// 获取海外cookie
-const getHoYoLABCookie = async function () {
-  let cookieString = ''
-  const _cookies = await cookies.getAll({ domain: 'hoyolab.com' })
-  if (_cookies.length !== 0) {
-    cookieString = ''
-    for (const cookie of _cookies)
-      cookieString += `${cookie.name}=${cookie.value};`
-    return cookieString
-  } else {
-    return ''
-  }
-}
-
-const clearMiHoYoCookie = async function () {
-  const originCookieList: Cookies.Cookie[] = await cookies.getAll({
-    domain: 'miyoushe.com',
-  })
-  const cookieList: Cookies.RemoveDetailsType[] = originCookieList.map(
-    (cookie) => ({
-      name: cookie.name,
-      url: 'https://miyoushe.com',
-    }),
-  )
-  for (const cookie of cookieList) await cookies.remove(cookie)
-}
-
-const clearHoYoLABCookie = async function () {
-  const originCookieList: Cookies.Cookie[] = await cookies.getAll({
-    domain: 'hoyolab.com',
-  })
-  const cookieList: Cookies.RemoveDetailsType[] = originCookieList.map(
-    (cookie) => ({
-      name: cookie.name,
-      url: 'https://hoyolab.com',
-    }),
-  )
-
-  for (const cookie of cookieList) await cookies.remove(cookie)
 }
 
 const addNewRoleToList = async function (
@@ -766,7 +668,6 @@ const refreshData = async function (
 }
 
 // 定时器，定时获取玩家数据
-
 const initAlarm = async (interval_time = INTERVAL_TIME) => {
   await alarms.clear('refresh_data')
   alarms.create('refresh_data', { periodInMinutes: interval_time })
