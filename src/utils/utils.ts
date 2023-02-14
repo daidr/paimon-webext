@@ -349,7 +349,7 @@ async function getGeetestChallenge(oversea: boolean, challenge: string, gt: stri
   const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 为 header 追加 cookie
-  setRule && await setRule(referer, userAgent)
+  setRule && await setRule('', referer, userAgent, false)
 
   // 构造请求
   const req = new Request(
