@@ -14,7 +14,8 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
     "types": [
-      "vite/client"
+      "vite/client",
+      "chrome"
     ],
     "paths": {
       "~/*": ["src/*"]

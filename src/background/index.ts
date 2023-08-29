@@ -36,8 +36,6 @@ import {
 } from '~/utils/cookie'
 import {
   initResponseRules,
-  resetRules,
-  setExtraHeaders,
 } from '~/utils/networkHook'
 
 // 一分钟
@@ -425,8 +423,6 @@ const refreshData = async function (
           role.cookie,
           role.uid,
           role.serverRegion,
-          setExtraHeaders,
-          resetRules,
         )
 
     if (Number.isInteger(data)) {
@@ -655,8 +651,6 @@ onMessage<{ oversea: boolean }, 'request_cookie_read'>(
     const result = await getRoleInfoByCookie(
       oversea,
       cookie,
-      setExtraHeaders,
-      resetRules,
     )
 
     if (result) {
@@ -696,7 +690,7 @@ async function _createVerification(uid: string) {
   const cookie = originRoleList[index].cookie
   const oversea = originRoleList[index].serverType === 'os'
 
-  return await createVerification(oversea, cookie, setExtraHeaders, resetRules)
+  return await createVerification(oversea, cookie)
 }
 
 onMessage<{ uid: string }, 'request_captcha_bg'>(
@@ -723,8 +717,6 @@ onMessage<{ uid: string }, 'request_captcha_bg'>(
       check()
     })
 
-    console.log('tab loaded')
-
     // send message to captcha tab
     const originRoleList = await readDataFromStorage<IUserDataItem[]>(
       'roleList',
@@ -739,8 +731,6 @@ onMessage<{ uid: string }, 'request_captcha_bg'>(
     const verification = await createVerification(
       oversea,
       cookie,
-      setExtraHeaders,
-      resetRules,
     )
     if (verification && curtab.id)
       await sendMessage(
@@ -774,11 +764,9 @@ async function _verifyVerification(uid: string, geetest: ICaptchaRequest) {
     oversea,
     cookie,
     geetest,
-    setExtraHeaders,
-    resetRules,
   )
 
-  getRoleInfoByCookie(oversea, cookie, setExtraHeaders, resetRules)
+  getRoleInfoByCookie(oversea, cookie)
   refreshData(false, false, true)
   return result
 }
@@ -800,6 +788,7 @@ onMessage(
   },
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function autoGeetestChallenge(uid: string) {
   const originRoleList = await readDataFromStorage<IUserDataItem[]>(
     'roleList',
@@ -816,8 +805,6 @@ async function autoGeetestChallenge(uid: string) {
       oversea,
       challenge.challenge,
       challenge.gt,
-      setExtraHeaders,
-      resetRules,
     )
     if (_validate) {
       const _ret = await _verifyVerification(uid, {

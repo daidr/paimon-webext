@@ -1,6 +1,8 @@
 import { storage } from 'webextension-polyfill'
 import type { ICaptchaRequest, ICaptchaResponse, IRoleDataItem, IUserData, IUserDataItem, serverRegions } from '../types'
 import { md5 } from './md5'
+import type { AdvancedHeaders } from './advancedFetch'
+import { advancedFetch } from './advancedFetch'
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -23,10 +25,19 @@ export const readDataFromStorage = async function <T>(key: string, defaultVal: T
 }
 
 function uuid() {
-  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
     return v.toString(16)
   })
+}
+
+export function generateSeed(length = 16) {
+  const characters = '0123456789abcdef'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += characters[Math.floor(Math.random() * characters.length)]
+  }
+  return result
 }
 
 // 随机生成的 deviceId
@@ -103,13 +114,15 @@ function getDS(oversea: boolean, params: Record<string, string>, body: object) {
 }
 
 const HEADER_TEMPLATE_CN: Record<string, string> = {
-  'x-rpc-app_version': '2.48.1',
-  'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.48.1',
+  'x-rpc-app_version': '2.56.1',
+  'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.56.1',
   'x-rpc-client_type': '5',
+  'x-rpc-device_name': 'iPhone',
   'Origin': 'https://webstatic.mihoyo.com',
   'X-Requested-With': 'com.mihoyo.hyperion',
   'x-rpc-page': '3.1.3_#/ys',
   'Referer': 'https://webstatic.mihoyo.com/',
+  'x-rpc-device_fp': '38d7eed0e6198',
 }
 
 const HEADER_TEMPLATE_OS: Record<string, string> = {
@@ -134,32 +147,22 @@ async function getHeader(oversea: boolean, params: Record<string, string>, body:
   return headers
 }
 
-async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?: Function, resetCookie?: Function): Promise<IRoleDataItem[] | false> {
+async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IRoleDataItem[] | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
     ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
     : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookieToken?game_biz=hk4e_cn'
 
-  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
-  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
-
   // 生成 header
   const headers = await getHeader(oversea, {}, {}, false)
 
-  // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer, userAgent)
-
-  // 构造请求
-  const req = new Request(
-    url,
-    {
-      method: 'get',
-      headers,
-    },
-  )
+  headers.Cookie = cookie
 
   // 发送请求
-  const _ret = await fetch(req)
+  const _ret = await advancedFetch(url, {
+    method: 'GET',
+    headers,
+  })
     .then(response => {
       return response.json()
     })
@@ -172,16 +175,12 @@ async function getRoleInfoByCookie(oversea: boolean, cookie: string, setCookie?:
     .catch(() => {
       return false
     })
-  resetCookie && await resetCookie()
   return _ret
 }
 
-async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions, setCookie?: Function, resetCookie?: Function): Promise<IUserData | false | number> {
+async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: string, serverRegion: serverRegions): Promise<IUserData | false | number> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://bbs-api-os.hoyolab.com/game_record/app/genshin/api/dailyNote' : 'https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote')
-
-  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
-  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 补全 url query
   const params = {
@@ -195,20 +194,18 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   // 生成 header
   const headers = await getHeader(oversea, params, {}, true)
 
-  // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer, userAgent)
+  if (!oversea) {
+    // 为 header 追加 fp
+    await appendDeviceFp(headers, role_id, cookie)
+  }
 
-  // 构造请求
-  const req = new Request(
-    url.toString(),
-    {
-      method: 'get',
-      headers,
-    },
-  )
+  headers.Cookie = cookie
 
   // 发送请求
-  const _ret = await fetch(req)
+  const _ret = await advancedFetch(url.toString(), {
+    method: 'GET',
+    headers,
+  })
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -222,16 +219,12 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     .catch(() => {
       return false
     })
-  resetCookie && await resetCookie()
   return _ret
 }
 
-async function createVerification(oversea: boolean, cookie: string, setCookie?: Function, resetCookie?: Function): Promise<ICaptchaResponse | false> {
+async function createVerification(oversea: boolean, cookie: string): Promise<ICaptchaResponse | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
-
-  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
-  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 补全 url query
   const params = {
@@ -245,19 +238,13 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
   const headers = await getHeader(oversea, params, {}, true)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer, userAgent)
-
-  // 构造请求
-  const req = new Request(
-    url.toString(),
-    {
-      method: 'get',
-      headers,
-    },
-  )
+  headers.Cookie = cookie
 
   // 发送请求
-  const _ret = await fetch(req)
+  const _ret = await advancedFetch(url.toString(), {
+    method: 'GET',
+    headers,
+  })
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -268,35 +255,25 @@ async function createVerification(oversea: boolean, cookie: string, setCookie?: 
     .catch(() => {
       return false
     })
-  resetCookie && await resetCookie()
   return _ret
 }
 
-async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest, setCookie?: Function, resetCookie?: Function): Promise<boolean> {
+async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest): Promise<boolean> {
   // 根据 oversea 参数选择对应 api 地址
   const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
-
-  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
-  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
 
   // 生成 header
   const headers = await getHeader(oversea, {}, geetest, true)
 
   // 为 header 追加 cookie
-  setCookie && await setCookie(cookie, referer, userAgent)
-
-  // 构造请求
-  const req = new Request(
-    url.toString(),
-    {
-      method: 'post',
-      headers,
-      body: JSON.stringify(geetest),
-    },
-  )
+  headers.Cookie = cookie
 
   // 发送请求
-  const _ret = await fetch(req)
+  const _ret = await advancedFetch(url.toString(), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(geetest),
+  })
     .then(response => response.json())
     .then((data) => {
       if (data.retcode === 0)
@@ -307,8 +284,6 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
     .catch(() => {
       return false
     })
-
-  resetCookie && await resetCookie()
   return _ret
 }
 
@@ -342,25 +317,17 @@ const calcRoleDataLocally = (role: IUserDataItem) => {
   return _role
 }
 
-async function getGeetestChallenge(oversea: boolean, challenge: string, gt: string, setRule?: Function, resetRule?: Function): Promise<string | false> {
+async function getGeetestChallenge(oversea: boolean, challenge: string, gt: string): Promise<string | false> {
   const url = `https://apiv6.geetest.com/ajax.php?pt=3&client_type=web_mobile&lang=zh-cn&challenge=${challenge}&gt=${gt}`
 
-  const referer = oversea ? HEADER_TEMPLATE_OS.Referer : HEADER_TEMPLATE_CN.Referer
-  const userAgent = oversea ? HEADER_TEMPLATE_OS['User-Agent'] : HEADER_TEMPLATE_CN['User-Agent']
-
   // 为 header 追加 cookie
-  setRule && await setRule('', referer, userAgent, false)
-
-  // 构造请求
-  const req = new Request(
-    url,
-    {
-      method: 'get',
-    },
-  )
+  const headers = await getHeader(oversea, {}, {}, false)
 
   // 发送请求
-  const _ret = await fetch(req)
+  const _ret = await advancedFetch(url, {
+    method: 'GET',
+    headers,
+  })
     .then(response => {
       const data = response.text()
       return data
@@ -383,8 +350,90 @@ async function getGeetestChallenge(oversea: boolean, challenge: string, gt: stri
     .catch(() => {
       return false
     })
-  resetRule && await resetRule()
   return _ret
+}
+
+export const generateDeviceFp = async (cookie: string) => {
+  const seed = generateSeed(16)
+  const time = `${Date.now()}`
+  const deviceId = await getDeviceId()
+  const ext_fields = JSON.stringify({
+    userAgent: HEADER_TEMPLATE_CN['User-Agent'],
+    browserScreenSize: 281520,
+    maxTouchPoints: 5,
+    isTouchSupported: true,
+    browserLanguage: 'zh-CN',
+    browserPlat: 'iPhone',
+    browserTimeZone: 'Asia/Shanghai',
+    webGlRender: 'Apple GPU',
+    webGlVendor: 'Apple Inc.',
+    numOfPlugins: 0,
+    listOfPlugins: 'unknown',
+    screenRatio: 3,
+    deviceMemory: 'unknown',
+    hardwareConcurrency: '4',
+    cpuClass: 'unknown',
+    ifNotTrack: 'unknown',
+    ifAdBlock: 0,
+    hasLiedResolution: 1,
+    hasLiedOs: 0,
+    hasLiedBrowser: 0,
+  })
+  const body = {
+    seed_id: seed,
+    device_id: deviceId,
+    platform: '5',
+    seed_time: time,
+    ext_fields,
+    app_name: 'account_cn',
+    device_fp: '38d7ee834d1e9',
+  }
+
+  const url = 'https://public-data-api.mihoyo.com/device-fp/api/getFp'
+
+  // 生成 header
+  const headers = await getHeader(false, {}, body, false)
+  // 为 header 追加 cookie
+  headers.Cookie = cookie
+
+  // 发送请求
+  const _ret = await advancedFetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  })
+    .then(response => {
+      return response.json()
+    })
+    .then((data) => {
+      if (data.data.code === 200) {
+        return data.data.device_fp
+      }
+      else {
+        console.error(new Error(`generateDeviceFp failed: ${data.data.msg}`))
+        return generateSeed(13)
+      }
+    })
+    .catch((e) => {
+      console.error(e)
+      return generateSeed(13)
+    })
+  return _ret
+}
+
+async function appendDeviceFp(headers: AdvancedHeaders, uid: string, cookie: string) {
+  const deviceFpCount = await readDataFromStorage(`deviceFp_${uid}_count`, 0)
+
+  let deviceFp = await readDataFromStorage(`deviceFp_${uid}`, '')
+
+  // 如果 storage 中没有 deviceId，则生成一个新的 deviceId
+  if (deviceFp === '' || Date.now() - deviceFpCount > 1000 * 60 * 10) {
+    deviceFp = await generateDeviceFp(cookie)
+    await writeDataToStorage(`deviceFp_${uid}`, deviceFp)
+  }
+  await writeDataToStorage(`deviceFp_${uid}_count`, Date.now())
+  headers['x-rpc-device_fp'] = deviceFp
+  return headers
 }
 
 export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally, getGeetestChallenge }
