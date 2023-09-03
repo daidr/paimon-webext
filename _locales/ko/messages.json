@@ -1,0 +1,293 @@
+{
+    "pluginDesc": {
+        "message": "Track Genshin Impact stats in your browser."
+    },
+    "cn_gf01": {
+        "message": "天空岛(CN)"
+    },
+    "cn_qd01": {
+        "message": "世界树(CN)"
+    },
+    "os_usa": {
+        "message": "NA"
+    },
+    "os_euro": {
+        "message": "EU"
+    },
+    "os_asia": {
+        "message": "Asia"
+    },
+    "os_cht": {
+        "message": "SAR"
+    },
+    "popup_hour": {
+        "message": ":"
+    },
+    "popup_minute": {
+        "message": ""
+    },
+    "popup_today": {
+        "message": "Today"
+    },
+    "popup_tomorrow": {
+        "message": "Tomorrow"
+    },
+    "popup_recovery_day": {
+        "message": "d"
+    },
+    "popup_recovery_hour": {
+        "message": "h"
+    },
+    "popup_recovery_minute": {
+        "message": "m"
+    },
+    "popup_recovery_second": {
+        "message": "s"
+    },
+    "popup_CurrentTitle": {
+        "message": "Current: "
+    },
+    "popup_ServerTitle": {
+        "message": "Server: "
+    },
+    "popup_ResinTitle": {
+        "message": "Current Resin"
+    },
+    "popup_FullyReplenishedTitle": {
+        "message": "Fully Replenished"
+    },
+    "popup_ETATitle": {
+        "message": "ETA"
+    },
+    "popup_ExpeditionsTitle": {
+        "message": "Expeditions"
+    },
+    "popup_ExploringStatus": {
+        "message": "Exploring"
+    },
+    "popup_FinishedStatus": {
+        "message": "Finished"
+    },
+    "popup_DailyCommissionsTitle": {
+        "message": "Daily commissions"
+    },
+    "popup_ExtraTaskReceived": {
+        "message": "(Received)"
+    },
+    "popup_ExtraTaskNotReceived": {
+        "message": "(Unreceived)"
+    },
+    "popup_RealmCurrencyTitle": {
+        "message": "Realm currency"
+    },
+    "popup_WeeklyBossesTitle": {
+        "message": "Weekly boss"
+    },
+    "popup_ParametricTransformerTitle": {
+        "message": "Parametric Transformer"
+    },
+    "popup_Available": {
+        "message": "Available"
+    },
+    "popup_ConfigurationTitle": {
+        "message": "Configuration"
+    },
+    "popup_ConfigurationTips": {
+        "message": "You just need to complete a few simple configurations, and then you are ready to enjoy it!"
+    },
+    "popup_ConfigurationButtonText": {
+        "message": "Open Options"
+    },
+    "popup_UpdateTimeTitle": {
+        "message": "Update: "
+    },
+    "popup_ErrorTitle": {
+        "message": "Error"
+    },
+    "popup_ErrorTips_1": {
+        "message": "We are unable to access your game data, try going to the options page to check if the configuration below is correct."
+    },
+    "popup_ErrorTips_2": {
+        "message": "Is the network currently available?"
+    },
+    "popup_ErrorTips_3": {
+        "message": "Are there any roles that are currently enabled?"
+    },
+    "popup_ErrorTips_4": {
+        "message": "If you are in China Mainland, you need a proxy to access the data of the overseas service"
+    },
+    "popup_ErrorTips_5": {
+        "message": "The current account triggers risk control and requires HMI verification"
+    },
+    "popup_ErrorTips_6": {
+        "message": "Login to your account and re-import your roles"
+    },
+    "popup_ErrorTips_7": {
+        "message": "Click on the captcha button below"
+    },
+    "popup_ErrorOpenConfigButtonText": {
+        "message": "Open Options"
+    },
+    "popup_ErrorRefreshButtonText": {
+        "message": "Refresh"
+    },
+    "popup_CaptchaButtonText": {
+        "message": "Open Captcha Page"
+    },
+    "options_Nav_AddNewRole": {
+        "message": "Add New Roles"
+    },
+    "options_Nav_RoleListSetting": {
+        "message": "Role List"
+    },
+    "options_Nav_AlertSetting": {
+        "message": "Alert"
+    },
+    "options_Nav_Setting": {
+        "message": "Settings"
+    },
+    "options_Nav_About": {
+        "message": "About"
+    },
+    "options_SelectServer": {
+        "message": "I. Choose Region"
+    },
+    "options_ServerCN": {
+        "message": "China Mainland"
+    },
+    "options_ServerOS": {
+        "message": "Oversea"
+    },
+    "options_FetchUserCookie": {
+        "message": "II. Fetch Cookies"
+    },
+    "options_Tips_1": {
+        "message": "We need your HoYoLAB user credentials (cookies) in order to access the relevant data."
+    },
+    "options_Tips_2": {
+        "message": "Don't worry, all these data are stored locally and will not be submitted to any third party service."
+    },
+    "options_Tips_3": {
+        "message": "Please make sure you are logged into <a href='https://www.miyoushe.com/ys' target='_blank'>HoYoLAB(China)</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout"
+    },
+    "options_Tips_4": {
+        "message": "Please make sure you are logged into <a href='https://www.hoyolab.com/home' target='_blank'>HoYoLAB</a> in this browser before clicking on the button below <br>After successfully obtaining cookies, the Extension will restore HoYoLAB to a non-logged-in state to prevent cookies from being invalidated due to manual logout <br>(HoYoLAB blocked access from China Mainland, users from China Mainland need a proxy to get the data of overseas service)"
+    },
+    "options_FetchBtnTitle": {
+        "message": "Fetch Cookies"
+    },
+    "options_FetchBtnAlert_1": {
+        "message": "Failed to fetch roles"
+    },
+    "options_FetchBtnAlert_2": {
+        "message": "Successfully added $1 role"
+    },
+    "options_FetchBtnAlert_3": {
+        "message": "No role binding"
+    },
+    "options_Role_NoRoleFound": {
+        "message": "No role found"
+    },
+    "options_Role_IsEnabledTitle": {
+        "message": "Enabled"
+    },
+    "options_Role_RoleNameTitle": {
+        "message": "Nickname(uid)"
+    },
+    "options_Role_RoleServerTitle": {
+        "message": "Server"
+    },
+    "options_Role_RoleActionTitle": {
+        "message": "Operation"
+    },
+    "options_About_VersionTitle": {
+        "message": "Version"
+    },
+    "options_About_AuthorTitle": {
+        "message": "Author"
+    },
+    "options_About_Author": {
+        "message": "<a class='reverse' href='https://daidr.me' target='_blank'>daidr</a>"
+    },
+    "options_About_OpenSourceTitle": {
+        "message": "Open Source"
+    },
+    "options_About_OpenSource": {
+        "message": "The extension is open source and hosted on <a class='reverse' href='https://github.com/daidr/paimon-webext' target='_blank'>Github</a>, obey the MIT license to use the source code please.\nYou can try to create <a class='reverse' href='https://github.com/daidr/paimon-webext/issues' target='_blank'>Issues</a> if you have any problems and I'll help you solve them as much as possible. It would be better if you could create PR👍"
+    },
+    "options_About_ThankTitle": {
+        "message": "Credits"
+    },
+    "options_About_Thank": {
+        "message": "Special thanks to all contributors of this extension\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
+    },
+    "options_About_DonateTitle": {
+        "message": "Donate"
+    },
+    "options_Alert_Setting": {
+        "message": "Settings"
+    },
+    "options_Alert_Resin": {
+        "message": "resin threshold"
+    },
+    "options_Alert_Transformer": {
+        "message": "transformer is available"
+    },
+    "options_Alert_RealmCurrency": {
+        "message": "realm currency overflowed"
+    },
+    "options_Alert_NoRoleFound": {
+        "message": "No role found"
+    },
+    "options_Alert_IsEnabledTitle": {
+        "message": "Alert"
+    },
+    "options_Alert_RoleNameTitle": {
+        "message": "Nickname(uid)"
+    },
+    "options_Alert_RoleServerTitle": {
+        "message": "Server"
+    },
+    "options_Alert_Notify_Title": {
+        "message": "Paimon Alert"
+    },
+    "options_Alert_Notify_Resin": {
+        "message": "Your amount of Original Resin is $1 and the threshold has been exceeded."
+    },
+    "options_Alert_Notify_Resin_Firefox": {
+        "message": "The Original Resin of $1 has exceeded the threshold."
+    },
+    "options_Alert_Notify_Transformer": {
+        "message": "The Parametric Transformer is available."
+    },
+    "options_Alert_Notify_Transformer_Firefox": {
+        "message": "The Parametric Transformer belonging to $1 is available."
+    },
+    "options_Alert_Notify_RealmCurrency": {
+        "message": "Your realm currency overflowed."
+    },
+    "options_Alert_Notify_RealmCurrency_Firefox": {
+        "message": "The realm currency of $1 overflowed."
+    },
+    "options_Setting_Apply": {
+        "message": "Apply"
+    },
+    "options_Setting_Unsaved": {
+        "message": "Unsaved"
+    },
+    "options_Setting_Item_Badge": {
+        "message": "Extension Badge"
+    },
+    "options_Setting_Item_DataRefreshInterval": {
+        "message": "Refresh Interval"
+    },
+    "options_Setting_Item_DataRefreshInterval_Unit": {
+        "message": "m"
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_1": {
+        "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+    },
+    "options_Setting_Item_DataRefreshInterval_Protips_2": {
+        "message": "Range: 3 ~ 60 min"
+    }
+}
