@@ -1,4 +1,7 @@
 {
+    "pluginName": {
+        "message": "Paimon"
+    },
     "pluginDesc": {
         "message": "Проверяет статы вашего аккаунта Genshin Impact"
     },
@@ -140,9 +143,6 @@
     "options_Nav_RoleListSetting": {
         "message": "Список ролей"
     },
-    "options_Nav_AlertSetting": {
-        "message": "Тревога"
-    },
     "options_Nav_Setting": {
         "message": "Настройки"
     },
@@ -224,51 +224,6 @@
     "options_About_DonateTitle": {
         "message": "Donate"
     },
-    "options_Alert_Setting": {
-        "message": "настройки"
-    },
-    "options_Alert_Resin": {
-        "message": "Порог смолы"
-    },
-    "options_Alert_Transformer": {
-        "message": "трансформатор в наличии"
-    },
-    "options_Alert_RealmCurrency": {
-        "message": "Сокровища обители переполнена"
-    },
-    "options_Alert_NoRoleFound": {
-        "message": "Аккаунты не добавлены"
-    },
-    "options_Alert_IsEnabledTitle": {
-        "message": "Тревога"
-    },
-    "options_Alert_RoleNameTitle": {
-        "message": "Ник(uid)"
-    },
-    "options_Alert_RoleServerTitle": {
-        "message": "Сервер"
-    },
-    "options_Alert_Notify_Title": {
-        "message": "Паймон Тревога"
-    },
-    "options_Alert_Notify_Resin": {
-        "message": "Ваше количество первородной смолы достигло $1, порог превышен."
-    },
-    "options_Alert_Notify_Resin_Firefox": {
-        "message": "Количество первородной смолы ($1) превысило допустимый порог."
-    },
-    "options_Alert_Notify_Transformer": {
-        "message": "Доступен параметрический преобразователь."
-    },
-    "options_Alert_Notify_Transformer_Firefox": {
-        "message": "Доступен параметрический преобразователь, принадлежащий $1."
-    },
-    "options_Alert_Notify_RealmCurrency": {
-        "message": "Количество сокровищ обители превысило предел."
-    },
-    "options_Alert_Notify_RealmCurrency_Firefox": {
-        "message": "Количество сокровищ обители превысило предел в $1."
-    },
     "options_Setting_Apply": {
         "message": "Apply"
     },
@@ -289,5 +244,11 @@
     },
     "options_Setting_Item_DataRefreshInterval_Protips_2": {
         "message": "Range: 3 ~ 60 min"
+    },
+    "options_Setting_Item_ManualRefresh": {
+        "message": "Manual Refresh"
+    },
+    "options_Setting_Item_ManualRefresh_Protips_1": {
+        "message": "If the manual refresh setting is set to true, we will only pull data from the API when you open the popup."
     }
 }
