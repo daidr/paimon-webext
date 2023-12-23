@@ -223,17 +223,17 @@ const openCaptcha = async () => {
               <img src="/assets/genshin/task.png">
               {{ i18n.getMessage("popup_DailyCommissionsTitle") }}
             </span>
-            <span class="right">{{ userData.data.finished_task_num }}/{{
+            <span class="right">{{ userData.data.daily_task.finished_num }}/{{
               userData.data.total_task_num
             }}
               <span
                 v-if="
-                  userData.data.finished_task_num
+                  userData.data.daily_task.finished_num
                     === userData.data.total_task_num
                 "
               >
                 {{
-                  userData.data.is_extra_task_reward_received
+                  userData.data.daily_task.is_extra_task_reward_received
                     ? i18n.getMessage("popup_ExtraTaskReceived")
                     : i18n.getMessage("popup_ExtraTaskNotReceived")
                 }}

@@ -9,7 +9,6 @@ declare module 'webext-bridge' {
     // 'get-current-tab': ProtocolWithReturn<{ tabId: number }, { title?: string }>
     'set_selected_role': { uid: string }
     'set_role_status': { uid: string; status: boolean }
-    'set_role_alert_status': { uid: string; status: boolean }
     'delete_role_request': ProtocolWithReturn<{ uid: string }, boolean>
     'request_cookie_read': ProtocolWithReturn<{ oversea: boolean }, number>
     'create_verification': ProtocolWithReturn<{ uid: string }, ICaptchaResponse | false>

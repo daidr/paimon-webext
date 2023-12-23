@@ -1,4 +1,7 @@
 {
+    "pluginName": {
+        "message": "パイモン"
+    },
     "pluginDesc": {
         "message": "ブラウザでGenshin Impactの統計情報を追跡します。"
     },
@@ -140,9 +143,6 @@
     "options_Nav_RoleListSetting": {
         "message": "ロールリスト"
     },
-    "options_Nav_AlertSetting": {
-        "message": "アラート"
-    },
     "options_Nav_Setting": {
         "message": "設定"
     },
@@ -223,51 +223,6 @@
     },
     "options_About_DonateTitle": {
         "message": "寄付する"
-    },
-    "options_Alert_Setting": {
-        "message": "設定"
-    },
-    "options_Alert_Resin": {
-        "message": "樹脂のしきい値"
-    },
-    "options_Alert_Transformer": {
-        "message": "トランスは利用可能です"
-    },
-    "options_Alert_RealmCurrency": {
-        "message": "洞天宝銭が最大です"
-    },
-    "options_Alert_NoRoleFound": {
-        "message": "アカウントが見つかりません"
-    },
-    "options_Alert_IsEnabledTitle": {
-        "message": "アラート"
-    },
-    "options_Alert_RoleNameTitle": {
-        "message": "ニックネーム(uid)"
-    },
-    "options_Alert_RoleServerTitle": {
-        "message": "サーバー"
-    },
-    "options_Alert_Notify_Title": {
-        "message": "パイモンアラート"
-    },
-    "options_Alert_Notify_Resin": {
-        "message": "樹脂の量は $1 であり、しきい値を超えています。"
-    },
-    "options_Alert_Notify_Resin_Firefox": {
-        "message": "$1の樹脂がしきい値を超えました。"
-    },
-    "options_Alert_Notify_Transformer": {
-        "message": "参量物質変化器が利用可能です"
-    },
-    "options_Alert_Notify_Transformer_Firefox": {
-        "message": "$1の参量物質変化器が利用可能です。"
-    },
-    "options_Alert_Notify_RealmCurrency": {
-        "message": "洞天宝銭が最大です。"
-    },
-    "options_Alert_Notify_RealmCurrency_Firefox": {
-        "message": "$1の洞天宝銭が最大です。"
     },
     "options_Setting_Apply": {
         "message": "Apply"

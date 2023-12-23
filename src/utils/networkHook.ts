@@ -11,6 +11,7 @@ const targetPages = [
   'https://bbs-api-os.hoyolab.com/game_record/app/card/wapi/verifyVerification*',
   'https://apiv6.geetest.com/ajax.php?pt=3&client_type=web_mobile&lang=zh-cn*',
   'https://public-data-api.mihoyo.com/device-fp/api/getFp*',
+  'https://bbs-api.mihoyo.com/user/wapi/getUserFullInfo?gids=2',
 ]
 const ruleID = 114514
 
@@ -63,7 +64,10 @@ export const initResponseRules = async () => {
       action: {
         type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
         responseHeaders: [
-          { header: 'set-cookie', operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE },
+          {
+            header: 'set-cookie',
+            operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE,
+          },
         ],
       },
       condition: { urlFilter: targetPages[i] },

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { sendMessage } from 'webext-bridge'
 import { i18n } from 'webextension-polyfill'
-import type { IAlertSetting, ISettingsMap, IUserDataItem } from '~/types'
+import type { ISettingsMap, IUserDataItem } from '~/types'
 
 const ServerSelectEl = ref()
 const ServerSelectValue = ref('0')
@@ -19,7 +19,6 @@ fetch('/manifest.json')
   })
 
 const roleList = ref([] as IUserDataItem[])
-const alertSetting = reactive({} as IAlertSetting)
 
 watch(activeNavItem, (newValue) => {
   if (newValue === 1) {
@@ -28,30 +27,6 @@ watch(activeNavItem, (newValue) => {
       roleList.value = data as unknown as IUserDataItem[]
     })
   }
-  else if (newValue === 3) {
-    // 当切换到 提醒 时，尝试获取角色列表 和 通知设定
-    sendMessage('get_role_list', {}).then((data) => {
-      roleList.value = data as unknown as IUserDataItem[]
-    })
-    sendMessage('get_alert_setting', {}).then((data) => {
-      const _data: IAlertSetting = data as unknown as IAlertSetting
-      alertSetting.realmCurrency = _data.realmCurrency
-      alertSetting.resin = _data.resin
-      alertSetting.resinThreshold = _data.resinThreshold
-      alertSetting.transformer = _data.transformer
-    })
-  }
-})
-
-watch(alertSetting, (newValue) => {
-  if (newValue.resinThreshold < 60)
-    alertSetting.resinThreshold = 60
-  else if (newValue.resinThreshold > 160)
-    alertSetting.resinThreshold = 160
-
-  sendMessage<number, 'set_alert_setting'>('set_alert_setting', {
-    ...newValue,
-  })
 })
 
 const isFetching = ref(false)
@@ -100,22 +75,17 @@ const onRoleCheckboxChange = (roleUid: string, e: any) => {
   })
 }
 
-const onRoleAlertCheckboxChange = (roleUid: string, e: any) => {
-  sendMessage('set_role_alert_status', {
-    uid: roleUid,
-    status: e.target.checked,
-  })
-}
-
 const settingsMap: ISettingsMap = reactive({
   refreshInterval: -1,
   badgeVisibility: true,
+  manualRefresh: false,
 })
 
 const getSettingsMap = async () => {
   const result = await sendMessage('read_settings', {})
   settingsMap.refreshInterval = result.refreshInterval
   settingsMap.badgeVisibility = result.badgeVisibility
+  settingsMap.manualRefresh = result.manualRefresh
 }
 
 watch(settingsMap, (newValue) => {
@@ -129,10 +99,10 @@ watch(settingsMap, (newValue) => {
 getSettingsMap()
 
 const setSettingsMap = async () => {
-  console.log(settingsMap.badgeVisibility)
   await sendMessage('write_settings', {
     refreshInterval: settingsMap.refreshInterval,
     badgeVisibility: settingsMap.badgeVisibility,
+    manualRefresh: settingsMap.manualRefresh,
   })
   getSettingsMap()
 }
@@ -148,10 +118,6 @@ const setSettingsMap = async () => {
       <div :class="{ active: activeNavItem === 1 }" @click="activeNavItem = 1">
         <uil:list-ul />
         <span>{{ i18n.getMessage("options_Nav_RoleListSetting") }}</span>
-      </div>
-      <div :class="{ active: activeNavItem === 3 }" @click="activeNavItem = 3">
-        <uil:bell />
-        <span>{{ i18n.getMessage("options_Nav_AlertSetting") }}</span>
       </div>
       <div :class="{ active: activeNavItem === 4 }" @click="activeNavItem = 4">
         <uil:setting />
@@ -182,10 +148,9 @@ const setSettingsMap = async () => {
         <p class="tips" v-html="i18n.getMessage('options_Tips_1')" />
         <p class="tips" v-html="i18n.getMessage('options_Tips_2')" />
         <p
-          class="tips" v-html="
-            ServerSelectValue === '0'
-              ? i18n.getMessage('options_Tips_3')
-              : i18n.getMessage('options_Tips_4')
+          class="tips" v-html="ServerSelectValue === '0'
+            ? i18n.getMessage('options_Tips_3')
+            : i18n.getMessage('options_Tips_4')
           "
         />
         <div class="btn" :class="{ 'is-fetching': isFetching }" @click="onCookieReadBtnClick">
@@ -238,73 +203,6 @@ const setSettingsMap = async () => {
         </template>
       </div>
     </template>
-    <template v-else-if="activeNavItem === 3">
-      <div class="setting-panel alert-panel">
-        <div v-if="'resin' in alertSetting" class="alert-setting">
-          <div class="title">
-            <uil:setting />
-            {{ i18n.getMessage("options_Alert_Setting") }}
-          </div>
-          <div class="content">
-            <div class="checkbox-item">
-              <input id="ResinCheck" v-model="alertSetting.resin" type="checkbox" :true-value="true" :false-value="false">
-              <label for="ResinCheck">
-                {{ i18n.getMessage("options_Alert_Resin") }}
-              </label>
-              <div v-if="alertSetting.resin" class="input-item">
-                ≥
-                <input id="ResinInput" v-model.lazy="alertSetting.resinThreshold" type="number" min="60" max="160">
-              </div>
-            </div>
-            <div class="checkbox-item">
-              <input id="TransformerCheck" v-model="alertSetting.transformer" type="checkbox" :true-value="true" :false-value="false">
-              <label for="TransformerCheck">
-                {{ i18n.getMessage("options_Alert_Transformer") }}
-              </label>
-            </div>
-            <div class="checkbox-item">
-              <input id="RealmCurrencyCheck" v-model="alertSetting.realmCurrency" type="checkbox" :true-value="true" :false-value="false">
-              <label for="RealmCurrencyCheck">
-                {{ i18n.getMessage("options_Alert_RealmCurrency") }}
-              </label>
-            </div>
-          </div>
-        </div>
-        <template v-if="!roleList || roleList.length === 0">
-          <div class="role-not-found">
-            {{ i18n.getMessage("options_Alert_NoRoleFound") }}
-          </div>
-        </template>
-        <template v-else>
-          <div class="role-list">
-            <table class="role-table">
-              <thead>
-                <tr>
-                  <th>{{ i18n.getMessage("options_Alert_IsEnabledTitle") }}</th>
-                  <th>{{ i18n.getMessage("options_Alert_RoleNameTitle") }}</th>
-                  <th>
-                    {{ i18n.getMessage("options_Alert_RoleServerTitle") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(role, index) in roleList" :key="role.uid" :class="{ disabled: !role.isEnabled }">
-                  <td>
-                    <input
-                      v-if="role.isEnabled" :id="`role-checkbox-${index}`" type="checkbox"
-                      :checked="role.enabledAlert" @change="onRoleAlertCheckboxChange(role.uid, $event)"
-                    >
-                    <label :for="`role-checkbox-${index}`" />
-                  </td>
-                  <td>{{ role.nickname }}({{ role.uid }})</td>
-                  <td>{{ i18n.getMessage(role.serverRegion) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </template>
-      </div>
-    </template>
     <template v-else-if="activeNavItem === 4">
       <div class="setting-panel settings-panel">
         <div v-if="settingsMap.refreshInterval !== -1" class="settings-list">
@@ -332,6 +230,19 @@ const setSettingsMap = async () => {
               {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips_1") }}
               <br>
               {{ i18n.getMessage("options_Setting_Item_DataRefreshInterval_Protips_2") }}
+            </div>
+          </div>
+          <div class="settings-item">
+            <div class="top">
+              <div class="key">
+                {{ i18n.getMessage("options_Setting_Item_ManualRefresh") }}
+              </div>
+              <div class="value">
+                <input v-model="settingsMap.manualRefresh" type="checkbox" :true-value="true" :false-value="false">
+              </div>
+            </div>
+            <div class="desc">
+              {{ i18n.getMessage("options_Setting_Item_ManualRefresh_Protips_1") }}
             </div>
           </div>
         </div>
@@ -371,7 +282,8 @@ const setSettingsMap = async () => {
                 <br>
                 <a class="reverse" href="https://afdian.net/a/daidr" target="_blank" rel="noopener noreferrer">爱发电</a>
                 <br>
-                <a class="reverse" href="https://sponsor.daidr.me" target="_blank" rel="noopener noreferrer">Sponsor list</a>
+                <a class="reverse" href="https://sponsor.daidr.me" target="_blank" rel="noopener noreferrer">Sponsor
+                  list</a>
               </td>
             </tr>
             <tr>
@@ -595,64 +507,6 @@ h1 {
             @apply opacity-70;
           }
         }
-      }
-    }
-  }
-}
-
-.alert-panel {
-  .alert-setting {
-    @apply rounded-md p-1;
-    border: 2px solid #e5dbc7;
-
-    .title {
-      @apply text-base font-bold text-[#e5dbc7];
-      @apply flex items-center gap-x-1 select-none;
-    }
-
-    .content {
-      @apply ml-2 mt-2;
-      @apply text-[#e5dbc7] text-sm;
-
-      .checkbox-item {
-        @apply flex items-center gap-x-1;
-      }
-    }
-  }
-
-  .role-not-found {
-    @apply text-lg text-primary-light text-center;
-    @apply select-none;
-  }
-
-  .role-list {
-    @apply text-base text-primary-dark text-center;
-
-    .role-table {
-      @apply w-full border-separate;
-
-      border-spacing: 0px 5px;
-
-      tr {
-        background: linear-gradient(60deg, #c6b5a2 0%, #e5dbc7 100%);
-
-        &.disabled {
-          @apply opacity-50 cursor-not-allowed;
-        }
-      }
-
-      th {
-        @apply select-none;
-      }
-
-      td:first-of-type,
-      th:first-of-type {
-        @apply rounded-l-md;
-      }
-
-      td:last-of-type,
-      th:last-of-type {
-        @apply rounded-r-md;
       }
     }
   }

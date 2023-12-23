@@ -25,10 +25,7 @@ export const readDataFromStorage = async function <T>(key: string, defaultVal: T
 }
 
 function uuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
-    return v.toString(16)
-  })
+  return crypto.randomUUID()
 }
 
 export function generateSeed(length = 16) {
@@ -40,15 +37,29 @@ export function generateSeed(length = 16) {
   return result
 }
 
+const latestDeviceMetaRandom = 'CMuZH62qyhKEAWR'
+const deviceIdNeedUpdate = async () => {
+  const deviceId = await readDataFromStorage('deviceId', '')
+  if (deviceId === '') {
+    return true
+  }
+  const prevRandom = await readDataFromStorage('deviceIdRandom', '')
+  if (prevRandom !== latestDeviceMetaRandom) {
+    return true
+  }
+  return false
+}
+
 // 随机生成的 deviceId
 export const getDeviceId = async () => {
   // 首先尝试从 storage 中读取 deviceId
   let deviceId = await readDataFromStorage('deviceId', '')
 
   // 如果 storage 中没有 deviceId，则生成一个新的 deviceId
-  if (deviceId === '') {
+  if (deviceId === '' || (await deviceIdNeedUpdate())) {
     deviceId = uuid()
     await writeDataToStorage('deviceId', deviceId)
+    await writeDataToStorage('deviceIdRandom', latestDeviceMetaRandom)
   }
 
   return deviceId
@@ -113,16 +124,21 @@ function getDS(oversea: boolean, params: Record<string, string>, body: object) {
   return `${timestamp},${randomStr},${sign}`
 }
 
+const MIYOUSHE_VERSION = '2.50.1'
+
 const HEADER_TEMPLATE_CN: Record<string, string> = {
-  'x-rpc-app_version': '2.56.1',
-  'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.56.1',
+  'x-rpc-app_version': MIYOUSHE_VERSION,
+  'User-Agent': `Mozilla/5.0 (Linux; Android 12) Mobile miHoYoBBS/${MIYOUSHE_VERSION}`,
   'x-rpc-client_type': '5',
+  'x-rpc-sys_version': '17.1',
+  'x-rpc-tool_version': 'v4.2.2-ys',
   'x-rpc-device_name': 'iPhone',
   'Origin': 'https://webstatic.mihoyo.com',
   'X-Requested-With': 'com.mihoyo.hyperion',
-  'x-rpc-page': '3.1.3_#/ys',
+  'x-rpc-page': 'v4.2.2-ys_#/ys/daily',
   'Referer': 'https://webstatic.mihoyo.com/',
-  'x-rpc-device_fp': '38d7eed0e6198',
+  'sec-fetch-dest': 'empty',
+  'sec-fetch-site': 'same-site',
 }
 
 const HEADER_TEMPLATE_OS: Record<string, string> = {
@@ -134,7 +150,12 @@ const HEADER_TEMPLATE_OS: Record<string, string> = {
   'Referer': 'https://act.hoyolab.com',
 }
 
-async function getHeader(oversea: boolean, params: Record<string, string>, body: object, ds: boolean) {
+async function getHeader(
+  oversea: boolean,
+  params: Record<string, string>,
+  body: object,
+  ds: boolean,
+) {
   const client = oversea ? HEADER_TEMPLATE_OS : HEADER_TEMPLATE_CN
   const headers = { ...client }
 
@@ -143,7 +164,7 @@ async function getHeader(oversea: boolean, params: Record<string, string>, body:
     headers.DS = dsStr
   }
 
-  headers['x-rpc-device_id'] = await getDeviceId()
+  headers['x-rpc-device_id'] = (await getDeviceId()).toUpperCase()
   return headers
 }
 
@@ -184,8 +205,8 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
 
   // 补全 url query
   const params = {
-    server: serverRegion,
     role_id,
+    server: serverRegion,
   }
 
   for (const [key, value] of Object.entries(params))
@@ -196,7 +217,8 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
 
   if (!oversea) {
     // 为 header 追加 fp
-    await appendDeviceFp(headers, role_id, cookie)
+    cookie = await appendDeviceFp(headers, role_id, cookie)
+    await appendChallenge(headers, role_id)
   }
 
   headers.Cookie = cookie
@@ -206,15 +228,24 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
     method: 'GET',
     headers,
   })
-    .then(response => response.json())
+    .then(async (response) => {
+      const headers = response.headers
+      await writeDataToStorage(
+        `traceId_${role_id}`,
+        headers.get('x-trace-id') || '',
+      )
+      return response.json()
+    })
     .then((data) => {
-      if (data.retcode === 0)
+      if (data.retcode === 0) {
         return data.data
-      else if (data.retcode === 1034)
+      } else if ([1034].includes(data.retcode)) {
         // risk control
         return 1034
-      else
+      } else {
+        writeDataToStorage(`deviceFp_${role_id}_request`, true)
         return false
+      }
     })
     .catch(() => {
       return false
@@ -222,9 +253,17 @@ async function getRoleDataByCookie(oversea: boolean, cookie: string, role_id: st
   return _ret
 }
 
-async function createVerification(oversea: boolean, cookie: string): Promise<ICaptchaResponse | false> {
+async function createVerification(
+  oversea: boolean,
+  cookie: string,
+  uid: string,
+): Promise<ICaptchaResponse | false> {
   // 根据 oversea 参数选择对应 api 地址
-  const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification')
+  const url = new URL(
+    oversea
+      ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification'
+      : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/createVerification',
+  )
 
   // 补全 url query
   const params = {
@@ -240,17 +279,31 @@ async function createVerification(oversea: boolean, cookie: string): Promise<ICa
   // 为 header 追加 cookie
   headers.Cookie = cookie
 
+  // 为 header 追加 x-rpc-challenge_path
+  headers['x-rpc-challenge_path']
+    = 'https://api-takumi-record.mihoyo.com/game_record/genshin/api/dailyNote'
+
+  const traceId = await readDataFromStorage(`traceId_${uid}`, '')
+
+  if (traceId !== '') {
+    headers['x-rpc-challenge_trace'] = traceId
+  }
+
+  if (!oversea) {
+    // 为 header 追加 fp
+    cookie = await appendDeviceFp(headers, uid, cookie)
+  }
+
   // 发送请求
   const _ret = await advancedFetch(url.toString(), {
     method: 'GET',
     headers,
   })
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((data) => {
       if (data.retcode === 0)
         return data.data
-      else
-        return false
+      else return false
     })
     .catch(() => {
       return false
@@ -258,9 +311,18 @@ async function createVerification(oversea: boolean, cookie: string): Promise<ICa
   return _ret
 }
 
-async function verifyVerification(oversea: boolean, cookie: string, geetest: ICaptchaRequest): Promise<boolean> {
+async function verifyVerification(
+  oversea: boolean,
+  cookie: string,
+  geetest: ICaptchaRequest,
+  uid: string,
+): Promise<boolean> {
   // 根据 oversea 参数选择对应 api 地址
-  const url = new URL(oversea ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification' : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification')
+  const url = new URL(
+    oversea
+      ? 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification'
+      : 'https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification',
+  )
 
   // 生成 header
   const headers = await getHeader(oversea, {}, geetest, true)
@@ -268,18 +330,31 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   // 为 header 追加 cookie
   headers.Cookie = cookie
 
+  // 为 header 追加 x-rpc-challenge_path
+  headers['x-rpc-challenge_path']
+    = 'https://api-takumi-record.mihoyo.com/game_record/genshin/api/dailyNote'
+  // headers['x-rpc-challenge_game'] = '5'
+
+  const traceId = await readDataFromStorage(`traceId_${uid}`, '')
+
+  if (traceId !== '') {
+    headers['x-rpc-challenge_trace'] = traceId
+  }
+
   // 发送请求
   const _ret = await advancedFetch(url.toString(), {
     method: 'POST',
     headers,
     body: JSON.stringify(geetest),
   })
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((data) => {
-      if (data.retcode === 0)
+      if (data.retcode === 0) {
+        writeDataToStorage(`challenge_${uid}`, data.data.challenge)
         return data.data
-      else
+      } else {
         return false
+      }
     })
     .catch(() => {
       return false
@@ -287,7 +362,29 @@ async function verifyVerification(oversea: boolean, cookie: string, geetest: ICa
   return _ret
 }
 
-const calcRoleDataLocally = (role: IUserDataItem) => {
+export async function getUserFullInfo(cookie: string): Promise<any> {
+  const url = 'https://bbs-api.mihoyo.com/user/wapi/getUserFullInfo?gids=2'
+  const headers = {
+    Cookie: cookie,
+    Accept: 'application/json, text/plain, */*',
+    Connection: 'keep-alive',
+    Host: 'bbs-api.mihoyo.com',
+    Origin: 'https://m.bbs.mihoyo.com',
+    Referer: ' https://m.bbs.mihoyo.com/',
+  }
+  let res = await advancedFetch(url, {
+    method: 'GET',
+    headers,
+  })
+
+  if (!res.ok) {
+    return false
+  }
+  res = await res.json()
+  return res
+}
+
+const calcRoleDataLocally = (role: IUserDataItem): IUserDataItem => {
   const _role = JSON.parse(JSON.stringify(role))
 
   const updateTimestamp = _role.updateTimestamp
@@ -353,40 +450,63 @@ async function getGeetestChallenge(oversea: boolean, challenge: string, gt: stri
   return _ret
 }
 
-export const generateDeviceFp = async (cookie: string) => {
-  const seed = generateSeed(16)
+export const randomStr = (length: number) => {
+  let str = ''
+  for (let i = 0; i < length; i++) {
+    str += Math.floor(Math.random() * 10)
+  }
+  return str
+}
+
+export const generateDeviceFp = async (cookie: string, uid: string) => {
+  const seed = uuid()
   const time = `${Date.now()}`
   const deviceId = await getDeviceId()
+  const oldDeviceFp = await readDataFromStorage(`deviceFp_${uid}`, '')
+  const model = randomStr(6)
   const ext_fields = JSON.stringify({
-    userAgent: HEADER_TEMPLATE_CN['User-Agent'],
-    browserScreenSize: 281520,
-    maxTouchPoints: 5,
-    isTouchSupported: true,
-    browserLanguage: 'zh-CN',
-    browserPlat: 'iPhone',
-    browserTimeZone: 'Asia/Shanghai',
-    webGlRender: 'Apple GPU',
-    webGlVendor: 'Apple Inc.',
-    numOfPlugins: 0,
-    listOfPlugins: 'unknown',
-    screenRatio: 3,
-    deviceMemory: 'unknown',
-    hardwareConcurrency: '4',
-    cpuClass: 'unknown',
-    ifNotTrack: 'unknown',
-    ifAdBlock: 0,
-    hasLiedResolution: 1,
-    hasLiedOs: 0,
-    hasLiedBrowser: 0,
+    cpuType: 'arm64-v8a',
+    romCapacity: '512',
+    productName: model,
+    romRemain: '256',
+    manufacturer: 'Xiaomi',
+    appMemory: '512',
+    hostname: 'dg02-pool03-kvm87',
+    screenSize: '1080x1920',
+    osVersion: '13',
+    aaid: '',
+    vendor: '中国移动',
+    accelerometer: 'true',
+    buildTags: 'release-keys',
+    model,
+    brand: 'Xiaomi',
+    oaid: '',
+    hardware: 'qcom',
+    deviceType: 'OP5913L1',
+    devId: 'unknown',
+    serialNumber: 'unknown',
+    buildTime: '1588876800000',
+    buildUser: 'root',
+    ramCapacity: '2048',
+    magnetometer: 'true',
+    display: `OP5913L1-user ${model} 10 QKQ1.190825.002 V12.0.1.0.QFJCNXM release-keys`,
+    ramRemain: '1024',
+    deviceInfo: 'unknown',
+    gyroscope: 'true',
+    vaid: '',
+    buildType: 'user',
+    sdkVersion: '29',
+    board: 'sdm660',
   })
   const body = {
     seed_id: seed,
-    device_id: deviceId,
-    platform: '5',
+    device_id: deviceId.toUpperCase(),
+    bbs_device_id: deviceId,
+    platform: '2',
     seed_time: time,
     ext_fields,
-    app_name: 'account_cn',
-    device_fp: '38d7ee834d1e9',
+    app_name: 'bbs_cn',
+    device_fp: generateSeed(13),
   }
 
   const url = 'https://public-data-api.mihoyo.com/device-fp/api/getFp'
@@ -394,7 +514,12 @@ export const generateDeviceFp = async (cookie: string) => {
   // 生成 header
   const headers = await getHeader(false, {}, body, false)
   // 为 header 追加 cookie
-  headers.Cookie = cookie
+  {
+    const seed = await readDataFromStorage(`deviceFp_seed_${uid}`, '')
+    const time = await readDataFromStorage(`deviceFp_time_${uid}`, '')
+
+    headers.Cookie = `DEVICEFP_SEED_ID=${seed};DEVICEFP_SEED_TIME=${time};DEVICEFP=${oldDeviceFp};${cookie};`
+  }
 
   // 发送请求
   const _ret = await advancedFetch(url, {
@@ -402,44 +527,78 @@ export const generateDeviceFp = async (cookie: string) => {
     headers,
     body: JSON.stringify(body),
   })
-    .then(response => {
+    .then((response) => {
       return response.json()
     })
     .then((data) => {
       if (data.data.code === 200) {
-        return data.data.device_fp
-      }
-      else {
+        return [seed, time, data.data.device_fp]
+      } else {
         console.error(new Error(`generateDeviceFp failed: ${data.data.msg}`))
-        return generateSeed(13)
+        return [seed, time, generateSeed(13)]
       }
     })
     .catch((e) => {
       console.error(e)
-      return generateSeed(13)
+      return [seed, time, generateSeed(13)]
     })
   return _ret
 }
 
-async function appendDeviceFp(headers: AdvancedHeaders, uid: string, cookie: string) {
-  const deviceFpCount = await readDataFromStorage(`deviceFp_${uid}_count`, 0)
+async function appendDeviceFp(
+  headers: AdvancedHeaders,
+  uid: string,
+  cookie: string,
+) {
+  const deviceFpRefreshRequest = await readDataFromStorage(
+    `deviceFp_${uid}_request`,
+    false,
+  )
 
   let deviceFp = await readDataFromStorage(`deviceFp_${uid}`, '')
+  let seed = await readDataFromStorage(`deviceFp_seed_${uid}`, '')
+  let time = await readDataFromStorage(`deviceFp_time_${uid}`, '')
 
   // 如果 storage 中没有 deviceId，则生成一个新的 deviceId
-  if (deviceFp === '' || Date.now() - deviceFpCount > 1000 * 60 * 10) {
-    deviceFp = await generateDeviceFp(cookie)
+  if (deviceFp === '' || deviceFpRefreshRequest) {
+    [seed, time, deviceFp] = await generateDeviceFp(cookie, uid)
     await writeDataToStorage(`deviceFp_${uid}`, deviceFp)
+    await writeDataToStorage(`deviceFp_seed_${uid}`, seed)
+    await writeDataToStorage(`deviceFp_time_${uid}`, time)
+    await writeDataToStorage(`deviceFp_${uid}_request`, false)
   }
-  await writeDataToStorage(`deviceFp_${uid}_count`, Date.now())
   headers['x-rpc-device_fp'] = deviceFp
+  return `DEVICEFP_SEED_ID=${seed};DEVICEFP_SEED_TIME=${time};DEVICEFP=${deviceFp};${cookie};`
+}
+
+async function appendChallenge(headers: AdvancedHeaders, uid: string) {
+  const challenge = await readDataFromStorage(`challenge_${uid}`, '')
+
+  // 如果 storage 中没有 deviceId，则生成一个新的 deviceId
+  if (challenge === '') {
+    return headers
+  }
+  headers['x-rpc-chellange'] = challenge
+  await writeDataToStorage(`challenge_${uid}`, '')
   return headers
 }
 
-export { md5, randomIntFromInterval, getTime, getClock, getDS, getHeader, getRoleInfoByCookie, getRoleDataByCookie, createVerification, verifyVerification, calcRoleDataLocally, getGeetestChallenge }
+export {
+  md5,
+  randomIntFromInterval,
+  getTime,
+  getClock,
+  getDS,
+  getHeader,
+  getRoleInfoByCookie,
+  getRoleDataByCookie,
+  createVerification,
+  verifyVerification,
+  calcRoleDataLocally,
+  getGeetestChallenge,
+}
 
 // 随机生成-5到5的整数
 export const getRandomTimeOffset = () => {
   return Math.floor(Math.random() * 11) - 5
 }
-

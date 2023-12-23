@@ -1,4 +1,7 @@
 {
+    "pluginName": {
+        "message": "派蒙"
+    },
     "pluginDesc": {
         "message": "在浏览器中实时查看原神游戏状态"
     },
@@ -140,9 +143,6 @@
     "options_Nav_RoleListSetting": {
         "message": "角色列表"
     },
-    "options_Nav_AlertSetting": {
-        "message": "提醒"
-    },
     "options_Nav_Setting": {
         "message": "设置"
     },
@@ -224,51 +224,6 @@
     "options_About_DonateTitle": {
         "message": "捐赠"
     },
-    "options_Alert_Setting": {
-        "message": "设置"
-    },
-    "options_Alert_Resin": {
-        "message": "原粹树脂阈值"
-    },
-    "options_Alert_Transformer": {
-        "message": "参量质变仪可用"
-    },
-    "options_Alert_RealmCurrency": {
-        "message": "洞天宝钱溢出"
-    },
-    "options_Alert_NoRoleFound": {
-        "message": "没有找到任何角色"
-    },
-    "options_Alert_IsEnabledTitle": {
-        "message": "提醒"
-    },
-    "options_Alert_RoleNameTitle": {
-        "message": "昵称(uid)"
-    },
-    "options_Alert_RoleServerTitle": {
-        "message": "服务器"
-    },
-    "options_Alert_Notify_Title": {
-        "message": "派蒙提醒"
-    },
-    "options_Alert_Notify_Resin": {
-        "message": "你的原粹树脂量为 $1，已超过阈值"
-    },
-    "options_Alert_Notify_Resin_Firefox": {
-        "message": "$1 的原粹树脂已超过阈值"
-    },
-    "options_Alert_Notify_Transformer": {
-        "message": "参量质变仪可用了"
-    },
-    "options_Alert_Notify_Transformer_Firefox": {
-        "message": "$1 的参量质变仪可用了"
-    },
-    "options_Alert_Notify_RealmCurrency": {
-        "message": "你的洞天宝钱溢出了"
-    },
-    "options_Alert_Notify_RealmCurrency_Firefox": {
-        "message": "$1 的洞天宝钱溢出了"
-    },
     "options_Setting_Apply": {
         "message": "应用"
     },
@@ -289,5 +244,11 @@
     },
     "options_Setting_Item_DataRefreshInterval_Protips_2": {
         "message": "范围：3~60分钟"
+    },
+    "options_Setting_Item_ManualRefresh": {
+        "message": "手动刷新"
+    },
+    "options_Setting_Item_ManualRefresh_Protips_1": {
+        "message": "如果手动刷新设置为true，扩展只会在打开 popup 时从 API 拉取数据。"
     }
 }

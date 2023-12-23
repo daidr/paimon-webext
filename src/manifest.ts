@@ -10,7 +10,7 @@ export async function getManifest() {
   // can also be conditional based on your need
   const manifest: Manifest.WebExtensionManifest = {
     manifest_version: 3,
-    name: pkg.displayName || pkg.name,
+    name: '__MSG_pluginName__',
     version: pkg.version,
     description: '__MSG_pluginDesc__',
     default_locale: 'en_US',
@@ -19,11 +19,18 @@ export async function getManifest() {
       default_popup: './dist/popup/index.html',
     },
     background: {
-      service_worker: './dist/background/index.mjs',
+      service_worker: './dist/background/index.js',
     },
     content_scripts: [
       {
-        matches: ['https://paimon-webext.daidr.me/captcha.html'],
+        matches: ['https://webstatic.mihoyo.com/app/community-game-records/?game_id=6&ref=paimon'],
+        js: ['./assets/js/content.js'],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        world: 'MAIN',
+      },
+      {
+        matches: ['https://webstatic.mihoyo.com/app/community-game-records/?game_id=6&ref=paimon'],
         js: ['./dist/contentScripts/index.global.js'],
       },
     ],
@@ -38,7 +45,7 @@ export async function getManifest() {
       96: './assets/icon-96.png',
       128: './assets/icon-128.png',
     },
-    permissions: ['storage', 'cookies', 'alarms', 'notifications', 'declarativeNetRequest'],
+    permissions: ['storage', 'cookies', 'alarms', 'declarativeNetRequest'],
     host_permissions: ['*://*.mihoyo.com/', '*://*.miyoushe.com/', '*://*.hoyolab.com/', '*://*.geetest.com/'],
   }
 

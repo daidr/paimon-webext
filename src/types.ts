@@ -5,9 +5,11 @@ export interface IUserData {
   current_resin: number
   max_resin: number
   resin_recovery_time: string
-  finished_task_num: number
   total_task_num: number
-  is_extra_task_reward_received: boolean
+  daily_task: {
+    finished_num: number
+    is_extra_task_reward_received: boolean
+  }
   remain_resin_discount_num: number
   resin_discount_num_limit: number
   current_expedition_num: number
@@ -32,56 +34,11 @@ export interface IUserData {
   }
 }
 
-export interface IAlertSetting {
-  /**
-   * 树脂
-   */
-  resin: boolean
-  /**
-   * 树脂阈值（默认 155）
-   */
-  resinThreshold: number
-  /**
-   * 参量质变仪
-   */
-  transformer: boolean
-  /**
-   * 洞天宝钱
-   */
-  realmCurrency: boolean
-}
-
-/**
-* 当前提醒的通知 ID
-*/
-export interface IAlertStatus {
-  /**
-   * 树脂
-   */
-  resin: string
-  /**
-   * 参量质变仪
-   */
-  transformer: string
-  /**
-   * 洞天宝钱
-   */
-  realmCurrency: string
-}
-
 export interface IUserDataItem {
   /**
    * 是否启用（不启用则不显示，且不获取数据）
    */
   isEnabled: boolean
-  /**
-   * 是否开启提示功能（默认关闭）
-   */
-  enabledAlert: boolean
-  // /**
-  //  * 周期内是否提醒过
-  //  */
-  // alertStatus: IAlertStatus
   /**
    * 服务器类型（国服/海外）
    */
@@ -162,4 +119,5 @@ export interface ICaptchaRequest {
 export interface ISettingsMap {
   refreshInterval: number
   badgeVisibility: boolean
+  manualRefresh: boolean
 }
