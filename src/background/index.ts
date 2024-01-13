@@ -385,7 +385,7 @@ onMessage<{ uid: string }, 'request_captcha_bg'>(
   async ({ data: { uid } }) => {
     // open captcha tab
     const curtab = await tabs.create({
-      url: 'https://webstatic.mihoyo.com/app/community-game-records/?game_id=6&ref=paimon',
+      url: 'https://webstatic.mihoyo.com/app/community-game-records/rpg/?game_id=6&ref=paimon&mhy_presentation_style=fullscreen#/',
     })
 
     // wait for curtab loaded

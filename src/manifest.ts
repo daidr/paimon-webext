@@ -23,14 +23,14 @@ export async function getManifest() {
     },
     content_scripts: [
       {
-        matches: ['https://webstatic.mihoyo.com/app/community-game-records/?game_id=6&ref=paimon'],
+        matches: ['https://webstatic.mihoyo.com/app/community-game-records/rpg/?game_id=6&ref=paimon*'],
         js: ['./assets/js/content.js'],
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         world: 'MAIN',
       },
       {
-        matches: ['https://webstatic.mihoyo.com/app/community-game-records/?game_id=6&ref=paimon'],
+        matches: ['https://webstatic.mihoyo.com/app/community-game-records/rpg/?game_id=6&ref=paimon*'],
         js: ['./dist/contentScripts/index.global.js'],
       },
     ],
