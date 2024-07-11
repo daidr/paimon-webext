@@ -222,33 +222,33 @@
         "message": "Особая благодарность всем участникам этого расширения\nUI Reference: <a class='reverse' href='https://github.com/spencerwooo/PaimonMenuBar' target='_blank'>PaimonMenuBar</a>"
     },
     "options_About_DonateTitle": {
-        "message": "Donate"
+        "message": "Пожертвовать"
     },
     "options_Setting_Apply": {
-        "message": "Apply"
+        "message": "Применить"
     },
     "options_Setting_Unsaved": {
-        "message": "Unsaved"
+        "message": "Не сохранено"
     },
     "options_Setting_Item_Badge": {
-        "message": "Extension Badge"
+        "message": "Значок расширения"
     },
     "options_Setting_Item_DataRefreshInterval": {
-        "message": "Refresh Interval"
+        "message": "Интервал обновления"
     },
     "options_Setting_Item_DataRefreshInterval_Unit": {
-        "message": "m"
+        "message": "м"
     },
     "options_Setting_Item_DataRefreshInterval_Protips_1": {
-        "message": "If the value is longer than 10 minutes, we'll attempt to impute some of the data locally."
+        "message": "Если значение длиннее 10 минут, мы попытаемся ввести некоторые данные локально."
     },
     "options_Setting_Item_DataRefreshInterval_Protips_2": {
-        "message": "Range: 3 ~ 60 min"
+        "message": "Диапазон: 3 ~ 60 мин"
     },
     "options_Setting_Item_ManualRefresh": {
-        "message": "Manual Refresh"
+        "message": "Обновление вручную"
     },
     "options_Setting_Item_ManualRefresh_Protips_1": {
-        "message": "If the manual refresh setting is set to true, we will only pull data from the API when you open the popup."
+        "message": "Если параметр ручного обновления установлен в true, мы будем получать данные только при открытии всплывающего окна."
     }
 }
