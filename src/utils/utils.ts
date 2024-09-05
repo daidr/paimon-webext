@@ -37,7 +37,7 @@ export function generateSeed(length = 16) {
   return result
 }
 
-const latestDeviceMetaRandom = 'CMuZH62qyhKEAWR'
+const latestDeviceMetaRandom = 'hTY1wqyfz6vqBmd'
 const deviceIdNeedUpdate = async () => {
   const deviceId = await readDataFromStorage('deviceId', '')
   if (deviceId === '') {
@@ -124,18 +124,19 @@ function getDS(oversea: boolean, params: Record<string, string>, body: object) {
   return `${timestamp},${randomStr},${sign}`
 }
 
-const MIYOUSHE_VERSION = '2.50.1'
+const MIYOUSHE_VERSION = '2.75.1'
 
 const HEADER_TEMPLATE_CN: Record<string, string> = {
   'x-rpc-app_version': MIYOUSHE_VERSION,
-  'User-Agent': `Mozilla/5.0 (Linux; Android 12) Mobile miHoYoBBS/${MIYOUSHE_VERSION}`,
+  'User-Agent': `Mozilla/5.0 (Windows NT 10.0; Win64; x64) miHoYoBBS/${MIYOUSHE_VERSION}`,
   'x-rpc-client_type': '5',
   'x-rpc-sys_version': '17.1',
-  'x-rpc-tool_version': 'v4.2.2-ys',
+  'x-rpc-tool_version': 'v5.0.1-ys',
   'x-rpc-device_name': 'iPhone',
   'Origin': 'https://webstatic.mihoyo.com',
   'X-Requested-With': 'com.mihoyo.hyperion',
-  'x-rpc-page': 'v4.2.2-ys_#/ys/daily',
+  'x-rpc-page': 'v5.0.1-ys_#/ys/daily',
+  'x-rpc-language': 'zh-cn',
   'Referer': 'https://webstatic.mihoyo.com/',
   'sec-fetch-dest': 'empty',
   'sec-fetch-site': 'same-site',
@@ -171,7 +172,7 @@ async function getHeader(
 async function getRoleInfoByCookie(oversea: boolean, cookie: string): Promise<IRoleDataItem[] | false> {
   // 根据 oversea 参数选择对应 api 地址
   const url = oversea
-    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global'
+    ? 'https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByLtoken?game_biz=hk4e_global'
     : 'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookieToken?game_biz=hk4e_cn'
 
   // 生成 header
@@ -450,6 +451,15 @@ async function getGeetestChallenge(oversea: boolean, challenge: string, gt: stri
   return _ret
 }
 
+export const getUpperAndNumberString = (length: number) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+
 export const randomStr = (length: number) => {
   let str = ''
   for (let i = 0; i < length; i++) {
@@ -463,46 +473,43 @@ export const generateDeviceFp = async (cookie: string, uid: string) => {
   const time = `${Date.now()}`
   const deviceId = await getDeviceId()
   const oldDeviceFp = await readDataFromStorage(`deviceFp_${uid}`, '')
-  const model = randomStr(6)
   const ext_fields = JSON.stringify({
-    cpuType: 'arm64-v8a',
-    romCapacity: '512',
-    productName: model,
-    romRemain: '256',
-    manufacturer: 'Xiaomi',
-    appMemory: '512',
-    hostname: 'dg02-pool03-kvm87',
-    screenSize: '1080x1920',
-    osVersion: '13',
-    aaid: '',
-    vendor: '中国移动',
-    accelerometer: 'true',
-    buildTags: 'release-keys',
-    model,
-    brand: 'Xiaomi',
-    oaid: '',
-    hardware: 'qcom',
-    deviceType: 'OP5913L1',
-    devId: 'unknown',
-    serialNumber: 'unknown',
-    buildTime: '1588876800000',
-    buildUser: 'root',
-    ramCapacity: '2048',
-    magnetometer: 'true',
-    display: `OP5913L1-user ${model} 10 QKQ1.190825.002 V12.0.1.0.QFJCNXM release-keys`,
-    ramRemain: '1024',
-    deviceInfo: 'unknown',
-    gyroscope: 'true',
-    vaid: '',
-    buildType: 'user',
-    sdkVersion: '29',
-    board: 'sdm660',
+    appInstallTimeDiff: `${Date.now() - 100000}`,
+    isSimInserted: '1',
+    IDFV: uuid(),
+    proxyStatus: '1',
+    ramCapacity: '5665',
+    isPushEnabled: '0',
+    magnetometer: '640.353210x-105.483749x-192.943878',
+    accelerometer: '0.033539x-0.684265x-0.757690',
+    screenSize: '393×852',
+    batteryStatus: '100',
+    romCapacity: '242989',
+    networkType: '5G',
+    hasVpn: '1',
+    romRemain: '20617',
+    vendor: '--',
+    packageName: 'com.miHoYo.mhybbs',
+    deviceName: 'iPhone',
+    osVersion: '18.0',
+    cpuCores: '6',
+    gyroscope: '-0.097501x0.010854x0.020438',
+    isJailBreak: '0',
+    packageVersion: '2.29.0',
+    appMemory: '120',
+    ramRemain: '104',
+    appUpdateTimeDiff: '1725558423064',
+    cpuType: 'CPU_TYPE_ARM64',
+    screenBrightness: '0.600',
+    chargeStatus: '3',
+    buildTime: '1725149453887',
+    model: 'iPhone15,2',
   })
   const body = {
     seed_id: seed,
-    device_id: deviceId.toUpperCase(),
+    device_id: generateSeed(16),
     bbs_device_id: deviceId,
-    platform: '2',
+    platform: '1',
     seed_time: time,
     ext_fields,
     app_name: 'bbs_cn',
