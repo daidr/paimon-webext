@@ -1,13 +1,13 @@
 {
   "name": "paimon-webext",
   "type": "module",
-  "version": "0.2.1",
+  "version": "0.2.2",
+  "packageManager": "pnpm@8.3.1",
   "description": "Track Genshin Impact stats in your browser.",
   "author": {
     "name": "daidr",
     "url": "https://daidr.me"
   },
-  "packageManager": "pnpm@8.3.1",
   "homepage": "https://github.com/daidr/paimon-webext",
   "scripts": {
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
